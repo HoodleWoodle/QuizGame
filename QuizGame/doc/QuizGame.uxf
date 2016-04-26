@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>10</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+&lt;package&gt;
+*IView*
+--
++ init (in control : IControl)
++ update (in question : Question)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>70</x>
+      <y>10</y>
+      <w>290</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+&lt;package&gt;
+*IControl*
+--
++ register (in name : String, in pswd : String)
++ login (in name : String, in pswd : String)
++ setChoice (in index : int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>160</y>
+      <w>380</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+&lt;package&gt;
+*IModelManager*
+--
++ getQuestion (in category : Category) : Question
++ addQuestion (in question : Question)
++ removeQuestion (in question : Question)
++ getAccount (in name : String, in pswd : String) : Account
++ addAccount (in name : String, in pswd : String) : Account
++ removeAccount (in ID : int)
++ refreshAccount (in account : Account)
++ getOpponents (in name : String) : int
++ getRandomOpponent : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>50</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>110</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>620</y>
+      <w>270</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;class&gt;&gt;
+&lt;package&gt;
+*Account*
+{final}
+--
+- name : String {final}
+- pswd : String {final}
+- score : in
+--
++ Quiz (in name : String, in pswd : String)
++ getName : String
++ getPassword : String
++ increaseScore (in increase : int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>380</y>
+      <w>490</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;class&gt;&gt;
+&lt;package&gt;
+*Question*
+{final}
+--
+- category : Category {final}
+- question : String {final}
+- answers : String[] {final}
+- correct : int {final}
+--
++ Question (in category : Category, in question : String, in answers : String[])
++ getCategory : Category
++ getQuestion : String
++ getAnswers : String[]
++ getCorrect : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>620</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+&lt;package&gt;
+*Category*
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

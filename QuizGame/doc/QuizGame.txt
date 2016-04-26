@@ -1,0 +1,34 @@
+- VIEW
+	- Login
+	- Register
+	- AbfrageStarten
+	- Abfrage
+
+- SERVER
+	- QU_NUM an Fragen gegeneinander zu zweit
+	- Fragen gleichzeitig
+
+
+ZUSTAENDIGKEITEN:
+- Grafiken (ALEX)
+- interfaces (ALEX)
+- server/control (QUIRIN, STEFAN)
+- view (ERIC)
+- model (STEFAN)
+
+
+MEILEINSTEINE:
+- UML
+- IMPLEMENTIERUNG
+	- interfaces
+	- model
+	- control
+	- view
+- Daten erstellen
+- Testen
+- Abgabe
+
+
+ZEITPLAN:
+- s. Meilensteine
+- abgabe vor ende des Schuljahres

@@ -60,7 +60,7 @@ quiz.server.model
 + getAccount (in name : String, in password : String) : Account
 + getAccounts : Account[]
 + getAccountCount : int
-+ addQuestion (in question : Question)
++ addQuestion (in question : Question) : boolean
 + addAccount (in name : String, in password : String) : Account
 + removeQuestion (in question : Question)
 + removeAccount (in account : Account)
@@ -95,16 +95,15 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1280</x>
+      <x>1160</x>
       <y>490</y>
       <w>210</w>
-      <h>80</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 quiz.model
 *Category*
---
-RANDOM</panel_attributes>
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

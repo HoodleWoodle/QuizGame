@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="13.1">
-  <zoom_level>7</zoom_level>
+  <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>252</x>
-      <y>105</y>
-      <w>399</w>
-      <h>98</h>
+      <x>10</x>
+      <y>220</y>
+      <w>570</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-&lt;package&gt;
+quiz.client
 *IView*
 --
 + init (in control : IClientControl)
-+ updateData (in account : CurrentAccount, in opponents : Account[], in requests : Game[])
++ updateData (in account : CurrentAccount, in opponents : Account[], in requests : Match[])
 + updateServerMessage (in information : String[])
-+ setGame (in game : Game)
-+ setNextQuestion (in question : Question)</panel_attributes>
++ updateMatch (in match : Match)
++ updateNextQuestion (in question : Question)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>252</x>
-      <y>210</y>
-      <w>252</w>
-      <h>126</h>
+      <x>10</x>
+      <y>370</y>
+      <w>360</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-&lt;package&gt;
+quiz.client
 *IClientControl*
 --
 + register (in name : String, in pswd : String)
@@ -37,26 +37,29 @@
 + logout
 + sendRequest (in category : Category)
 + sendRequest (in category : Category, in aim : Account)
-+ acceptRequest (in request : Game)
++ sendRequest
++ sendRequest (in aim : Account)
++ acceptRequest (in request : Match)
 + setChoice (in index : int)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>252</x>
-      <y>455</y>
-      <w>294</w>
-      <h>147</h>
+      <x>10</x>
+      <y>740</y>
+      <w>420</w>
+      <h>220</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-&lt;package&gt;
+quiz.server.model
 *IModelManager*
 --
 + getQuestion (in category : Category) : Question
++ getQuestionCount : int
 + getAccount (in name : String, in password : String) : Account
-+ getAccount : Account
 + getAccounts : Account[]
++ getAccountCount : int
 + addQuestion (in question : Question)
 + addAccount (in name : String, in password : String) : Account
 + removeQuestion (in question : Question)
@@ -67,13 +70,13 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>728</x>
-      <y>336</y>
-      <w>343</w>
-      <h>161</h>
+      <x>690</x>
+      <y>570</y>
+      <w>580</w>
+      <h>230</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
-&lt;package&gt;
+quiz.model
 *Question*
 {final}
 --
@@ -82,7 +85,7 @@
 - answers : String[] {final}
 - correct : int {final}
 --
-+ Question (in category : Category, in question : String, in answers : String[])
++ Question (in category : Category, in question : String, in answers : String[], int correct : int)
 + getCategory : Category
 + getQuestion : String
 + getAnswers : String[]
@@ -92,28 +95,28 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1057</x>
-      <y>273</y>
-      <w>147</w>
-      <h>42</h>
+      <x>1280</x>
+      <y>490</y>
+      <w>210</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
-&lt;package&gt;
+quiz.model
 *Category*
 --
-</panel_attributes>
+RANDOM</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>728</x>
-      <y>105</y>
-      <w>322</w>
-      <h>224</h>
+      <x>690</x>
+      <y>220</y>
+      <w>460</w>
+      <h>340</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
-&lt;package&gt;
+quiz.model
 *Account*
 {final}
 --
@@ -124,11 +127,12 @@
 - online : boolean
 - available : boolean
 --
-+ Account (in ID : int, in name : String, in score : int)
 + Account (in ID : int, in name : String, in password : String, in score : int)
++ Account (in ID : int, in name : String, in score : int)
 + getID : int
 + getName : String
 + getPassword : String
++ getScore : int
 + isOnline : boolean
 + isAvailable : boolean
 + setOnline (in online : boolean)
@@ -138,50 +142,51 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>252</x>
-      <y>406</y>
-      <w>294</w>
-      <h>42</h>
+      <x>10</x>
+      <y>650</y>
+      <w>420</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-&lt;package&gt;
+quiz.server
 *IServerControl*
---
-</panel_attributes>
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1057</x>
-      <y>105</y>
-      <w>385</w>
-      <h>161</h>
+      <x>1160</x>
+      <y>220</y>
+      <w>710</w>
+      <h>260</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
-&lt;package&gt;
-*Game*
+quiz.model
+*Match*
 {final}
 --
 - ID : int {final}
 - category : Category {final}
-- opponent : Account {fianl}
-- random : boolean {final}
+- opponents : Account[] {final}
+- questions : Question[] {final}
+- answers : int[][] {final}
 --
-+ Game (in ID : int, in category : Category, in opponent : Account, in random : boolean)
++ Match (in ID : int, in category : Category, in opponents : Account[], in questions : Question[], in answers : int[][])
 + getID : int
 + getCategory : Category
-+ getOpponent : Account
-+ isRandom : boolean</panel_attributes>
++ getOpponents : Account[]
++ getQuestions : Question[]
++ getAnswers : int[][]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>252</x>
-      <y>105</y>
-      <w>168</w>
-      <h>42</h>
+      <x>10</x>
+      <y>220</y>
+      <w>240</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>ClientControl kümmert sich um zu spätes oder gar nicht abgeben von Antworten, NICHT View
 bg=blue</panel_attributes>
@@ -190,10 +195,10 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>252</x>
-      <y>77</y>
-      <w>63</w>
-      <h>21</h>
+      <x>10</x>
+      <y>180</y>
+      <w>90</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>ClientSide:
 bg=green</panel_attributes>
@@ -202,10 +207,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>252</x>
-      <y>378</y>
-      <w>63</w>
-      <h>21</h>
+      <x>10</x>
+      <y>610</y>
+      <w>90</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>ServerSide:
 bg=green</panel_attributes>
@@ -214,10 +219,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>728</x>
-      <y>77</y>
-      <w>49</w>
-      <h>21</h>
+      <x>690</x>
+      <y>180</y>
+      <w>70</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>Model:
 bg=green</panel_attributes>
@@ -226,10 +231,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>497</x>
-      <y>406</y>
-      <w>49</w>
-      <h>21</h>
+      <x>360</x>
+      <y>650</y>
+      <w>70</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>TODO
 bg=RED</panel_attributes>
@@ -238,22 +243,22 @@ bg=RED</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>728</x>
-      <y>336</y>
-      <w>91</w>
-      <h>42</h>
+      <x>690</x>
+      <y>570</y>
+      <w>130</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>View darf nicht die korrekte Antwort zeigen            :)
+    <panel_attributes>View darf nicht die korrekte Antwort anzeigen           :)
 bg=blue</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>252</x>
-      <y>406</y>
-      <w>98</w>
-      <h>42</h>
+      <x>10</x>
+      <y>650</y>
+      <w>140</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Server ist auch für SECURING zuständig
 bg=blue</panel_attributes>
@@ -262,13 +267,13 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>553</x>
-      <y>406</y>
-      <w>154</w>
-      <h>42</h>
+      <x>440</x>
+      <y>650</y>
+      <w>220</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-&lt;package&gt;
+quiz.server
 *IEditorTool*
 --</panel_attributes>
     <additional_attributes/>
@@ -276,13 +281,32 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>658</x>
-      <y>406</y>
-      <w>49</w>
-      <h>21</h>
+      <x>590</x>
+      <y>650</y>
+      <w>70</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>TODO
 bg=RED</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>430</x>
+      <y>10</y>
+      <w>260</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+quiz
+*Constants*
+--
++ QUESTION_COUNT : int {static, final}
++ DB_FILE : String {static, final}
++ DB_PATH : String {static, final}
++ DB_USERNAME : String {static, final}
++ DB_PASSWORD : String {static, final}</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

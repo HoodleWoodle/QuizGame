@@ -15,17 +15,17 @@ import utils.db.U_Database;
 /**
  * @author Stefan
  */
-public final class ModelManager // implements IModelManager
+public final class DataManager // implements IModelManager
 {
 	/**
-	 * The database-connection of the ModelManager.
+	 * The database-connection of the DataManager.
 	 */
 	private final U_Database db;
 
 	/**
-	 * Creates an instance of ModelManager.
+	 * Creates an instance of DataManager.
 	 */
-	public ModelManager()
+	public DataManager()
 	{
 		db = new U_Database(DB_PATH, DB_USERNAME, DB_PASSWORD);
 
@@ -59,7 +59,8 @@ public final class ModelManager // implements IModelManager
 	// @Override
 	public Question getQuestion(Category category)
 	{
-		// db.select("SELECT * FROM Questions WHERE category='" + category.ordinal() + "'");
+		// db.select("SELECT * FROM Questions WHERE category='" +
+		// category.ordinal() + "'");
 
 		return null;
 	}
@@ -91,51 +92,47 @@ public final class ModelManager // implements IModelManager
 	// @Override
 	public boolean addQuestion(Question question)
 	{
+		// get data from Question-object
 		String quest = question.getQuestion();
-		if (quest == null || quest.isEmpty() || quest.length() >= 1022)
-			// invalid question-string
-			return false;
-
 		Category category = question.getCategory();
-		if (category == null)
-			// invalid category
-			return false;
-		int cate = category.ordinal();
-
 		String[] answers = question.getAnswers();
+		int correct = question.getCorrect();
+
+		// check question-string
+		if (!check(quest, 1023))
+			return false;
+		// check category
+		if (category == null)
+			return false;
+		// check answer-strings
 		if (answers.length != 4)
-			// invalid answers-count
 			return false;
 		for (String answer : answers)
-			if (answer == null || answer.isEmpty() || answers.length >= 254)
-				// invalid answer-string
+			if (!check(answer))
 				return false;
-
-		int correct = question.getCorrect();
+		// check correct
 		if (correct < 0 || correct > 3)
-			// invalid correct-answer
 			return false;
 
-		return db.insert("INSERT INTO Questions (question, category, a0, a1, a2, a3, correct) VALUES ('" + quest + "', '" + cate + "','" + answers[0] + "','" + answers[1] + "','" + answers[2] + "','" + answers[3] + "','" + correct + "')");
+		// insert question into database
+		if (!db.insert("INSERT INTO Questions (question, category, a0, a1, a2, a3, correct) VALUES ('" + quest + "', '" + category.ordinal() + "','" + answers[0] + "','" + answers[1] + "','" + answers[2] + "','" + answers[3] + "','" + correct + "')"))
+			return false; // TODO
+
+		return true;
 	}
 
 	// @Override
 	public Account addAccount(String name, String password)
 	{
-		if (name == null || name.isEmpty() || name.length() >= 254)
-			// invalid name
-			return null;
-
-		if (password == null || password.isEmpty() || password.length() >= 254)
-			// invalid password
+		// check name and password
+		if (!check(name) || !check(password))
 			return null;
 
 		int ID = db.insertReturn("INSERT INTO Accounts (name, password) VALUES ('" + name + "','" + password + "')");
 		if (ID == -1)
-			// invalid input
-			return null;
+			return null; // TODO
 
-		return null;
+		return new Account(ID, name, password, 0);
 	}
 
 	// @Override
@@ -149,15 +146,42 @@ public final class ModelManager // implements IModelManager
 	}
 
 	// @Override
-	public void refreshAccount(Account account, int score)
+	public void updateAccount(Account account, int score)
 	{
+	}
+
+	// @Override
+	public void close()
+	{
+		if (!db.close())
+			; // TODO
+	}
+
+	private boolean check(String toCheck)
+	{
+		return check(toCheck, 255);
+	}
+
+	private boolean check(String toCheck, int maxLength)
+	{
+		// check whether string is valid for database
+		if (toCheck == null || toCheck.isEmpty() || toCheck.length() > maxLength)
+			// invalid string
+			return false;
+		// valid string
+		return true;
 	}
 
 	public static void main(String[] args)
 	{
-		ModelManager manager = new ModelManager();
+		DataManager manager = new DataManager();
 
-		manager.addAccount("name", "pswd");
-		manager.addAccount("name", "pswd1");
+		String[] answers = { "a", "b", "c", "d" };
+		manager.addQuestion(new Question(Category.X, "q0", answers, 0));
+		manager.addQuestion(new Question(Category.X, "q1", answers, 0));
+		manager.addAccount("n0", "p");
+		manager.addAccount("n1", "p");
+
+		manager.close();
 	}
 }

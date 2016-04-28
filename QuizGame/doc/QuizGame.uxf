@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
+      <x>10</x>
       <y>190</y>
       <w>290</w>
       <h>100</h>
@@ -20,15 +20,19 @@ quiz.client.view
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
+      <x>10</x>
       <y>470</y>
       <w>250</w>
-      <h>100</h>
+      <h>150</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
 quiz.client
 *Client*
 {final}
+--
+- model : IModel {final}
+- view : IView {final}
+- control : IControl {final}
 --
 + main (in args : String[]) {static, final}</panel_attributes>
     <additional_attributes/>
@@ -36,8 +40,8 @@ quiz.client
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>730</y>
+      <x>10</x>
+      <y>810</y>
       <w>400</w>
       <h>250</h>
     </coordinates>
@@ -62,7 +66,7 @@ quiz.server.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>690</x>
       <y>540</y>
       <w>580</w>
       <h>230</h>
@@ -87,7 +91,7 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1270</x>
+      <x>1280</x>
       <y>460</y>
       <w>260</w>
       <h>100</h>
@@ -103,7 +107,7 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>690</x>
       <y>190</y>
       <w>460</w>
       <h>340</h>
@@ -135,15 +139,17 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>620</y>
+      <x>10</x>
+      <y>680</y>
       <w>250</w>
-      <h>100</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
 quiz.server
 *Server*
 {final}
+--
+- dataManager : IDataManager {final}
 --
 + main (in args : String[]) {static, final}</panel_attributes>
     <additional_attributes/>
@@ -151,7 +157,7 @@ quiz.server
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1150</x>
+      <x>1160</x>
       <y>190</y>
       <w>710</w>
       <h>260</h>
@@ -178,7 +184,7 @@ quiz.model
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>0</x>
+      <x>10</x>
       <y>150</y>
       <w>90</w>
       <h>30</h>
@@ -191,7 +197,7 @@ bg=green</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>0</x>
-      <y>580</y>
+      <y>640</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -202,7 +208,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>680</x>
+      <x>690</x>
       <y>150</y>
       <w>120</w>
       <h>30</h>
@@ -214,8 +220,8 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>180</x>
-      <y>620</y>
+      <x>190</x>
+      <y>680</y>
       <w>70</w>
       <h>30</h>
     </coordinates>
@@ -226,35 +232,25 @@ bg=RED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>260</x>
-      <y>620</y>
+      <x>270</x>
+      <y>680</y>
       <w>250</w>
-      <h>100</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
 quiz.server.tools
 *MasterTool*
 {final}
 --
+- dataManager : IDataManager {final}
+--
 + main (in args : String[]) {static, final}</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>440</x>
-      <y>620</y>
-      <w>70</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>TODO
-bg=RED</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>690</x>
       <y>0</y>
       <w>260</w>
       <h>140</h>
@@ -273,7 +269,7 @@ quiz
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
+      <x>10</x>
       <y>300</y>
       <w>200</w>
       <h>160</h>
@@ -293,7 +289,7 @@ quiz.client.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
+      <x>310</x>
       <y>190</y>
       <w>370</w>
       <h>190</h>
@@ -315,7 +311,7 @@ quiz.client
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>220</x>
+      <x>230</x>
       <y>190</y>
       <w>70</w>
       <h>60</h>
@@ -327,7 +323,7 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>540</x>
+      <x>550</x>
       <y>190</y>
       <w>130</w>
       <h>40</h>
@@ -340,7 +336,7 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>180</x>
+      <x>190</x>
       <y>470</y>
       <w>70</w>
       <h>30</h>

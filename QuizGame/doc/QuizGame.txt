@@ -1,34 +1,65 @@
-- VIEW
-	- Login
-	- Register
-	- AbfrageStarten
-	- Abfrage
+QUIZ-GAME
+~~~~~~~~~
 
-- SERVER
-	- QU_NUM an Fragen gegeneinander zu zweit
-	- Fragen gleichzeitig
+CATEGORIES:
+	- ?
+	
+ACCOUNT:
+	- name (immovable)
+	- password (immovable)
+	- score
 
+QUESTION:
+	- 1 category
+	- 1 question (max. 1024 characters)
+	- 4 answers (each max. 255 characters)
+	- 1 correct answer
+
+USER:
+	- register
+	- login
+	- request-match (random/person, random/category)
+	- accept-match-request
+	- list-opponents
+	- list-account-data
+	- list-match-data
+
+------------------------------------------------
+
+VIEW:
+	- MVC (architectural pattern)
+CLIENT:
+	- client-logic
+SERVER::
+	- security
+	- logic
+DATA:
+	- database
+TOOLS:
+	- MasterTool (editor)
+
+------------------------------------------------
 
 ZUSTAENDIGKEITEN:
-- Grafiken (ALEX)
+~~~~~~~~~~~~~~~~
+- graphics (ALEX)
 - interfaces (ALEX)
-- server/control (QUIRIN, STEFAN)
+- server / control (QUIRIN, STEFAN)
 - view (ERIC)
-- model (STEFAN)
+- model / MasterTool(STEFAN)
+- architectural planning (??STEFAN??)
+- content (ALEX, ERIC, QUIRIN)
 
+------------------------------------------------
 
-MEILEINSTEINE:
-- UML
-- IMPLEMENTIERUNG
+MEILENSTEINE / TIMELINE:
+~~~~~~~~~~~~~~~~~~~~~~~
+- UML                     (01.05)
+- implementation          (01.06)
 	- interfaces
 	- model
-	- control
-	- view
-- Daten erstellen
-- Testen
-- Abgabe
-
-
-ZEITPLAN:
-- s. Meilensteine
-- abgabe vor ende des Schuljahres
+	- data/master-tool
+	- server/client, view
+- checking modules        (01.06)
+- creating data           (10.06)
+- RELEASE                 (     )

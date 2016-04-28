@@ -42,13 +42,13 @@ TOOLS:
 
 ZUSTAENDIGKEITEN:
 ~~~~~~~~~~~~~~~~
-- graphics (ALEX)
-- interfaces (ALEX)
-- server / control (QUIRIN, STEFAN)
-- view (ERIC)
-- model / MasterTool(STEFAN)
-- architectural planning (??STEFAN??)
-- content (ALEX, ERIC, QUIRIN)
+- graphics (A)
+- interfaces (A)
+- server / control (Q, S)
+- view (E)
+- model / MasterTool(S)
+- architectural planning (?S?)
+- content (A, E, Q)
 
 ------------------------------------------------
 
@@ -62,4 +62,14 @@ MEILENSTEINE / TIMELINE:
 	- server/client, view
 - checking modules        (01.06)
 - creating data           (10.06)
-- RELEASE                 (     )
+- RELEASE                 (??.??)
+
+------------------------------------------------
+
+OTHERS:
+~~~~~~~~~
+	- H2 Database
+	- UMLet
+	- Utils-Library (own)
+	- Eclipse
+	- GitHub (EGit[Eclipse-Plugin])

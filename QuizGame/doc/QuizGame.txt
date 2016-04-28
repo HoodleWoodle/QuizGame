@@ -5,8 +5,8 @@ CATEGORIES:
 	- ?
 	
 ACCOUNT:
-	- name (immovable)
-	- password (immovable)
+	- name (max. 255 characters) (immovable)
+	- password (max. 255 characters) (immovable)
 	- score
 
 QUESTION:
@@ -70,6 +70,5 @@ OTHERS:
 ~~~~~~~~~
 	- H2 Database
 	- UMLet
-	- Utils-Library (own)
 	- Eclipse
 	- GitHub (EGit[Eclipse-Plugin])

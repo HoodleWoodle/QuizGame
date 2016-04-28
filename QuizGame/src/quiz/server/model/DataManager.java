@@ -14,7 +14,6 @@ import java.util.List;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Question;
-import utils.db.U_Database;
 
 /**
  * @author Stefan
@@ -33,14 +32,14 @@ public final class DataManager // implements IDataManager
 	/**
 	 * The database-connection of the DataManager.
 	 */
-	private final U_Database db;
+	private final Database db;
 
 	/**
 	 * Creates an instance of DataManager.
 	 */
 	public DataManager()
 	{
-		db = new U_Database(DB_PATH, DB_USERNAME, DB_PASSWORD);
+		db = new Database(DB_PATH, DB_USERNAME, DB_PASSWORD);
 
 		boolean create = false;
 		if (!new File(DB_FILE).exists())
@@ -320,7 +319,7 @@ public final class DataManager // implements IDataManager
 	 *            the string to check
 	 * @return whether a string is valid for database
 	 */
-	private boolean check(String string)
+	public static boolean check(String string)
 	{
 		// check string
 		return check(string, 255);
@@ -335,7 +334,7 @@ public final class DataManager // implements IDataManager
 	 *            the max-length of the string
 	 * @return whether a string is valid for database
 	 */
-	private boolean check(String string, int maxLength)
+	public static boolean check(String string, int maxLength)
 	{
 		// check whether string is valid for database
 		if (string == null || string.isEmpty() || string.length() > maxLength)

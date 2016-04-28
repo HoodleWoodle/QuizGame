@@ -18,8 +18,10 @@ public enum Category
 	{
 		// switch (ordinal)
 		// {
-		// case X:
-		// return Y;
+		// case 0:
+		// return X;
+		// case 0:
+		// return X;
 		// }
 
 		return null;

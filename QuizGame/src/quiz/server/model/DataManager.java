@@ -6,6 +6,10 @@ import static quiz.Constants.DB_PATH;
 import static quiz.Constants.DB_USERNAME;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import quiz.model.Account;
 import quiz.model.Category;
@@ -15,8 +19,17 @@ import utils.db.U_Database;
 /**
  * @author Stefan
  */
-public final class DataManager // implements IModelManager
+public final class DataManager // implements IDataManager
 {
+	/**
+	 * The name of the Accounts-table.
+	 */
+	private static final String TABLE_ACCOUNTS = "accounts";
+	/**
+	 * The name of the Questions-table.
+	 */
+	private static final String TABLE_QUESTIONS = "questions";
+
 	/**
 	 * The database-connection of the DataManager.
 	 */
@@ -51,42 +64,100 @@ public final class DataManager // implements IModelManager
 	private void create()
 	{
 		// create Accounts-table
-		db.insert("CREATE TABLE Accounts (ID INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, score INTEGER DEFAULT '0' NOT NULL)");
+		db.insert("CREATE TABLE " + TABLE_ACCOUNTS + " (ID INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, score INTEGER DEFAULT '0' NOT NULL)");
 		// create Questions-table
-		db.insert("CREATE TABLE Questions (question VARCHAR(1023) NOT NULL UNIQUE, category TINYINT NOT NULL, a0 VARCHAR(255) NOT NULL, a1 VARCHAR(255) NOT NULL, a2 VARCHAR(255) NOT NULL, a3 VARCHAR(255) NOT NULL, correct TINYINT NOT NULL)");
+		db.insert("CREATE TABLE " + TABLE_QUESTIONS + " (category TINYINT NOT NULL, question VARCHAR(1023) NOT NULL UNIQUE, a0 VARCHAR(255) NOT NULL, a1 VARCHAR(255) NOT NULL, a2 VARCHAR(255) NOT NULL, a3 VARCHAR(255) NOT NULL, correct TINYINT NOT NULL)");
 	}
 
 	// @Override
-	public Question getQuestion(Category category)
+	public List<Question> getQuestions(Category category)
 	{
-		// db.select("SELECT * FROM Questions WHERE category='" +
-		// category.ordinal() + "'");
+		// check category
+		if (category == null)
+			return null;
 
-		return null;
+		// select Questions
+		ResultSet result = db.select("SELECT * FROM " + TABLE_QUESTIONS + " WHERE category='" + category.ordinal() + "'");
+
+		// get Questions
+		return getQuestions(result);
+	}
+
+	// @Override
+	public List<Question> getQuestions()
+	{
+		// select all Questions
+		ResultSet result = db.select("SELECT * FROM " + TABLE_QUESTIONS);
+
+		// get Questions
+		return getQuestions(result);
 	}
 
 	// @Override
 	public int getQuestionCount()
 	{
-		return -1;
+		// get count
+		return getCount(TABLE_QUESTIONS);
 	}
 
 	// @Override
 	public Account getAccount(String name, String password)
 	{
-		return null;
+		// select Account
+		ResultSet result = db.select("SELECT * FROM " + TABLE_ACCOUNTS + " WHERE name='" + name + "' AND password='" + password + "'");
+
+		try
+		{
+			// go to next row
+			if (!result.next())
+				// there is no row
+				return null;
+		} catch (SQLException e)
+		{
+			// some Exception
+			e.printStackTrace();
+			return null; // TODO
+		}
+
+		// get Account
+		return getAccount(result);
 	}
 
 	// @Override
-	public Account[] getAccounts()
+	public List<Account> getAccounts()
 	{
-		return null;
+		// select all Accounts
+		ResultSet result = db.select("SELECT * FROM " + TABLE_ACCOUNTS);
+
+		try
+		{
+			List<Account> accounts = new ArrayList<Account>();
+
+			// loop through all rows
+			while (result.next())
+			{
+				// get Account
+				Account account = getAccount(result);
+				if (account != null)
+					accounts.add(account);
+				else
+					; // TODO
+			}
+
+			return accounts;
+		} catch (SQLException e)
+		{
+			// some Exception
+			e.printStackTrace();
+			return null; // TODO
+		}
 	}
 
 	// @Override
 	public int getAccountCount()
 	{
-		return -1;
+		// get count
+		return getCount(TABLE_ACCOUNTS);
 	}
 
 	// @Override
@@ -115,7 +186,7 @@ public final class DataManager // implements IModelManager
 			return false;
 
 		// insert question into database
-		if (!db.insert("INSERT INTO Questions (question, category, a0, a1, a2, a3, correct) VALUES ('" + quest + "', '" + category.ordinal() + "','" + answers[0] + "','" + answers[1] + "','" + answers[2] + "','" + answers[3] + "','" + correct + "')"))
+		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (question, category, a0, a1, a2, a3, correct) VALUES ('" + quest + "', '" + category.ordinal() + "','" + answers[0] + "','" + answers[1] + "','" + answers[2] + "','" + answers[3] + "','" + correct + "')"))
 			return false; // TODO
 
 		return true;
@@ -128,7 +199,7 @@ public final class DataManager // implements IModelManager
 		if (!check(name) || !check(password))
 			return null;
 
-		int ID = db.insertReturn("INSERT INTO Accounts (name, password) VALUES ('" + name + "','" + password + "')");
+		int ID = db.insertReturn("INSERT INTO " + TABLE_ACCOUNTS + " (name, password) VALUES ('" + name + "','" + password + "')");
 		if (ID == -1)
 			return null; // TODO
 
@@ -138,16 +209,22 @@ public final class DataManager // implements IModelManager
 	// @Override
 	public void removeQuestion(Question question)
 	{
+		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'"))
+			; // TODO
 	}
 
 	// @Override
 	public void removeAccount(Account account)
 	{
+		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'"))
+			; // TODO
 	}
 
 	// @Override
 	public void updateAccount(Account account, int score)
 	{
+		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
+			; // TODO
 	}
 
 	// @Override
@@ -157,31 +234,114 @@ public final class DataManager // implements IModelManager
 			; // TODO
 	}
 
-	private boolean check(String toCheck)
+	/**
+	 * Returns Questions from a resultSet.
+	 * 
+	 * @param result
+	 *            the resultSet
+	 * @return the Questions (Exception: null)
+	 */
+	private List<Question> getQuestions(ResultSet result)
 	{
-		return check(toCheck, 255);
+		try
+		{
+			List<Question> questions = new ArrayList<Question>();
+
+			// loop through all rows
+			while (result.next())
+			{
+				// add Question
+				String[] answers = new String[4];
+				for (int a = 0; a < answers.length; a++)
+					answers[a] = result.getString(3 + a);
+				questions.add(new Question(Category.getCategory(result.getInt(1)), result.getString(2), answers, result.getInt(7)));
+			}
+
+			return questions;
+		} catch (SQLException e)
+		{
+			// some Exception
+			e.printStackTrace();
+			return null; // TODO
+		}
 	}
 
-	private boolean check(String toCheck, int maxLength)
+	/**
+	 * Returns an Account from a resultSet.
+	 * 
+	 * @param result
+	 *            the resultSet
+	 * @return the Account (Exception: null)
+	 */
+	private Account getAccount(ResultSet result)
+	{
+		try
+		{
+			// get Account
+			return new Account(result.getInt(1), result.getString(2), result.getString(3), result.getInt(4));
+		} catch (SQLException e)
+		{
+			// some Exception
+			e.printStackTrace();
+			return null; // TODO
+		}
+	}
+
+	/**
+	 * Returns the count of rows from a table
+	 * 
+	 * @param table
+	 *            the table
+	 * @return the count (Exception: -1)
+	 */
+	private int getCount(String table)
+	{
+		// select count
+		ResultSet result = db.select("SELECT COUNT(*) AS count FROM " + table);
+
+		try
+		{
+			// get count
+			if (result.next())
+				return result.getInt("count");
+		} catch (SQLException e)
+		{
+			// some Exception
+			e.printStackTrace();
+		}
+
+		return -1; // TODO
+	}
+
+	/**
+	 * Checks whether a string is valid for database. (max-length: 255)
+	 * 
+	 * @param string
+	 *            the string to check
+	 * @return whether a string is valid for database
+	 */
+	private boolean check(String string)
+	{
+		// check string
+		return check(string, 255);
+	}
+
+	/**
+	 * Checks whether a string is valid for database.
+	 * 
+	 * @param string
+	 *            the string to check
+	 * @param maxLength
+	 *            the max-length of the string
+	 * @return whether a string is valid for database
+	 */
+	private boolean check(String string, int maxLength)
 	{
 		// check whether string is valid for database
-		if (toCheck == null || toCheck.isEmpty() || toCheck.length() > maxLength)
+		if (string == null || string.isEmpty() || string.length() > maxLength)
 			// invalid string
 			return false;
 		// valid string
 		return true;
-	}
-
-	public static void main(String[] args)
-	{
-		DataManager manager = new DataManager();
-
-		String[] answers = { "a", "b", "c", "d" };
-		manager.addQuestion(new Question(Category.X, "q0", answers, 0));
-		manager.addQuestion(new Question(Category.X, "q1", answers, 0));
-		manager.addAccount("n0", "p");
-		manager.addAccount("n1", "p");
-
-		manager.close();
 	}
 }

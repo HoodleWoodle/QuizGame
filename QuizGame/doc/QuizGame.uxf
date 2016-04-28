@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.3">
+<diagram program="umlet" version="13.1">
   <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>190</y>
       <w>290</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-quiz.client
+quiz.client.view
 *IView*
 --
 + init (in model : IModel, in control : IControl)
@@ -20,7 +20,7 @@ quiz.client
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>470</y>
       <w>250</w>
       <h>100</h>
@@ -36,19 +36,20 @@ quiz.client
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>730</y>
-      <w>420</w>
-      <h>240</h>
+      <w>400</w>
+      <h>250</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 quiz.server.model
 *IDataManager*
 --
-+ getQuestion (in category : Category) : Question
++ getQuestions (in category : Category) : List&lt;Question&gt;
++ getQuestions : List&lt;Question&gt;
 + getQuestionCount : int
 + getAccount (in name : String, in password : String) : Account
-+ getAccounts : Account[]
++ getAccounts : List&lt;Account&gt;
 + getAccountCount : int
 + addQuestion (in question : Question) : boolean
 + addAccount (in name : String, in password : String) : Account
@@ -61,7 +62,7 @@ quiz.server.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
+      <x>680</x>
       <y>540</y>
       <w>580</w>
       <h>230</h>
@@ -86,21 +87,23 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1160</x>
+      <x>1270</x>
       <y>460</y>
-      <w>210</w>
-      <h>60</h>
+      <w>260</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 quiz.model
 *Category*
---</panel_attributes>
+--
+...
++ getCategory (in ordinal : int) : Category</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
+      <x>680</x>
       <y>190</y>
       <w>460</w>
       <h>340</h>
@@ -132,7 +135,7 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>620</y>
       <w>250</w>
       <h>100</h>
@@ -148,7 +151,7 @@ quiz.server
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1160</x>
+      <x>1150</x>
       <y>190</y>
       <w>710</w>
       <h>260</h>
@@ -175,7 +178,7 @@ quiz.model
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>150</y>
       <w>90</w>
       <h>30</h>
@@ -187,7 +190,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>580</y>
       <w>100</w>
       <h>30</h>
@@ -199,7 +202,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>690</x>
+      <x>680</x>
       <y>150</y>
       <w>120</w>
       <h>30</h>
@@ -211,7 +214,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>190</x>
+      <x>180</x>
       <y>620</y>
       <w>70</w>
       <h>30</h>
@@ -223,13 +226,13 @@ bg=RED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>270</x>
+      <x>260</x>
       <y>620</y>
       <w>250</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
-quiz.server
+quiz.server.tools
 *MasterTool*
 {final}
 --
@@ -239,7 +242,7 @@ quiz.server
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>450</x>
+      <x>440</x>
       <y>620</y>
       <w>70</w>
       <h>30</h>
@@ -251,7 +254,7 @@ bg=RED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
+      <x>680</x>
       <y>0</y>
       <w>260</w>
       <h>140</h>
@@ -270,13 +273,13 @@ quiz
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
+      <x>0</x>
       <y>300</y>
       <w>200</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
-quiz.client
+quiz.client.model
 *IModel*
 --
 + getAccount : Account
@@ -290,7 +293,7 @@ quiz.client
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>310</x>
+      <x>300</x>
       <y>190</y>
       <w>370</w>
       <h>190</h>
@@ -312,7 +315,7 @@ quiz.client
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>230</x>
+      <x>220</x>
       <y>190</y>
       <w>70</w>
       <h>60</h>
@@ -324,7 +327,7 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>550</x>
+      <x>540</x>
       <y>190</y>
       <w>130</w>
       <h>40</h>
@@ -337,7 +340,7 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>190</x>
+      <x>180</x>
       <y>470</y>
       <w>70</w>
       <h>30</h>

@@ -17,10 +17,6 @@ public final class Question
 	 * The answer-strings of the Question.
 	 */
 	private final String[] answers;
-	/**
-	 * The index of the correct answer of the Question.
-	 */
-	private final int correct;
 
 	/**
 	 * Creates an instance of Question.
@@ -31,15 +27,12 @@ public final class Question
 	 *            the question-string of the Question
 	 * @param answers
 	 *            the answer-strings of the Question
-	 * @param correct
-	 *            the index of the correct answer of the Question
 	 */
-	public Question(Category category, String question, String[] answers, int correct)
+	public Question(Category category, String question, String[] answers)
 	{
 		this.category = category;
 		this.question = question;
 		this.answers = answers;
-		this.correct = correct;
 	}
 
 	/**
@@ -70,15 +63,5 @@ public final class Question
 	public String[] getAnswers()
 	{
 		return answers;
-	}
-
-	/**
-	 * Getter.
-	 * 
-	 * @return the index of the correct answer of the Question
-	 */
-	public int getCorrect()
-	{
-		return correct;
 	}
 }

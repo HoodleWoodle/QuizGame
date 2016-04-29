@@ -1,6 +1,8 @@
 package quiz.server.tools;
 
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,11 +14,17 @@ import quiz.server.model.DataManager;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
-public final class MasterTool extends JPanel
+final class MasterTool extends JPanel
 {
 	/***/
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * The IDataManager.
+	 */
+	private final/* I */DataManager dataManager;
 
 	/**
 	 * The JTabbedPane.
@@ -34,8 +42,10 @@ public final class MasterTool extends JPanel
 	/**
 	 * Creates an instance of MasterTool.
 	 */
-	public MasterTool()
+	MasterTool()
 	{
+		dataManager = new DataManager();
+
 		// initialize components
 		initComponents();
 		// initialize listeners
@@ -51,8 +61,6 @@ public final class MasterTool extends JPanel
 		pane = new JTabbedPane();
 		pane.setPreferredSize(new Dimension(600, 400));
 		add(pane);
-
-		/* I */DataManager dataManager = new DataManager();
 
 		// initialize panels
 		pane.add("Questions", question = new QuestionPanel(dataManager));
@@ -88,13 +96,25 @@ public final class MasterTool extends JPanel
 	 */
 	public static void main(String[] args)
 	{
+		MasterTool tool = new MasterTool();
+
 		// initialize frame
 		JFrame frame = new JFrame("QuizGame - MasterTool");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.add(new MasterTool());
+		frame.add(tool);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+
+		frame.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				tool.dataManager.close();
+				System.exit(0);
+			}
+		});
+
 		frame.setVisible(true);
 	}
 }

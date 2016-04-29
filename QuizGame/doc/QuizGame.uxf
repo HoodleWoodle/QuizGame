@@ -69,7 +69,7 @@ quiz.server.model
       <x>690</x>
       <y>540</y>
       <w>580</w>
-      <h>230</h>
+      <h>200</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
 quiz.model
@@ -79,13 +79,11 @@ quiz.model
 - category : Category {final}
 - question : String {final}
 - answers : String[] {final}
-- correct : int {final}
 --
-+ Question (in category : Category, in question : String, in answers : String[], int correct : int)
++ Question (in category : Category, in question : String, in answers : String[])
 + getCategory : Category
 + getQuestion : String
-+ getAnswers : String[]
-+ getCorrect : int</panel_attributes>
++ getAnswers : String[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -196,7 +194,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>0</x>
+      <x>10</x>
       <y>640</y>
       <w>100</w>
       <h>30</h>

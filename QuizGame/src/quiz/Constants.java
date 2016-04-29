@@ -2,9 +2,14 @@ package quiz;
 
 /**
  * @author Alex, Eric, Quirin, Stefan
+ * @version 29.04.2016
  */
 public interface Constants
 {
+	/**
+	 * The count of Questions in on Match.
+	 */
+	public static final int QUESTION_COUNT = 3;
 	/**
 	 * The name of the database.
 	 */

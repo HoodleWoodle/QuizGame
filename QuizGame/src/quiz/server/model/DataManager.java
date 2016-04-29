@@ -11,12 +11,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Question;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 public final class DataManager // implements IDataManager
 {
@@ -48,9 +51,12 @@ public final class DataManager // implements IDataManager
 
 		// connect to database
 		if (!db.connect())
+		{
 			// if connecting fails
+			JOptionPane.showMessageDialog(null, "Cannot connect to database!");
 			// shut down process
 			System.exit(1);
+		}
 
 		if (create)
 			// create database tables
@@ -62,10 +68,12 @@ public final class DataManager // implements IDataManager
 	 */
 	private void create()
 	{
+		System.out.println("Creating database!");
+
 		// create Accounts-table
 		db.insert("CREATE TABLE " + TABLE_ACCOUNTS + " (ID INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, score INTEGER DEFAULT '0' NOT NULL)");
 		// create Questions-table
-		db.insert("CREATE TABLE " + TABLE_QUESTIONS + " (category TINYINT NOT NULL, question VARCHAR(1023) NOT NULL UNIQUE, a0 VARCHAR(255) NOT NULL, a1 VARCHAR(255) NOT NULL, a2 VARCHAR(255) NOT NULL, a3 VARCHAR(255) NOT NULL, correct TINYINT NOT NULL)");
+		db.insert("CREATE TABLE " + TABLE_QUESTIONS + " (category TINYINT NOT NULL, question VARCHAR(1023) NOT NULL UNIQUE, correct VARCHAR(255) NOT NULL, answer1 VARCHAR(255) NOT NULL, answer2 VARCHAR(255) NOT NULL, answer3 VARCHAR(255) NOT NULL)");
 	}
 
 	// @Override
@@ -114,8 +122,9 @@ public final class DataManager // implements IDataManager
 		} catch (SQLException e)
 		{
 			// some Exception
-			e.printStackTrace();
-			return null; // TODO
+			log_err(0);
+			// e.printStackTrace();
+			return null;
 		}
 
 		// get Account
@@ -140,15 +149,16 @@ public final class DataManager // implements IDataManager
 				if (account != null)
 					accounts.add(account);
 				else
-					; // TODO
+					log_err(1);
 			}
 
 			return accounts;
 		} catch (SQLException e)
 		{
 			// some Exception
-			e.printStackTrace();
-			return null; // TODO
+			log_err(2);
+			// e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -166,7 +176,6 @@ public final class DataManager // implements IDataManager
 		String quest = question.getQuestion();
 		Category category = question.getCategory();
 		String[] answers = question.getAnswers();
-		int correct = question.getCorrect();
 
 		// check question-string
 		if (!check(quest, 1023))
@@ -180,13 +189,13 @@ public final class DataManager // implements IDataManager
 		for (String answer : answers)
 			if (!check(answer))
 				return false;
-		// check correct
-		if (correct < 0 || correct > 3)
-			return false;
 
 		// insert question into database
-		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (question, category, a0, a1, a2, a3, correct) VALUES ('" + quest + "', '" + category.ordinal() + "','" + answers[0] + "','" + answers[1] + "','" + answers[2] + "','" + answers[3] + "','" + correct + "')"))
-			return false; // TODO
+		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (question, category, correct, answer1, answer2, answer3) VALUES ('" + quest + "', '" + category.ordinal() + "', '" + answers[0] + "', '" + answers[1] + "', '" + answers[2] + "', '" + answers[3] + "')"))
+		{
+			log_err(3);
+			return false;
+		}
 
 		return true;
 	}
@@ -198,9 +207,12 @@ public final class DataManager // implements IDataManager
 		if (!check(name) || !check(password))
 			return null;
 
-		int ID = db.insertReturn("INSERT INTO " + TABLE_ACCOUNTS + " (name, password) VALUES ('" + name + "','" + password + "')");
+		int ID = db.insertReturn("INSERT INTO " + TABLE_ACCOUNTS + " (name, password) VALUES ('" + name + "', '" + password + "')");
 		if (ID == -1)
-			return null; // TODO
+		{
+			log_err(4);
+			return null;
+		}
 
 		return new Account(ID, name, password, 0);
 	}
@@ -209,28 +221,28 @@ public final class DataManager // implements IDataManager
 	public void removeQuestion(Question question)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'"))
-			; // TODO
+			log_err(5);
 	}
 
 	// @Override
 	public void removeAccount(Account account)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'"))
-			; // TODO
+			log_err(6);
 	}
 
 	// @Override
 	public void updateAccount(Account account, int score)
 	{
 		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
-			; // TODO
+			log_err(7);
 	}
 
 	// @Override
 	public void close()
 	{
 		if (!db.close())
-			; // TODO
+			log_err(8);
 	}
 
 	/**
@@ -251,17 +263,18 @@ public final class DataManager // implements IDataManager
 			{
 				// add Question
 				String[] answers = new String[4];
-				for (int a = 0; a < answers.length; a++)
-					answers[a] = result.getString(3 + a);
-				questions.add(new Question(Category.getCategory(result.getInt(1)), result.getString(2), answers, result.getInt(7)));
+				for (int answer = 0; answer < answers.length; answer++)
+					answers[answer] = result.getString(3 + answer);
+				questions.add(new Question(Category.getCategory(result.getInt(1)), result.getString(2), answers));
 			}
 
 			return questions;
 		} catch (SQLException e)
 		{
 			// some Exception
-			e.printStackTrace();
-			return null; // TODO
+			log_err(9);
+			// e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -281,8 +294,9 @@ public final class DataManager // implements IDataManager
 		} catch (SQLException e)
 		{
 			// some Exception
-			e.printStackTrace();
-			return null; // TODO
+			log_err(10);
+			// e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -306,10 +320,22 @@ public final class DataManager // implements IDataManager
 		} catch (SQLException e)
 		{
 			// some Exception
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
-		return -1; // TODO
+		log_err(11);
+		return -1;
+	}
+
+	/**
+	 * Logs an error.
+	 * 
+	 * @param code
+	 *            the error-code
+	 */
+	private void log_err(int code)
+	{
+		System.err.println("DataManager-fail: '" + code + "'!");
 	}
 
 	/**

@@ -18,6 +18,7 @@ import quiz.server.model.DataManager;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 final class QuestionPanel extends JPanel
 {
@@ -27,7 +28,7 @@ final class QuestionPanel extends JPanel
 	/**
 	 * The IDataManager.
 	 */
-	private final /* I */DataManager dataManager;
+	private final/* I */DataManager dataManager;
 
 	/**
 	 * The table.
@@ -50,10 +51,6 @@ final class QuestionPanel extends JPanel
 	 * The category-box.
 	 */
 	private JComboBox<Category> category;
-	/**
-	 * The correct-box.
-	 */
-	private JComboBox<Integer> correct;
 	/**
 	 * The get-button.
 	 */
@@ -102,18 +99,16 @@ final class QuestionPanel extends JPanel
 		JLabel label = null;
 		add(label = new JLabel("Question:"));
 		label.setBounds(0, 240, 70, 25);
-		add(label = new JLabel("Answer 1:"));
+		add(label = new JLabel("Correct:"));
 		label.setBounds(0, 265, 70, 25);
-		add(label = new JLabel("Answer 2:"));
+		add(label = new JLabel("Answer 1:"));
 		label.setBounds(302, 265, 70, 25);
-		add(label = new JLabel("Antwort 3:"));
+		add(label = new JLabel("Answer 2:"));
 		label.setBounds(0, 290, 70, 25);
-		add(label = new JLabel("Answer 4:"));
+		add(label = new JLabel("Answer 3:"));
 		label.setBounds(302, 290, 70, 25);
 		add(label = new JLabel("Category:"));
 		label.setBounds(0, 315, 70, 25);
-		add(label = new JLabel("Correct:"));
-		label.setBounds(302, 315, 70, 25);
 
 		// initialize fields/boxes
 		add(question = new JTextField());
@@ -129,8 +124,6 @@ final class QuestionPanel extends JPanel
 		answers[3].setBounds(372, 291, 223, 22);
 		add(category = new JComboBox<Category>(Category.values()));
 		category.setBounds(70, 316, 120, 23);
-		add(correct = new JComboBox<Integer>(new Integer[] { 1, 2, 3, 4 }));
-		correct.setBounds(372, 316, 120, 23);
 
 		// initialize buttons
 		add(get = new JButton("get"));
@@ -166,7 +159,6 @@ final class QuestionPanel extends JPanel
 				for (int i = 0; i < 4; i++)
 					answers[i].setText(selected.getAnswers()[i]);
 				category.setSelectedItem(selected.getCategory());
-				correct.setSelectedItem(selected.getCorrect());
 			}
 		});
 
@@ -201,7 +193,6 @@ final class QuestionPanel extends JPanel
 				for (int i = 0; i < 4; i++)
 					as[i] = answers[i].getText();
 				Category ca = (Category) category.getSelectedItem();
-				int co = (int) correct.getSelectedItem();
 
 				// check input
 				if (!DataManager.check(q, 1024))
@@ -211,7 +202,7 @@ final class QuestionPanel extends JPanel
 						return;
 				if (ca == null)
 					return;
-				if (!dataManager.addQuestion(new Question(ca, q, as, co)))
+				if (!dataManager.addQuestion(new Question(ca, q, as)))
 					return;
 
 				// clear input
@@ -219,7 +210,6 @@ final class QuestionPanel extends JPanel
 				for (int i = 0; i < 4; i++)
 					answers[i].setText("");
 				category.setSelectedIndex(0);
-				correct.setSelectedIndex(0);
 
 				// update table
 				update();

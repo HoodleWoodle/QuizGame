@@ -9,26 +9,10 @@ import java.sql.Statement;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 public class Database
 {
-	/**
-	 * The info of connecting to a Database.
-	 */
-	private static final String TAG_CONNECTING = "Connecting to H2Database: '<T>' - '<U>'!";
-	/**
-	 * The error-message of connecting to Database.
-	 */
-	private static final String ERR_CONNECTING = "Cannot connect to H2Database!";
-	/**
-	 * The error-message of closing Database.
-	 */
-	private static final String ERR_CLOSING = "Cannot close H2Database!";
-	/**
-	 * The error-message of executing a sql-command.
-	 */
-	private static final String ERR_SQL = "Cannot execute SQL-command: '<C>'!";
-
 	/**
 	 * The Database-tag.
 	 */
@@ -38,7 +22,7 @@ public class Database
 	 */
 	private final String user;
 	/**
-	 * The Database password.
+	 * The Database-password.
 	 */
 	private final String password;
 
@@ -85,8 +69,9 @@ public class Database
 	{
 		try
 		{
-			System.out.println(TAG_CONNECTING.replaceAll("<T>", database).replaceAll("<U>", user));
+			System.out.println("Connecting to database!");
 
+			// try to connect to database
 			Class.forName("org.h2.Driver");
 			connection = DriverManager.getConnection(database, user, password);
 			statement = connection.createStatement();
@@ -94,8 +79,9 @@ public class Database
 			return true;
 		} catch (ClassNotFoundException | SQLException e)
 		{
-			System.err.println(ERR_CONNECTING);
-			e.printStackTrace();
+			// some Exception
+			System.err.println("Cannot connect to database!");
+			// e.printStackTrace();
 			return false;
 		}
 	}
@@ -109,6 +95,9 @@ public class Database
 	{
 		try
 		{
+			System.out.println("Closing database!");
+
+			// try to close database-connection
 			if (statement != null)
 				statement.close();
 			if (resultSet != null)
@@ -116,8 +105,9 @@ public class Database
 			return true;
 		} catch (SQLException e)
 		{
-			System.err.println(ERR_CLOSING);
-			e.printStackTrace();
+			// some Exception
+			System.err.println("Cannot close database!");
+			// e.printStackTrace();
 			return false;
 		}
 	}
@@ -126,8 +116,8 @@ public class Database
 	 * Selects in the Database!
 	 * 
 	 * @param sql
-	 *            the sql-command
-	 * @return the ResultSet
+	 *            the SQL-command
+	 * @return the resultSet
 	 */
 	public ResultSet select(String sql)
 	{
@@ -135,14 +125,16 @@ public class Database
 			return null;
 		try
 		{
+			// execute a kind of select-command
 			if (resultSet != null)
 				resultSet.close();
 			resultSet = statement.executeQuery(sql);
 			return resultSet;
 		} catch (SQLException e)
 		{
-			System.err.println(ERR_SQL.replaceAll("<C>", sql));
-			e.printStackTrace();
+			// some Exception
+			System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+			// e.printStackTrace();
 			return null;
 		}
 	}
@@ -151,7 +143,7 @@ public class Database
 	 * Inserts in the Database.
 	 * 
 	 * @param sql
-	 *            the sql-command
+	 *            the SQL-command
 	 * @return whether it was successful
 	 */
 	public boolean insert(String sql)
@@ -160,12 +152,14 @@ public class Database
 			return false;
 		try
 		{
+			// execute a kind of insert-command
 			statement.execute(sql);
 			return true;
 		} catch (SQLException e)
 		{
-			System.err.println(ERR_SQL.replaceAll("<C>", sql));
-			e.printStackTrace();
+			// some Exception
+			System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+			// e.printStackTrace();
 			return false;
 		}
 	}
@@ -174,14 +168,15 @@ public class Database
 	 * Inserts in the Database.
 	 * 
 	 * @param sql
-	 *            the sql-command
-	 * @return the insert-id
+	 *            the SQL-command
+	 * @return the insert-ID
 	 */
 	public int insertReturn(String sql)
 	{
 		if (connected != false)
 			try
 			{
+				// execute a kind of insert-command and get key for returning
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				ps.executeUpdate();
 				if (resultSet != null)
@@ -191,8 +186,9 @@ public class Database
 					return resultSet.getInt(1);
 			} catch (SQLException e)
 			{
-				System.err.println(ERR_SQL.replaceAll("<C>", sql));
-				e.printStackTrace();
+				// some Exception
+				System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+				// e.printStackTrace();
 			}
 		return -1;
 	}

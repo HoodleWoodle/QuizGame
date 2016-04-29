@@ -56,7 +56,7 @@ final class QuestionTableModel extends AbstractTableModel
 	@Override
 	public int getColumnCount()
 	{
-		return 7;
+		return 6;
 	}
 
 	@Override
@@ -65,18 +65,16 @@ final class QuestionTableModel extends AbstractTableModel
 		switch (column)
 		{
 		case 0:
-			return "Frage";
+			return "Question";
 		case 1:
-			return "Antwort 1";
-		case 2:
-			return "Antwort 2";
-		case 3:
-			return "Antwort 3";
-		case 4:
-			return "Antwort 4";
-		case 5:
 			return "Correct";
-		case 6:
+		case 2:
+			return "Answer 1";
+		case 3:
+			return "Answer 2";
+		case 4:
+			return "Answer 3";
+		case 5:
 			return "Category";
 		default:
 			return null;
@@ -111,8 +109,6 @@ final class QuestionTableModel extends AbstractTableModel
 		case 4:
 			return model.get(row).getAnswers()[3];
 		case 5:
-			return model.get(row).getCorrect();
-		case 6:
 			return model.get(row).getCategory();
 		}
 

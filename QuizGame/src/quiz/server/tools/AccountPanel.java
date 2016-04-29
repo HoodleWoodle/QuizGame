@@ -16,6 +16,7 @@ import quiz.server.model.DataManager;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 final class AccountPanel extends JPanel
 {
@@ -25,7 +26,7 @@ final class AccountPanel extends JPanel
 	/**
 	 * The IDataManager.
 	 */
-	private final /* I */DataManager dataManager;
+	private final/* I */DataManager dataManager;
 
 	/**
 	 * The table.

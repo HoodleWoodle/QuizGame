@@ -6,6 +6,7 @@ import quiz.model.Account;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 final class AccountComparator implements Comparator<Account>
 {

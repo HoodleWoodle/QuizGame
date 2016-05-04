@@ -7,7 +7,7 @@ package quiz;
 public interface Constants
 {
 	/**
-	 * The count of Questions in on Match.
+	 * The count of Questions per Match.
 	 */
 	public static final int QUESTION_COUNT = 3;
 	/**

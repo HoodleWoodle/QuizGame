@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
- * @author Hoodle
+ * @author Stefan
+ * @version 29.04.2016
  */
 final class ReceivingThread implements Runnable
 {

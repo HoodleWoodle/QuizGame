@@ -2,6 +2,7 @@ package quiz.model;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 public final class Question
 {

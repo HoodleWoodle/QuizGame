@@ -9,6 +9,7 @@ import quiz.model.Question;
 
 /**
  * @author Stefan
+ * @version 29.04.2016
  */
 final class QuestionTableModel extends AbstractTableModel
 {

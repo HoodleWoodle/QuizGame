@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
- * @author Hoodle
+ * @author Stefan
+ * @version 29.04.2016
  */
 public abstract class AbstractTCPClient
 {

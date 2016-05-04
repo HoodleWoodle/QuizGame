@@ -125,7 +125,7 @@ public class Database
 			return null;
 		try
 		{
-			// execute a kind of select-command
+			// execute select like SQL-command
 			if (resultSet != null)
 				resultSet.close();
 			resultSet = statement.executeQuery(sql);
@@ -152,7 +152,7 @@ public class Database
 			return false;
 		try
 		{
-			// execute a kind of insert-command
+			// execute of insert like SQL-command
 			statement.execute(sql);
 			return true;
 		} catch (SQLException e)
@@ -176,7 +176,7 @@ public class Database
 		if (connected != false)
 			try
 			{
-				// execute a kind of insert-command and get key for returning
+				// execute insert like SQL-command and get key for returning
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				ps.executeUpdate();
 				if (resultSet != null)

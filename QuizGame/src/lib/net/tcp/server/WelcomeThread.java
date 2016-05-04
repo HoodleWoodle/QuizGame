@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 /**
- * @author Hoodle
+ * @author Stefan
+ * @version 29.04.2016
  */
 final class WelcomeThread implements Runnable
 {

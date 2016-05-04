@@ -21,7 +21,7 @@ import quiz.model.Question;
  * @author Stefan
  * @version 29.04.2016
  */
-public final class DataManager // implements IDataManager
+public final class DataManager implements IDataManager
 {
 	/**
 	 * The name of the Accounts-table.
@@ -76,7 +76,7 @@ public final class DataManager // implements IDataManager
 		db.insert("CREATE TABLE " + TABLE_QUESTIONS + " (category TINYINT NOT NULL, question VARCHAR(1023) NOT NULL UNIQUE, correct VARCHAR(255) NOT NULL, answer1 VARCHAR(255) NOT NULL, answer2 VARCHAR(255) NOT NULL, answer3 VARCHAR(255) NOT NULL)");
 	}
 
-	// @Override
+	@Override
 	public List<Question> getQuestions(Category category)
 	{
 		// check category
@@ -90,7 +90,7 @@ public final class DataManager // implements IDataManager
 		return getQuestions(result);
 	}
 
-	// @Override
+	@Override
 	public List<Question> getQuestions()
 	{
 		// select all Questions
@@ -100,14 +100,14 @@ public final class DataManager // implements IDataManager
 		return getQuestions(result);
 	}
 
-	// @Override
+	@Override
 	public int getQuestionCount()
 	{
 		// get count
 		return getCount(TABLE_QUESTIONS);
 	}
 
-	// @Override
+	@Override
 	public Account getAccount(String name, String password)
 	{
 		// select Account
@@ -131,7 +131,7 @@ public final class DataManager // implements IDataManager
 		return getAccount(result);
 	}
 
-	// @Override
+	@Override
 	public List<Account> getAccounts()
 	{
 		// select all Accounts
@@ -162,14 +162,14 @@ public final class DataManager // implements IDataManager
 		}
 	}
 
-	// @Override
+	@Override
 	public int getAccountCount()
 	{
 		// get count
 		return getCount(TABLE_ACCOUNTS);
 	}
 
-	// @Override
+	@Override
 	public boolean addQuestion(Question question)
 	{
 		// get data from Question-object
@@ -200,7 +200,7 @@ public final class DataManager // implements IDataManager
 		return true;
 	}
 
-	// @Override
+	@Override
 	public Account addAccount(String name, String password)
 	{
 		// check name and password
@@ -217,28 +217,28 @@ public final class DataManager // implements IDataManager
 		return new Account(ID, name, password, 0);
 	}
 
-	// @Override
+	@Override
 	public void removeQuestion(Question question)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'"))
 			log_err(5);
 	}
 
-	// @Override
+	@Override
 	public void removeAccount(Account account)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'"))
 			log_err(6);
 	}
 
-	// @Override
+	@Override
 	public void updateAccount(Account account, int score)
 	{
 		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
 			log_err(7);
 	}
 
-	// @Override
+	@Override
 	public void close()
 	{
 		if (!db.close())
@@ -335,7 +335,7 @@ public final class DataManager // implements IDataManager
 	 */
 	private void log_err(int code)
 	{
-		System.err.println("DataManager-fail: '" + code + "'!");
+		System.err.println("DataManager-error: '" + code + "'!");
 	}
 
 	/**

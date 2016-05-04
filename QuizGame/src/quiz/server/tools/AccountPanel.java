@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import quiz.model.Account;
 import quiz.server.model.DataManager;
+import quiz.server.model.IDataManager;
 
 /**
  * @author Stefan
@@ -26,7 +27,7 @@ final class AccountPanel extends JPanel
 	/**
 	 * The IDataManager.
 	 */
-	private final/* I */DataManager dataManager;
+	private final IDataManager dataManager;
 
 	/**
 	 * The table.
@@ -62,9 +63,9 @@ final class AccountPanel extends JPanel
 	 * Creates an instance of AccountPanel.
 	 * 
 	 * @param dataManager
-	 *            the IDataManager
+	 *            the IDataManager instance
 	 */
-	AccountPanel(/* I */DataManager dataManager)
+	AccountPanel(IDataManager dataManager)
 	{
 		this.dataManager = dataManager;
 

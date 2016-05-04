@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import quiz.server.model.DataManager;
+import quiz.server.model.IDataManager;
 
 /**
  * @author Stefan
@@ -24,7 +25,7 @@ final class MasterTool extends JPanel
 	/**
 	 * The IDataManager.
 	 */
-	private final/* I */DataManager dataManager;
+	private final IDataManager dataManager;
 
 	/**
 	 * The JTabbedPane.

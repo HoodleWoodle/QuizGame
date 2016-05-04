@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import quiz.model.Category;
 import quiz.model.Question;
 import quiz.server.model.DataManager;
+import quiz.server.model.IDataManager;
 
 /**
  * @author Stefan
@@ -28,7 +29,7 @@ final class QuestionPanel extends JPanel
 	/**
 	 * The IDataManager.
 	 */
-	private final/* I */DataManager dataManager;
+	private final IDataManager dataManager;
 
 	/**
 	 * The table.
@@ -70,7 +71,7 @@ final class QuestionPanel extends JPanel
 	 * @param dataManager
 	 *            the IDataManager
 	 */
-	QuestionPanel(/* I */DataManager dataManager)
+	QuestionPanel(IDataManager dataManager)
 	{
 		this.dataManager = dataManager;
 

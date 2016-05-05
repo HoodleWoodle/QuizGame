@@ -1,5 +1,8 @@
 package quiz;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * @author Alex, Eric, Quirin, Stefan
  * @version 29.04.2016
@@ -26,4 +29,8 @@ public interface Constants
 	 * The password to connect to the database.
 	 */
 	public static final String DB_PASSWORD = "qM";
+	/**
+	 * The path to the username file.
+	 */
+	public static final Path USERNAME_FILE = Paths.get("data").resolve("username.txt");
 }

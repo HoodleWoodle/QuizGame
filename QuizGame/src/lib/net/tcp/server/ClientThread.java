@@ -12,35 +12,15 @@ import java.net.Socket;
  */
 public class ClientThread implements Runnable
 {
-	/**
-	 * The ID of the next client.
-	 */
 	private static int ID_NEXT;
 
-	/**
-	 * The ID.
-	 */
 	private final int ID;
 
-	/**
-	 * The AbstractTCPServer.
-	 */
 	private final AbstractTCPServer server;
-	/**
-	 * The connection-socket.
-	 */
 	private final Socket socket;
-	/**
-	 * The input.
-	 */
 	private BufferedReader in;
-	/**
-	 * The output.
-	 */
 	private DataOutputStream out;
-	/**
-	 * Whether the thread is running.
-	 */
+
 	private boolean running;
 
 	/**

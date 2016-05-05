@@ -13,17 +13,10 @@ import quiz.model.Question;
  */
 final class QuestionTableModel extends AbstractTableModel
 {
-	/***/
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The comparator.
-	 */
 	private final QuestionComparator comparator = new QuestionComparator();
 
-	/**
-	 * The model.
-	 */
 	private List<Question> model;
 
 	/**

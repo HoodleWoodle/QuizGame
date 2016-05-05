@@ -23,46 +23,17 @@ import quiz.server.model.IDataManager;
  */
 final class QuestionPanel extends JPanel
 {
-	/***/
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The IDataManager.
-	 */
 	private final IDataManager dataManager;
 
-	/**
-	 * The table.
-	 */
 	private JTable table;
-	/**
-	 * The QuestionTableModel.
-	 */
 	private QuestionTableModel model;
-
-	/**
-	 * The question-field.
-	 */
 	private JTextField question;
-	/**
-	 * The answer-fields.
-	 */
 	private JTextField[] answers;
-	/**
-	 * The category-box.
-	 */
 	private JComboBox<Category> category;
-	/**
-	 * The get-button.
-	 */
 	private JButton get;
-	/**
-	 * The remove-button.
-	 */
 	private JButton remove;
-	/**
-	 * The add-button.
-	 */
 	private JButton add;
 
 	/**

@@ -21,42 +21,17 @@ import quiz.server.model.IDataManager;
  */
 final class AccountPanel extends JPanel
 {
-	/***/
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The IDataManager.
-	 */
 	private final IDataManager dataManager;
 
-	/**
-	 * The table.
-	 */
 	private JTable table;
-	/**
-	 * The AccountTableModel.
-	 */
 	private AccountTableModel model;
 
-	/**
-	 * The name-field.
-	 */
 	private JTextField name;
-	/**
-	 * The password-field.
-	 */
 	private JTextField password;
-	/**
-	 * The get-button.
-	 */
 	private JButton get;
-	/**
-	 * The remove-button.
-	 */
 	private JButton remove;
-	/**
-	 * The add-button.
-	 */
 	private JButton add;
 
 	/**

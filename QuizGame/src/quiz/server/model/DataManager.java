@@ -23,18 +23,9 @@ import quiz.model.Question;
  */
 public final class DataManager implements IDataManager
 {
-	/**
-	 * The name of the Accounts-table.
-	 */
 	private static final String TABLE_ACCOUNTS = "accounts";
-	/**
-	 * The name of the Questions-table.
-	 */
 	private static final String TABLE_QUESTIONS = "questions";
 
-	/**
-	 * The database-connection of the DataManager.
-	 */
 	private final Database db;
 
 	/**
@@ -265,7 +256,7 @@ public final class DataManager implements IDataManager
 				String[] answers = new String[4];
 				for (int answer = 0; answer < answers.length; answer++)
 					answers[answer] = result.getString(3 + answer);
-				questions.add(new Question(Category.getCategory(result.getInt(1)), result.getString(2), answers));
+				questions.add(new Question(Category.values()[result.getInt(1)], result.getString(2), answers));
 			}
 
 			return questions;

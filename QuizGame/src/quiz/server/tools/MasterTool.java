@@ -19,25 +19,12 @@ import quiz.server.model.IDataManager;
  */
 final class MasterTool extends JPanel
 {
-	/***/
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The IDataManager.
-	 */
 	private final IDataManager dataManager;
 
-	/**
-	 * The JTabbedPane.
-	 */
 	private JTabbedPane pane;
-	/**
-	 * The Panel for Question-controlling.
-	 */
 	private QuestionPanel question;
-	/**
-	 * The Panel for Account-controlling.
-	 */
 	private AccountPanel account;
 
 	/**

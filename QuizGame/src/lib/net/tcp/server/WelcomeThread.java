@@ -9,21 +9,11 @@ import java.net.ServerSocket;
  */
 final class WelcomeThread implements Runnable
 {
-	/**
-	 * The AbstractTCPServer.
-	 */
-	private final AbstractTCPServer server;
-	/**
-	 * The server-port.
-	 */
 	private final int port;
-	/**
-	 * The server-socket.
-	 */
+
+	private final AbstractTCPServer server;
 	private ServerSocket socket;
-	/**
-	 * Whether the thread is running.
-	 */
+
 	private boolean running;
 
 	/**

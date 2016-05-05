@@ -6,25 +6,10 @@ package quiz.model;
  */
 public final class Match
 {
-	/**
-	 * The ID of the Match.
-	 */
 	private final int ID;
-	/**
-	 * The Category of the Match.
-	 */
 	private final Category category;
-	/**
-	 * The Opponents of the Match.
-	 */
 	private final Account[] opponents;
-	/**
-	 * The done Questions of the Match.
-	 */
 	private final Question[] questions;
-	/**
-	 * The answer-indices of the Match.
-	 */
 	private final int[][] answers;
 
 	/**

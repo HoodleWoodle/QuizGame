@@ -6,17 +6,8 @@ package quiz.model;
  */
 public final class Question
 {
-	/**
-	 * The Category of the Question.
-	 */
 	private final Category category;
-	/**
-	 * The question-string of the Question.
-	 */
 	private final String question;
-	/**
-	 * The answer-strings of the Question.
-	 */
 	private final String[] answers;
 
 	/**

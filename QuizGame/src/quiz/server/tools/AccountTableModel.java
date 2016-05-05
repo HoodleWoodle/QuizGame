@@ -13,17 +13,10 @@ import quiz.model.Account;
  */
 final class AccountTableModel extends AbstractTableModel
 {
-	/***/
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The comparator.
-	 */
 	private final AccountComparator comparator = new AccountComparator();
 
-	/**
-	 * The model.
-	 */
 	private List<Account> model;
 
 	/**

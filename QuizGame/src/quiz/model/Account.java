@@ -6,29 +6,12 @@ package quiz.model;
  */
 public final class Account
 {
-	/**
-	 * The ID of the Account.
-	 */
 	private final int ID;
-	/**
-	 * The name of the Account.
-	 */
 	private final String name;
-	/**
-	 * The password of the Account.
-	 */
 	private final String password;
-	/**
-	 * The score of the Account.
-	 */
 	private final int score;
-	/**
-	 * Whether the Account is currently online.
-	 */
+
 	private boolean online;
-	/**
-	 * Whether the Account is currently available for a new Match.
-	 */
 	private boolean available;
 
 	/**

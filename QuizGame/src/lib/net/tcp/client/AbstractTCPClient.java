@@ -12,25 +12,11 @@ import java.net.Socket;
  */
 public abstract class AbstractTCPClient
 {
-	/**
-	 * The server-tag.
-	 */
 	private final String server;
-	/**
-	 * The server-port.
-	 */
 	private final int port;
-	/**
-	 * The client-socket.
-	 */
-	private Socket socket;
-	/**
-	 * The ReceivingThread.
-	 */
+
 	private ReceivingThread receiver;
-	/**
-	 * The output.
-	 */
+	private Socket socket;
 	private DataOutputStream out;
 
 	/**

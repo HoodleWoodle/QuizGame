@@ -13,35 +13,15 @@ import java.sql.Statement;
  */
 public class Database
 {
-	/**
-	 * The Database-tag.
-	 */
 	private final String database;
-	/**
-	 * The Database-user.
-	 */
 	private final String user;
-	/**
-	 * The Database-password.
-	 */
 	private final String password;
 
-	/**
-	 * The Database-connection.
-	 */
 	private Connection connection;
-	/**
-	 * Whether the Database is connected.
-	 */
-	private boolean connected;
-	/**
-	 * The Database-statement.
-	 */
 	private Statement statement;
-	/**
-	 * The Database-result-set.
-	 */
 	private ResultSet resultSet;
+
+	private boolean connected;
 
 	/**
 	 * Creates an new instance of Database (H2).

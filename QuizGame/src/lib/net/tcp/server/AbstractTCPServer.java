@@ -9,12 +9,10 @@ import java.util.List;
  */
 public abstract class AbstractTCPServer
 {
-	/**
-	 * The WelcomeThread.
-	 */
 	private final WelcomeThread welcome;
+
 	/**
-	 * The clients.
+	 * The registered clients.
 	 */
 	protected final List<ClientThread> clients;
 

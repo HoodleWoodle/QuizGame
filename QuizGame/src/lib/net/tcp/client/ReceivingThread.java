@@ -9,17 +9,9 @@ import java.io.IOException;
  */
 final class ReceivingThread implements Runnable
 {
-	/**
-	 * The AbstractTCPClient.
-	 */
 	private final AbstractTCPClient client;
-	/**
-	 * The input.
-	 */
 	private final BufferedReader in;
-	/**
-	 * Whether the thread is running.
-	 */
+
 	private boolean running;
 
 	/**

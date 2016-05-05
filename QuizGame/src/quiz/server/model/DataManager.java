@@ -68,7 +68,7 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public List<Question> getQuestions(Category category)
+	public synchronized List<Question> getQuestions(Category category)
 	{
 		// check category
 		if (category == null)
@@ -82,7 +82,7 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public List<Question> getQuestions()
+	public synchronized List<Question> getQuestions()
 	{
 		// select all Questions
 		ResultSet result = db.select("SELECT * FROM " + TABLE_QUESTIONS);
@@ -92,14 +92,14 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public int getQuestionCount()
+	public synchronized int getQuestionCount()
 	{
 		// get count
 		return getCount(TABLE_QUESTIONS);
 	}
 
 	@Override
-	public Account getAccount(String name, String password)
+	public synchronized Account getAccount(String name, String password)
 	{
 		// select Account
 		ResultSet result = db.select("SELECT * FROM " + TABLE_ACCOUNTS + " WHERE name='" + name + "' AND password='" + password + "'");
@@ -123,7 +123,7 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public List<Account> getAccounts()
+	public synchronized List<Account> getAccounts()
 	{
 		// select all Accounts
 		ResultSet result = db.select("SELECT * FROM " + TABLE_ACCOUNTS);
@@ -154,14 +154,14 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public int getAccountCount()
+	public synchronized int getAccountCount()
 	{
 		// get count
 		return getCount(TABLE_ACCOUNTS);
 	}
 
 	@Override
-	public boolean addQuestion(Question question)
+	public synchronized boolean addQuestion(Question question)
 	{
 		// get data from Question-object
 		String quest = question.getQuestion();
@@ -192,7 +192,7 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public Account addAccount(String name, String password)
+	public synchronized Account addAccount(String name, String password)
 	{
 		// check name and password
 		if (!check(name) || !check(password))
@@ -209,28 +209,28 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public void removeQuestion(Question question)
+	public synchronized void removeQuestion(Question question)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'"))
 			log_err(5);
 	}
 
 	@Override
-	public void removeAccount(Account account)
+	public synchronized void removeAccount(Account account)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'"))
 			log_err(6);
 	}
 
 	@Override
-	public void updateAccount(Account account, int score)
+	public synchronized void updateAccount(Account account, int score)
 	{
 		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
 			log_err(7);
 	}
 
 	@Override
-	public void close()
+	public synchronized void close()
 	{
 		if (!db.close())
 			log_err(8);

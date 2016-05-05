@@ -35,14 +35,6 @@ public interface IControl
 	 * 
 	 * @param category
 	 *            the Category
-	 */
-	void requestMatch(Category category);
-
-	/**
-	 * Requests a new Match.
-	 * 
-	 * @param category
-	 *            the Category
 	 * @param aim
 	 *            the aim-Account
 	 */
@@ -50,8 +42,11 @@ public interface IControl
 
 	/**
 	 * Requests a new Match.
+	 * 
+	 * @param category
+	 *            the Category
 	 */
-	void requestMatch();
+	void requestMatch(Category category);
 
 	/**
 	 * Requests a new Match.
@@ -60,6 +55,11 @@ public interface IControl
 	 *            the aim-Account
 	 */
 	void requestMatch(Account aim);
+
+	/**
+	 * Requests a new Match.
+	 */
+	void requestMatch();
 
 	/**
 	 * Accepts a request.

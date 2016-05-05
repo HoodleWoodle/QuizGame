@@ -48,7 +48,7 @@ public interface IModel
 	/**
 	 * Getter.
 	 * 
-	 * @return the server-message
+	 * @return the information
 	 */
-	String[] getServerMessage();
+	Information getInformation();
 }

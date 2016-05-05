@@ -27,7 +27,7 @@ public enum ChangeType
 	 */
 	REQUESTS,
 	/**
-	 * If the server-message has changed.
+	 * If the Information has changed.
 	 */
-	SERVER_MESSAGE;
+	INFORMATION;
 }

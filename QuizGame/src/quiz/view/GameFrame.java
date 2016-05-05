@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import quiz.client.view.IView;
+
 /**
  * 
  * @author Eric
@@ -18,6 +20,7 @@ public final class GameFrame extends JFrame {
 	public static GameFrame instance;
 
 	private final MenuPanel menuPanel;
+	private final QuestionPanel questionPanel;
 
 	/**
 	 * Singleton. Returns the instance of GameFrame.
@@ -70,7 +73,7 @@ public final class GameFrame extends JFrame {
 		setLocationRelativeTo(null);
 
 		setContentPane(menuPanel = new MenuPanel());
-		setContentPane(new QuestionPanel());
+		setContentPane(questionPanel = new QuestionPanel());
 		setVisible(true);
 	}
 
@@ -81,6 +84,24 @@ public final class GameFrame extends JFrame {
 	 */
 	public MenuPanel getMenuPanel() {
 		return menuPanel;
+	}
+
+	/**
+	 * Returns the QuestionPanel.
+	 * 
+	 * @return the QuestionPanel
+	 */
+	public QuestionPanel getQuestionPanel() {
+		return questionPanel;
+	}
+
+	/**
+	 * Returns the IView.
+	 * 
+	 * @return the IView
+	 */
+	public IView getView() {
+		return getQuestionPanel();
 	}
 
 	/**

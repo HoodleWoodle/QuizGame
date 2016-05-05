@@ -14,7 +14,7 @@ quiz.client.view
 *IView*
 --
 + init (in model : IModel, in control : IControl)
-+ onChange (in types : ChangeType[])</panel_attributes>
++ onChange (in type : ChangeType)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -65,7 +65,7 @@ quiz.server.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>750</x>
+      <x>810</x>
       <y>310</y>
       <w>580</w>
       <h>200</h>
@@ -88,8 +88,8 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>590</x>
-      <y>40</y>
+      <x>650</x>
+      <y>210</y>
       <w>150</w>
       <h>160</h>
     </coordinates>
@@ -102,13 +102,13 @@ MATCH
 QUESTION
 OPPONENTS
 REQUESTS
-SERVER_MESSAGE</panel_attributes>
+INFORMATION</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>750</x>
+      <x>810</x>
       <y>520</y>
       <w>460</w>
       <h>340</h>
@@ -158,7 +158,7 @@ quiz.server
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>750</x>
+      <x>810</x>
       <y>40</y>
       <w>710</w>
       <h>260</h>
@@ -209,7 +209,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>750</x>
+      <x>810</x>
       <y>0</y>
       <w>120</w>
       <h>30</h>
@@ -239,7 +239,7 @@ quiz.server.tools
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1220</x>
+      <x>1280</x>
       <y>590</y>
       <w>260</w>
       <h>140</h>
@@ -272,7 +272,7 @@ quiz.client.model
 + getQuestion : Question
 + getOpponents : Account[]
 + getRequests : Match[]
-+ getServerMessage : String[]</panel_attributes>
++ getInformation : Information</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -289,10 +289,10 @@ quiz.client
 --
 + register (in name : String, in password : String)
 + login (in name : String, in password : String)
-+ requestMatch (in category : Category)
 + requestMatch (in category : Category, in aim : Account)
-+ requestMatch
++ requestMatch (in category : Category)
 + requestMatch (in aim : Account)
++ requestMatch
 + acceptRequest (in request : Match)
 + setAnswer (in index : int)</panel_attributes>
     <additional_attributes/>
@@ -480,7 +480,7 @@ bg=RED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1220</x>
+      <x>1280</x>
       <y>520</y>
       <w>260</w>
       <h>60</h>
@@ -489,6 +489,26 @@ bg=RED</panel_attributes>
 quiz.model
 *Category*
 --</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>40</y>
+      <w>210</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+quiz.client.model
+*Information*
+--
+INVALID_REGISTER_DETAILS
+INVALID_LOGIN_DETAILS
+OPPONENT_NOT_AVAILABLE
+ALREADY_IN_MATCH
+NOT_LOGGED_IN
+NO_OPPONENTS_AVAILABLE</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

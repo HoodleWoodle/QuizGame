@@ -21,10 +21,10 @@ public interface IView
 	void init(IModel model, IControl control);
 
 	/**
-	 * On change of the model.
+	 * On change of the IModel.
 	 * 
-	 * @param types
-	 *            the types of models which were changed
+	 * @param type
+	 *            the type of model which has changed
 	 */
-	void onChange(ChangeType[] types);
+	void onChange(ChangeType type);
 }

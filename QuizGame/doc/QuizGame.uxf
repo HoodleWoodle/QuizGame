@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.1">
+<diagram program="umlet" version="13.3">
   <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
@@ -14,7 +14,7 @@ quiz.client.view
 *IView*
 --
 + init (in model : IModel, in control : IControl)
-+ onChange</panel_attributes>
++ onChange (in types : ChangeType[])</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -65,7 +65,7 @@ quiz.server.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>750</x>
       <y>310</y>
       <w>580</w>
       <h>200</h>
@@ -88,23 +88,27 @@ quiz.model
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1150</x>
-      <y>520</y>
-      <w>260</w>
-      <h>100</h>
+      <x>590</x>
+      <y>40</y>
+      <w>150</w>
+      <h>160</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
-quiz.model
-*Category*
+quiz.client.model
+*ChangeType*
 --
-...
-+ getCategory (in ordinal : int) : Category</panel_attributes>
+ACCOUNT
+MATCH
+QUESTION
+OPPONENTS
+REQUESTS
+SERVER_MESSAGE</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>750</x>
       <y>520</y>
       <w>460</w>
       <h>340</h>
@@ -154,7 +158,7 @@ quiz.server
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>750</x>
       <y>40</y>
       <w>710</w>
       <h>260</h>
@@ -205,7 +209,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>680</x>
+      <x>750</x>
       <y>0</y>
       <w>120</w>
       <h>30</h>
@@ -235,7 +239,7 @@ quiz.server.tools
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1150</x>
+      <x>1220</x>
       <y>630</y>
       <w>260</w>
       <h>140</h>
@@ -290,7 +294,7 @@ quiz.client
 + requestMatch
 + requestMatch (in aim : Account)
 + acceptRequest (in request : Match)
-+ setChoice (in index : int)</panel_attributes>
++ setAnswer (in index : int)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -472,5 +476,21 @@ bg=RED</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>130.0;360.0;230.0;360.0;230.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1220</x>
+      <y>520</y>
+      <w>260</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+quiz.model
+*Category*
+--
+...
++ getCategory (in ordinal : int) : Category</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

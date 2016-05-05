@@ -1,6 +1,7 @@
 package quiz.client.view;
 
 import quiz.client.IControl;
+import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 
 /**
@@ -20,7 +21,10 @@ public interface IView
 	void init(IModel model, IControl control);
 
 	/**
-	 * On a change of model.
+	 * On change of the model.
+	 * 
+	 * @param types
+	 *            the types of models which were changed
 	 */
-	void onChange();
+	void onChange(ChangeType[] types);
 }

@@ -70,10 +70,10 @@ public interface IControl
 	void acceptRequest(Match request);
 
 	/**
-	 * Sets a choice.
+	 * Sets an answer.
 	 * 
 	 * @param index
 	 *            the index of the correct answer
 	 */
-	void setChoice(int index);
+	void setAnswer(int index);
 }

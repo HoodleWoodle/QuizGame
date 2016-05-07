@@ -1,4 +1,4 @@
-package quiz.view;
+package quiz.client.view;
 
 import java.awt.Color;
 import java.awt.Dimension;

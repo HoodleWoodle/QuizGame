@@ -89,7 +89,7 @@ quiz.model
     <id>UMLClass</id>
     <coordinates>
       <x>650</x>
-      <y>210</y>
+      <y>230</y>
       <w>150</w>
       <h>160</h>
     </coordinates>
@@ -497,12 +497,13 @@ quiz.model
       <x>590</x>
       <y>40</y>
       <w>210</w>
-      <h>160</h>
+      <h>180</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 quiz.client.model
 *Information*
 --
+SUCCESS
 INVALID_REGISTER_DETAILS
 INVALID_LOGIN_DETAILS
 OPPONENT_NOT_AVAILABLE

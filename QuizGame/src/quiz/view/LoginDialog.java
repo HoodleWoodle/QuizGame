@@ -75,20 +75,20 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	}
 
 	@Override
-	public void onChange(ChangeType[] changeTypes) {
-		for (ChangeType changeType : changeTypes) {
-			if (changeType == ChangeType.ACCOUNT) {
-				Account account = model.getAccount();
+	public void onChange(ChangeType changeType) {
+		if (changeType == ChangeType.ACCOUNT) {
+			Account user = model.getAccount();
 
-				if (account != null)
-					dispose();
-				else {
-					JOptionPane
-							.showMessageDialog(null,
-									"Es ist ein Fehler bei der " + (login.isSelected() ? "Registrierung" : "Anmeldung")
-											+ "aufgetreten! Versuche es noch einmal!",
-									"Fehler", JOptionPane.ERROR_MESSAGE);
-				}
+			if (user != null) {
+				GameFrame.getInstance().setUser(user);
+				dispose();
+			}
+			else {
+				JOptionPane
+						.showMessageDialog(null,
+								"Es ist ein Fehler bei der " + (login.isSelected() ? "Registrierung" : "Anmeldung")
+										+ "aufgetreten! Versuche es noch einmal!",
+								"Fehler", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

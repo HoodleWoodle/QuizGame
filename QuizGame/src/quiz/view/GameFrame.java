@@ -4,8 +4,10 @@ import java.awt.Dimension;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import quiz.client.view.IView;
+import quiz.model.Account;
 
 /**
  * 
@@ -21,6 +23,7 @@ public final class GameFrame extends JFrame {
 
 	private final MenuPanel menuPanel;
 	private final QuestionPanel questionPanel;
+	private Account user;
 
 	/**
 	 * Singleton. Returns the instance of GameFrame.
@@ -30,7 +33,7 @@ public final class GameFrame extends JFrame {
 	public static GameFrame getInstance() {
 		if (instance == null)
 			instance = new GameFrame();
-
+		
 		return instance;
 	}
 
@@ -71,10 +74,30 @@ public final class GameFrame extends JFrame {
 		setSize(new Dimension(700, 700));
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setContentPane(menuPanel = new MenuPanel());
 		setContentPane(questionPanel = new QuestionPanel());
+		pack();
 		setVisible(true);
+	}
+	
+	/**
+	 * Returns the currently logged in user.
+	 * 
+	 * @return the currently logged in user
+	 */
+	public Account getUser() {
+		return user;
+	}
+	
+	/**
+	 * Sets the currently logged in user.
+	 * 
+	 * @param user the currently logged in user
+	 */
+	public void setUser(Account user) {
+		this.user = user;
 	}
 
 	/**
@@ -110,6 +133,9 @@ public final class GameFrame extends JFrame {
 	 * @param args
 	 */
 	public static void main(String args[]) {
-		GameFrame.getInstance();
+		SwingUtilities.invokeLater(() -> {
+			//Swing needs to run on event dispatching thread
+			GameFrame.getInstance();
+		});
 	}
 }

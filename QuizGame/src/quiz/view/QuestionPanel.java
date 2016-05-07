@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
@@ -28,7 +28,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
 	private IModel model;
 	private IControl control;
-	private JTextArea questionText;
+	private JTextPane questionText;
 	private JButton[] answerButtons = new JButton[4];
 	private CountdownProgressBar countdown;
 	private Question question;
@@ -52,10 +52,9 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		c.weighty = 0.55;
 		c.fill = GridBagConstraints.BOTH;
 		
-		questionText = new JTextArea(question.getQuestion());
+		questionText = new JTextPane();
 		questionText.setEditable(false);
-		questionText.setWrapStyleWord(true);
-		questionText.setLineWrap(true);
+		questionText.setText(question.getQuestion());
 		
 		add(questionText, c);
 		c.gridwidth = 1;
@@ -114,7 +113,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	}
 
 	@Override
-	public void onChange(ChangeType[] types) {
+	public void onChange(ChangeType types) {
 		
 	}
 }

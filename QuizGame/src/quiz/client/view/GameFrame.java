@@ -1,11 +1,9 @@
-package quiz.view;
+package quiz.client.view;
 
 import java.awt.Dimension;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-
-import quiz.client.view.IView;
 
 /**
  * 

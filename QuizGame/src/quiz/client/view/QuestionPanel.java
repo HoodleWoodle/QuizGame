@@ -1,4 +1,4 @@
-package quiz.view;
+package quiz.client.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,7 +16,6 @@ import javax.swing.JTextArea;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
-import quiz.client.view.IView;
 import quiz.model.Question;
 
 /**

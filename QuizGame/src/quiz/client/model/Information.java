@@ -7,6 +7,8 @@ package quiz.client.model;
 public enum Information
 {
 	/***/
+	SUCCESS,
+	/***/
 	INVALID_REGISTER_DETAILS,
 	/***/
 	INVALID_LOGIN_DETAILS,

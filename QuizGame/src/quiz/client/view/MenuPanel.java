@@ -1,4 +1,4 @@
-package quiz.view;
+package quiz.client.view;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;

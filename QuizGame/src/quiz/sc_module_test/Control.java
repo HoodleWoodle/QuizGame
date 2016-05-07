@@ -7,6 +7,7 @@ import java.util.Random;
 import quiz.Constants;
 import quiz.client.IControl;
 import quiz.client.model.Information;
+import quiz.client.view.GameFrame;
 import quiz.client.view.IView;
 import quiz.model.Account;
 import quiz.model.Category;
@@ -14,7 +15,6 @@ import quiz.model.Match;
 import quiz.model.Question;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
-import quiz.view.GameFrame;
 
 public class Control implements IControl
 {

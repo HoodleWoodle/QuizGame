@@ -1,4 +1,4 @@
-package quiz.view;
+package quiz.client.view;
 
 import static quiz.Constants.USERNAME_FILE;
 
@@ -30,7 +30,6 @@ import javax.swing.JTextField;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
-import quiz.client.view.IView;
 import quiz.model.Account;
 
 /**

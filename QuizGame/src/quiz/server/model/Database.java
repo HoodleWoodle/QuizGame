@@ -11,7 +11,7 @@ import java.sql.Statement;
  * @author Stefan
  * @version 29.04.2016
  */
-public class Database
+class Database
 {
 	private final String database;
 	private final String user;
@@ -33,7 +33,7 @@ public class Database
 	 * @param password
 	 *            the user-password
 	 */
-	public Database(String database, String user, String password)
+	Database(String database, String user, String password)
 	{
 		this.database = database;
 		this.user = user;
@@ -45,7 +45,7 @@ public class Database
 	 * 
 	 * @return whether it was successful
 	 */
-	public boolean connect()
+	boolean connect()
 	{
 		try
 		{
@@ -71,7 +71,7 @@ public class Database
 	 * 
 	 * @return whether it was successful
 	 */
-	public boolean close()
+	boolean close()
 	{
 		try
 		{
@@ -99,7 +99,7 @@ public class Database
 	 *            the SQL-command
 	 * @return the resultSet
 	 */
-	public ResultSet select(String sql)
+	ResultSet select(String sql)
 	{
 		if (connected == false)
 			return null;
@@ -126,7 +126,7 @@ public class Database
 	 *            the SQL-command
 	 * @return whether it was successful
 	 */
-	public boolean insert(String sql)
+	boolean insert(String sql)
 	{
 		if (connected == false)
 			return false;
@@ -151,7 +151,7 @@ public class Database
 	 *            the SQL-command
 	 * @return the insert-ID
 	 */
-	public int insertReturn(String sql)
+	int insertReturn(String sql)
 	{
 		if (connected != false)
 			try

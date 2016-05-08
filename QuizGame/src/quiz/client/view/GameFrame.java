@@ -118,15 +118,6 @@ public final class GameFrame extends JFrame {
 	}
 
 	/**
-	 * Returns the IView.
-	 * 
-	 * @return the IView
-	 */
-	public IView getView() {
-		return getQuestionPanel();
-	}
-
-	/**
 	 * Main.
 	 * 
 	 * @param args

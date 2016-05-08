@@ -1,5 +1,6 @@
 package quiz.client.model;
 
+import quiz.client.view.IView;
 import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
@@ -46,9 +47,18 @@ public interface IModel
 	Match[] getRequests();
 
 	/**
-	 * Getter.
+	 * Adds a IView to the IModel (Observer-Pattern).
 	 * 
-	 * @return the information
+	 * @param view
+	 *            the IView to add
 	 */
-	Information getInformation();
+	void addView(IView view);
+
+	/**
+	 * Removes a IView from IModel (Observer-Pattern).
+	 * 
+	 * @param view
+	 *            the IView to remove
+	 */
+	void removeView(IView view);
 }

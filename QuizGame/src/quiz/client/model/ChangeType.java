@@ -25,9 +25,5 @@ public enum ChangeType
 	/**
 	 * If the requests have changed.
 	 */
-	REQUESTS,
-	/**
-	 * If the Information has changed.
-	 */
-	INFORMATION;
+	REQUESTS;
 }

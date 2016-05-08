@@ -4,7 +4,7 @@ package quiz.client.model;
  * @author Stefan
  * @version 05.05.2016
  */
-public enum Information
+public enum Status
 {
 	/***/
 	SUCCESS,

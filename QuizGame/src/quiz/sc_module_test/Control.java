@@ -6,9 +6,7 @@ import java.util.Random;
 
 import quiz.Constants;
 import quiz.client.IControl;
-import quiz.client.model.Information;
-import quiz.client.view.GameFrame;
-import quiz.client.view.IView;
+import quiz.client.model.Status;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
@@ -24,7 +22,6 @@ public class Control implements IControl
 
 	public IDataManager data;
 	public Model model;
-	public IView view;
 
 	public List<Match> requests;
 	public List<Match> matches;
@@ -43,12 +40,7 @@ public class Control implements IControl
 				System.exit(1);
 			}
 
-		IView view = GameFrame.getInstance().getView();
-
-		model = new Model(view);
-		Control control = new Control();
-
-		view.init(model, control);
+		model = new Model(new Control());
 	}
 
 	@Override
@@ -60,7 +52,10 @@ public class Control implements IControl
 		Account acc = data.addAccount(name, password);
 
 		if (acc == null)
-			model.setInformation(Information.INVALID_REGISTER_DETAILS);
+		{
+			model.setStatus(Status.INVALID_REGISTER_DETAILS);
+			return;
+		}
 
 		model.setAccount(acc);
 	}
@@ -74,7 +69,10 @@ public class Control implements IControl
 		Account acc = data.getAccount(name, password);
 
 		if (acc == null)
-			model.setInformation(Information.INVALID_LOGIN_DETAILS);
+		{
+			model.setStatus(Status.INVALID_LOGIN_DETAILS);
+			return;
+		}
 
 		model.setAccount(acc);
 	}
@@ -82,8 +80,6 @@ public class Control implements IControl
 	@Override
 	public void requestMatch(Category category, Account aim)
 	{
-		if (aim == null)
-			return;
 		if (!checkAcc_Mat())
 			return;
 
@@ -127,7 +123,7 @@ public class Control implements IControl
 		for (Account acc : request.getOpponents())
 			if (!acc.isAvailable())
 			{
-				model.setInformation(Information.OPPONENT_NOT_AVAILABLE);
+				model.setStatus(Status.OPPONENT_NOT_AVAILABLE);
 				return;
 			}
 
@@ -150,7 +146,7 @@ public class Control implements IControl
 			return false;
 		if (model.getMatch() != null)
 		{
-			model.setInformation(Information.ALREADY_IN_MATCH);
+			model.setStatus(Status.ALREADY_IN_MATCH);
 			return false;
 		}
 		return true;
@@ -160,7 +156,7 @@ public class Control implements IControl
 	{
 		if (model.getAccount() == null)
 		{
-			model.setInformation(Information.NOT_LOGGED_IN);
+			model.setStatus(Status.NOT_LOGGED_IN);
 			return false;
 		}
 		return true;
@@ -192,7 +188,7 @@ public class Control implements IControl
 				accounts.add(acc);
 		if (accounts.size() <= 1)
 		{
-			model.setInformation(Information.NO_OPPONENTS_AVAILABLE);
+			model.setStatus(Status.NO_OPPONENTS_AVAILABLE);
 			return null;
 		}
 		Account acc = accounts.get(random.nextInt(accounts.size()));

@@ -1,8 +1,12 @@
 package quiz.sc_module_test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
-import quiz.client.model.Information;
+import quiz.client.model.Status;
 import quiz.client.view.IView;
 import quiz.model.Account;
 import quiz.model.Match;
@@ -10,18 +14,21 @@ import quiz.model.Question;
 
 public class Model implements IModel
 {
-	private final IView view;
+	private final IControl control;
+	private final List<IView> views;
 
 	private Account account;
 	private Match match;
 	private Question question;
 	private Account[] opponents;
 	private Match[] requests;
-	private Information information;
 
-	Model(IView view)
+	private Status status;
+
+	public Model(IControl control)
 	{
-		this.view = view;
+		this.control = control;
+		views = new ArrayList<IView>();
 	}
 
 	@Override
@@ -54,45 +61,57 @@ public class Model implements IModel
 		return requests;
 	}
 
-	@Override
-	public Information getInformation()
+	public void setStatus(Status status)
 	{
-		return information;
-	}
-
-	public void setInformation(Information information)
-	{
-		this.information = information;
-		view.onChange(ChangeType.INFORMATION);
+		this.status = status;
 	}
 
 	public void setAccount(Account account)
 	{
 		this.account = account;
-		view.onChange(ChangeType.ACCOUNT);
+		onChange(ChangeType.ACCOUNT);
 	}
 
 	public void setMatch(Match match)
 	{
 		this.match = match;
-		view.onChange(ChangeType.MATCH);
+		onChange(ChangeType.MATCH);
 	}
 
 	public void setQuestion(Question question)
 	{
 		this.question = question;
-		view.onChange(ChangeType.QUESTION);
+		onChange(ChangeType.QUESTION);
 	}
 
 	public void setOpponents(Account[] opponents)
 	{
 		this.opponents = opponents;
-		view.onChange(ChangeType.OPPONENTS);
+		onChange(ChangeType.OPPONENTS);
 	}
 
 	public void setRequests(Match[] requests)
 	{
 		this.requests = requests;
-		view.onChange(ChangeType.REQUESTS);
+		onChange(ChangeType.REQUESTS);
+	}
+
+	@Override
+	public void addView(IView view)
+	{
+		views.add(view);
+		view.init(this, control);
+	}
+
+	@Override
+	public void removeView(IView view)
+	{
+		views.remove(view);
+	}
+
+	private void onChange(ChangeType type)
+	{
+		for (IView view : views)
+			view.onChange(ChangeType.REQUESTS, status);
 	}
 }

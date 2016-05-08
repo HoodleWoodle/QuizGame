@@ -3,6 +3,7 @@ package quiz.client.view;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
+import quiz.client.model.Status;
 
 /**
  * @author Alex
@@ -25,6 +26,8 @@ public interface IView
 	 * 
 	 * @param type
 	 *            the type of model which has changed
+	 * @param status
+	 *            the Status of the change
 	 */
-	void onChange(ChangeType type);
+	void onChange(ChangeType type, Status status);
 }

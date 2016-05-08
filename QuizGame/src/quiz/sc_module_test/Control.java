@@ -40,7 +40,7 @@ public class Control implements IControl
 				System.exit(1);
 			}
 
-		model = new Model(new Control());
+		model = new Model(this);
 	}
 
 	@Override

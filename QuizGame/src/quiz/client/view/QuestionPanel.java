@@ -16,6 +16,7 @@ import javax.swing.JTextPane;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
+import quiz.client.model.Status;
 import quiz.model.Question;
 
 /**
@@ -112,7 +113,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	}
 
 	@Override
-	public void onChange(ChangeType types) {
+	public void onChange(ChangeType types, Status status) {
 		
 	}
 }

@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
+import quiz.client.model.Status;
 import quiz.model.Account;
 
 /**
@@ -72,12 +73,13 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		this.model = model;
 		this.control = control;
 	}
-
+	
 	@Override
-	public void onChange(ChangeType changeType) {
-		if (changeType == ChangeType.ACCOUNT) {
+	public void onChange(ChangeType type, Status status) {
+		if (type == ChangeType.ACCOUNT) {
 			Account user = model.getAccount();
 
+			
 			if (user != null) {
 				GameFrame.getInstance().setUser(user);
 				dispose();

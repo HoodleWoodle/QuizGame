@@ -1,5 +1,6 @@
 package quiz.client.view;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,11 +12,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
+import quiz.client.model.Status;
 import quiz.model.Account;
 import quiz.model.Match;
 
@@ -31,20 +34,22 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	private JLabel gameTitle;
 	private IModel model;
 	private IControl control;
+	private JScrollPane matchRequestsPane;
 
 	/**
 	 * Creates a new MenuPanel.
 	 */
 	public MenuPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-
+		add(new PlayerListPanel(null, null));
+		add(new JSeparator(JSeparator.VERTICAL));
 		add(Box.createHorizontalGlue());
 		add(createMainPart());
 		add(Box.createHorizontalGlue());
 		add(new JSeparator(JSeparator.VERTICAL));
 		add(createMatchRequests());
 	}
-	
+
 	private JPanel createMainPart() {
 		JPanel mainPart = new JPanel();
 		mainPart.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -60,17 +65,19 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 			mainPart.add(menuButtons[i]);
 		}
 		mainPart.add(Box.createVerticalGlue());
-		
+
 		return mainPart;
 	}
-	
+
 	private JPanel createMatchRequests() {
 		JPanel matchRequests = new JPanel();
 		matchRequests.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-		
+
 		matchRequests.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 		matchRequests.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
+
+		matchRequests.add(this.matchRequestsPane = new JScrollPane(matchRequests));
+
 		return matchRequests;
 	}
 
@@ -122,16 +129,33 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	}
 
 	@Override
-	public void onChange(ChangeType type) {
+	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.MATCH) {
 			Match match = model.getMatch();
 			for (Account account : match.getOpponents()) {
 				// set unavailable during match
 				account.setAvailable(false);
 			}
-		}
-		else if(type == ChangeType.REQUESTS) {
+		} else if (type == ChangeType.REQUESTS) {
 			Match[] matchRequests = model.getRequests();
+			Component[] components = matchRequestsPane.getComponents();
+
+			for (Match matchRequest : matchRequests) {
+				boolean foundIt = false;
+				
+				for (Component component : components) {
+					if (component instanceof MatchRequestPanel) {
+						MatchRequestPanel matchRequestPanel = (MatchRequestPanel) component;
+						if (matchRequestPanel.getMatchRequest().getID() == matchRequest.getID()) {
+							foundIt = true;
+							break;
+						}
+					}
+				}
+				
+				if(!foundIt) 
+					this.matchRequestsPane.add(new MatchRequestPanel(matchRequest));
+			}
 		}
 	}
 }

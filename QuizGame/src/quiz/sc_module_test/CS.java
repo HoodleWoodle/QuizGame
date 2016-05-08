@@ -1,5 +1,6 @@
 package quiz.sc_module_test;
 
+import quiz.client.view.GameFrame;
 import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
@@ -18,13 +19,13 @@ public class CS implements Runnable
 	public static void main(String[] args)
 	{
 		new CS(new Control());
+		GameFrame.getInstance();
 	}
 
 	@Override
 	public void run()
 	{
 		boolean loggedIn = false;
-		int counter = 0;
 
 		control.data.addAccount("test0", "0");
 		control.data.addAccount("test1", "1");
@@ -38,8 +39,16 @@ public class CS implements Runnable
 					loggedIn = true;
 				}
 
-			if (counter == 5)
+			if (control.model.getAccount()!=null)
 			{
+
+				try
+				{
+					Thread.sleep(2000);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 				control.requests.add(new Match(50, control.getRandomCategory(), new Account[] { control.model.getAccount(), control.getRandomOpponent(control.model.getAccount()) }, new Question[0], new int[0][0]));
 				control.model.setRequests(control.getRequests(control.model.getAccount()));
 			}
@@ -51,7 +60,6 @@ public class CS implements Runnable
 			{
 				e.printStackTrace();
 			}
-			counter++;
 		}
 	}
 }

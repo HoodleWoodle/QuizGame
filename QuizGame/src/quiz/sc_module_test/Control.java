@@ -176,7 +176,8 @@ public class Control implements IControl
 
 	public Category getRandomCategory()
 	{
-		return Category.values()[Category.values().length];
+		Category[] categories = Category.values();
+		return categories[random.nextInt(categories.length - 1)];
 	}
 
 	public Account getRandomOpponent(Account account)

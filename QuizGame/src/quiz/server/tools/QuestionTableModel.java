@@ -15,8 +15,6 @@ final class QuestionTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private final QuestionComparator comparator = new QuestionComparator();
-
 	private List<Question> model;
 
 	/**
@@ -28,7 +26,7 @@ final class QuestionTableModel extends AbstractTableModel
 	void update(List<Question> model)
 	{
 		this.model = model;
-		Collections.sort(model, comparator);
+		Collections.sort(model, (q0, q1) -> q0.getQuestion().compareTo(q1.getQuestion()));
 		fireTableDataChanged();
 	}
 

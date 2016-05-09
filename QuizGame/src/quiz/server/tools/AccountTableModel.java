@@ -15,8 +15,6 @@ final class AccountTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private final AccountComparator comparator = new AccountComparator();
-
 	private List<Account> model;
 
 	/**
@@ -28,7 +26,7 @@ final class AccountTableModel extends AbstractTableModel
 	void update(List<Account> model)
 	{
 		this.model = model;
-		Collections.sort(model, comparator);
+		Collections.sort(model, (a0, a1) -> a0.getName().compareTo(a1.getName()));
 		fireTableDataChanged();
 	}
 

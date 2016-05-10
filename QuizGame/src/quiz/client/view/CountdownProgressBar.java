@@ -100,4 +100,13 @@ public class CountdownProgressBar extends JProgressBar {
 	public int getCounter() {
 		return counter;
 	}
+	
+	/**
+	 * Returns whether the countdown is over.
+	 * 
+	 * @return whether the countdown is over
+	 */
+	public boolean isOver() {
+		return counter > getMinimum();
+	}
 }

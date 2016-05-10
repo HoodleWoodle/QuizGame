@@ -70,13 +70,13 @@ public final class GameFrame extends JFrame {
 	}
 
 	private GameFrame() {
-		setSize(new Dimension(700, 700));
+		setPreferredSize(new Dimension(600, 600));
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setContentPane(menuPanel = new MenuPanel());
-		setContentPane(questionPanel = new QuestionPanel());
+		questionPanel = new QuestionPanel();
 		pack();
 		setVisible(true);
 	}

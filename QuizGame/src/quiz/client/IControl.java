@@ -70,6 +70,14 @@ public interface IControl
 	void acceptRequest(Match request);
 
 	/**
+	 * Denies a request.
+	 * 
+	 * @param request
+	 *            the request to deny
+	 */
+	void denyRequest(Match request);
+
+	/**
 	 * Sets an answer.
 	 * 
 	 * @param index

@@ -197,4 +197,10 @@ public class Control implements IControl
 			return getRandomOpponent(account);
 		return accounts.get(random.nextInt(accounts.size()));
 	}
+
+	@Override
+	public void denyRequest(Match request)
+	{
+		// TODO
+	}
 }

@@ -30,11 +30,14 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	private JLabel gameTitle;
 	private IModel model;
 	private IControl control;
+	private final QuestionPanel questionPanel;
 
 	/**
 	 * Creates a new MenuPanel.
 	 */
 	public MenuPanel() {
+		questionPanel = new QuestionPanel();
+		
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		add(new PlayerScrollPane());
 		add(new JSeparator(JSeparator.VERTICAL));
@@ -43,6 +46,16 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		add(Box.createHorizontalGlue());
 		add(new JSeparator(JSeparator.VERTICAL));
 		add(new MatchRequestScrollPane());
+	}
+	
+	
+	/**
+	 * Returns the QuestionPanel.
+	 * 
+	 * @return the QuestionPanel
+	 */
+	public QuestionPanel getQuestionPanel() {
+		return questionPanel;
 	}
 
 	private JPanel createMainPart() {
@@ -115,10 +128,14 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.MATCH) {
 			Match match = model.getMatch();
-			for (Account account : match.getOpponents()) {
-				// set unavailable during match
-				account.setAvailable(false);
+			if(match != null) {
+				for (Account account : match.getOpponents()) {
+					// set unavailable during match
+					account.setAvailable(false);
+				}	
 			}
+			
+			GameFrame.getInstance().setContentPane(questionPanel);
 		}
 	}
 }

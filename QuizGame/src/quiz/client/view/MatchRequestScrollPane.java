@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
@@ -39,7 +43,8 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 		setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
 		setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
 		setBorder(BorderFactory.createEmptyBorder());
-		
+		setColumnHeaderView(new JLabel("Herausforderungen"));
+
 		lastMatchRequests = new ArrayList<>();
 		matchRequestPanels = new ArrayList<>();
 	}
@@ -53,6 +58,12 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 	@Override
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.REQUESTS) {
+			if (status == Status.ALREADY_IN_MATCH) {
+				JOptionPane.showMessageDialog(null, "Dieser Spieler befindet sich zurzeit schon in einem Match!",
+						"Fehler", JOptionPane.ERROR);
+				return;
+			}
+
 			List<Match> matchRequests = Arrays.asList(model.getRequests());
 
 			// add all new match requests
@@ -71,7 +82,7 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 			for (Match matchRequest : lastMatchRequests) {
 				for (ListIterator<MatchRequestPanel> it = matchRequestPanels.listIterator(); it.hasNext();) {
 					MatchRequestPanel next = it.next();
-					if(next.matchRequest.getID() == matchRequest.getID()) {
+					if (next.matchRequest.getID() == matchRequest.getID()) {
 						remove(next);
 						break;
 					}
@@ -112,14 +123,28 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 				}
 			}
 
-			int option = JOptionPane.showInternalConfirmDialog(this,
-					"Du hast eine Herausforderung von " + opponent.getName() + " erhalten!", "",
-					JOptionPane.YES_NO_OPTION);
-			if (option == JOptionPane.YES_OPTION) {
-				control.acceptRequest(matchRequest);
-			} else if (option == JOptionPane.NO_OPTION) {
-				setEnabled(false);
-			}
+			JTextArea textArea = new JTextArea("Du hast eine Herausforderung von " + opponent.getName() + " erhalten!");
+			textArea.setEditable(false);
+			textArea.setLineWrap(true);
+			textArea.setWrapStyleWord(true);
+			add(textArea);
+			add(Box.createVerticalGlue());
+
+			Box row = Box.createHorizontalBox();
+			row.add(Box.createHorizontalGlue());
+
+			JButton accept = new JButton("Annehmen");
+			accept.addActionListener(e -> control.acceptRequest(matchRequest));
+			row.add(accept);
+			row.add(Box.createHorizontalGlue());
+
+			JButton deny = new JButton("Ablehnen");
+			deny.addActionListener(e -> control.denyRequest(matchRequest));
+			row.add(deny);
+			row.add(Box.createHorizontalGlue());
+
+			add(row);
+			add(Box.createVerticalGlue());
 		}
 	}
 }

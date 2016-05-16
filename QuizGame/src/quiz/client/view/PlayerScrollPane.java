@@ -39,6 +39,10 @@ public class PlayerScrollPane extends JScrollPane implements IView {
 		setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
 		setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
 		setBorder(BorderFactory.createEmptyBorder());
+		
+		JLabel players = new JLabel("Spieler:");
+		players.setAlignmentX(CENTER_ALIGNMENT);
+		setColumnHeaderView(players);
 	}
 
 	@Override

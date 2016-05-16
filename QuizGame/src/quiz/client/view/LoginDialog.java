@@ -73,23 +73,25 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		this.model = model;
 		this.control = control;
 	}
-	
+
 	@Override
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.ACCOUNT) {
-			Account user = model.getAccount();
+			if (status == Status.INVALID_LOGIN_DETAILS) {
+				exceptionMessage("Ungültige Kombination von Benutzername und Passwort! Bitte versuche es erneut!");
+				return;
+			}
 
-			
-			if (user != null) {
+			else if (status == Status.INVALID_REGISTER_DETAILS) {
+				exceptionMessage("Es ist ein Fehler bei der Registrierung aufgetreten!");
+				return;
+			}
+
+			else if (status == Status.SUCCESS) {
+				Account user = model.getAccount();
+
 				GameFrame.getInstance().setUser(user);
 				dispose();
-			}
-			else {
-				JOptionPane
-						.showMessageDialog(null,
-								"Es ist ein Fehler bei der " + (login.isSelected() ? "Registrierung" : "Anmeldung")
-										+ "aufgetreten! Versuche es noch einmal!",
-								"Fehler", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -129,8 +131,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		}
 
 		if (login.isSelected() && !password.getPassword().equals(repeatPassword.getPassword())) {
-			JOptionPane.showMessageDialog(null, "Bitte verwende zweimal das gleiche Passwort!", "Fehler",
-					JOptionPane.ERROR_MESSAGE);
+			exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
 			return;
 		}
 
@@ -201,5 +202,9 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		login.addItemListener(this);
 		keepUsername.addItemListener(this);
 		okButton.addActionListener(this);
+	}
+
+	private void exceptionMessage(String message) {
+		JOptionPane.showMessageDialog(null, message, "Fehler", JOptionPane.ERROR_MESSAGE);
 	}
 }

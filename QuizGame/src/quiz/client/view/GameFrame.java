@@ -1,9 +1,12 @@
 package quiz.client.view;
 
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import quiz.model.Account;
@@ -15,10 +18,7 @@ import quiz.model.Account;
  */
 public final class GameFrame extends JFrame {
 
-	/**
-	 * Singleton. The GameFrame instance.
-	 */
-	public static GameFrame instance;
+	private static GameFrame instance;
 
 	private final MenuPanel menuPanel;
 	private final QuestionPanel questionPanel;
@@ -32,7 +32,7 @@ public final class GameFrame extends JFrame {
 	public static GameFrame getInstance() {
 		if (instance == null)
 			instance = new GameFrame();
-		
+
 		return instance;
 	}
 
@@ -73,14 +73,27 @@ public final class GameFrame extends JFrame {
 		setPreferredSize(new Dimension(600, 600));
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		setContentPane(menuPanel = new MenuPanel());
 		questionPanel = new QuestionPanel();
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				if (user != null && !user.isAvailable()) {
+					JOptionPane.showConfirmDialog(GameFrame.this,
+							"Wenn du QuizGame während des Matches beendest, verlierst du dadurch sofort. Möchstest du das Spiel wirklich schon beenden?",
+							"QuizGame beenden", JOptionPane.YES_NO_OPTION);
+					return;
+				}
+
+				dispose();
+			}
+		});
 		pack();
 		setVisible(true);
 	}
-	
+
 	/**
 	 * Returns the currently logged in user.
 	 * 
@@ -89,11 +102,12 @@ public final class GameFrame extends JFrame {
 	public Account getUser() {
 		return user;
 	}
-	
+
 	/**
 	 * Sets the currently logged in user.
 	 * 
-	 * @param user the currently logged in user
+	 * @param user
+	 *            the currently logged in user
 	 */
 	public void setUser(Account user) {
 		this.user = user;
@@ -124,7 +138,7 @@ public final class GameFrame extends JFrame {
 	 */
 	public static void main(String args[]) {
 		SwingUtilities.invokeLater(() -> {
-			//Swing needs to run on event dispatching thread
+			// Swing needs to run on event dispatching thread
 			GameFrame.getInstance();
 		});
 	}

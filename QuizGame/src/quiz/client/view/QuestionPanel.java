@@ -1,5 +1,7 @@
 package quiz.client.view;
 
+import static quiz.Constants.SECONDS_PER_ANSWER;
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,6 +44,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	public QuestionPanel() {
 		setLayout(new GridBagLayout());
 
+		question = model.getQuestion();
 		initComponents();
 	}
 
@@ -82,7 +85,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		c.gridwidth = 2;
 		c.weighty = 0.05;
 		c.insets = new Insets(10, 20, 20, 20);
-		countdown = new CountdownProgressBar(20);
+		countdown = new CountdownProgressBar(SECONDS_PER_ANSWER);
 		add(countdown, c);
 	}
 
@@ -123,13 +126,14 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 			int[][] answersGiven = match.getAnswers();
 
 			// todo
-			for (int i = 0; i < answersGiven.length; i++) {
-				for (int j = 0; j < answersGiven[0].length; i++) {
-					
+			for (int a = 0; a < answersGiven.length; a++) {
+				for (int j = 0; j < answersGiven[0].length; j++) {
+
 				}
 			}
 		}
 		if (type == ChangeType.QUESTION) {
+			// prepare the next question
 			question = model.getQuestion();
 			List<String> answers = Arrays.asList(question.getAnswers());
 			questionText.setText(question.getQuestion());

@@ -15,12 +15,15 @@ public class CountdownProgressBar extends JProgressBar {
 	private final int delay;
 
 	/**
-	 * Creates a new CountdownProgessBar with the minimum 0, the
-	 * maximum @param max, and the delay 1000.
+	 * Creates a new CountdownProgessBar with the minimum 0, the maximum @param
+	 * max, and the delay 1000.
 	 * 
-	 * @param min the minimum
-	 * @param max the maximum
-	 * @param delay the delay in milliseconds
+	 * @param min
+	 *            the minimum
+	 * @param max
+	 *            the maximum
+	 * @param delay
+	 *            the delay in milliseconds
 	 */
 	public CountdownProgressBar(int max) {
 		this(0, max, 1000);
@@ -30,9 +33,12 @@ public class CountdownProgressBar extends JProgressBar {
 	 * Creates a new CountdownProgessBar with the minimum @param min, the
 	 * maximum @param max, and the delay 1000.
 	 * 
-	 * @param min the minimum
-	 * @param max the maximum
-	 * @param delay the delay in milliseconds
+	 * @param min
+	 *            the minimum
+	 * @param max
+	 *            the maximum
+	 * @param delay
+	 *            the delay in milliseconds
 	 */
 	public CountdownProgressBar(int min, int max) {
 		this(min, max, 1000);
@@ -42,9 +48,12 @@ public class CountdownProgressBar extends JProgressBar {
 	 * Creates a new CountdownProgessBar with the minimum @param min, the
 	 * maximum @param max, and the @delay delay.
 	 * 
-	 * @param min the minimum
-	 * @param max the maximum
-	 * @param delay the delay in milliseconds
+	 * @param min
+	 *            the minimum
+	 * @param max
+	 *            the maximum
+	 * @param delay
+	 *            the delay in milliseconds
 	 */
 	public CountdownProgressBar(int min, int max, int delay) {
 		super(min, max);
@@ -55,10 +64,30 @@ public class CountdownProgressBar extends JProgressBar {
 		timer = new Timer(delay, event -> {
 			counter--;
 			setValue(counter);
-			if (counter < min)
+			if (counter < min) {
 				timer.stop();
+				onCountdownOver();
+			}
 		});
+	}
+
+	/**
+	 * Starts the countdown.
+	 */
+	public void start() {
 		timer.start();
+	}
+	
+	/**
+	 * Restarts the countdown.
+	 * 
+	 * Starts the countdown in case it is not running so far.
+	 */
+	public void restart() {
+		if(!timer.isRunning())
+			start();
+		
+		timer.restart();
 	}
 
 	/**
@@ -82,8 +111,10 @@ public class CountdownProgressBar extends JProgressBar {
 	/**
 	 * Sets the value of counter.
 	 * 
-	 * @param counter the new counter value
-	 * @throws IllegalArgumentException when @param counter > max or counter < min.
+	 * @param counter
+	 *            the new counter value
+	 * @throws IllegalArgumentException
+	 *             when @param counter > max or counter < min.
 	 */
 	public void setCounter(int counter) {
 		if (counter > getMaximum() || counter < getMinimum())
@@ -100,7 +131,7 @@ public class CountdownProgressBar extends JProgressBar {
 	public int getCounter() {
 		return counter;
 	}
-	
+
 	/**
 	 * Returns whether the countdown is over.
 	 * 
@@ -108,5 +139,14 @@ public class CountdownProgressBar extends JProgressBar {
 	 */
 	public boolean isOver() {
 		return counter > getMinimum();
+	}
+
+	/**
+	 * Gets called when the countdown is over.
+	 * 
+	 * This method can be used by subclasses to implement their logic.
+	 */
+	public void onCountdownOver() {
+
 	}
 }

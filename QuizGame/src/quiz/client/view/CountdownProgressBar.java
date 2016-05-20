@@ -1,5 +1,7 @@
 package quiz.client.view;
 
+import java.awt.Color;
+
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
@@ -60,14 +62,30 @@ public class CountdownProgressBar extends JProgressBar {
 
 		this.delay = delay;
 		setCounter(max);
+		setForeground(new Color(0, 255, 0));
+		setStringPainted(true);
+		setString(String.valueOf(counter));
 
 		timer = new Timer(delay, event -> {
 			counter--;
-			setValue(counter);
-			if (counter < min) {
-				timer.stop();
-				onCountdownOver();
+
+			int red, green;
+			double percentage = ((double) counter) / getMaximum();
+
+			if (percentage >= 0.5) {
+				green = 255;
+				red = (int) ((1 - percentage) * 2 * 255);
+			} else {
+				red = 255;
+				green = (int) (percentage * 2 * 255);
 			}
+
+			setForeground(new Color(red, green, 0));
+			setValue(counter);
+			setString(String.valueOf(counter));
+
+			if (counter < min)
+				timer.stop();
 		});
 	}
 
@@ -77,16 +95,17 @@ public class CountdownProgressBar extends JProgressBar {
 	public void start() {
 		timer.start();
 	}
-	
+
 	/**
 	 * Restarts the countdown.
 	 * 
 	 * Starts the countdown in case it is not running so far.
 	 */
 	public void restart() {
-		if(!timer.isRunning())
+		if (!timer.isRunning())
 			start();
-		
+
+		setForeground(new Color(0, 255, 0));
 		timer.restart();
 	}
 
@@ -133,20 +152,11 @@ public class CountdownProgressBar extends JProgressBar {
 	}
 
 	/**
-	 * Returns whether the countdown is over.
+	 * Returns whether the countdown is running.
 	 * 
-	 * @return whether the countdown is over
+	 * @return whether the countdown is running
 	 */
-	public boolean isOver() {
-		return counter > getMinimum();
-	}
-
-	/**
-	 * Gets called when the countdown is over.
-	 * 
-	 * This method can be used by subclasses to implement their logic.
-	 */
-	public void onCountdownOver() {
-
+	public boolean isRunning() {
+		return timer.isRunning();
 	}
 }

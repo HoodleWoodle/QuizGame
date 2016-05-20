@@ -1,6 +1,7 @@
 package quiz.client.view;
 
 import static quiz.Constants.SECONDS_PER_ANSWER;
+import static quiz.Constants.QUESTION_COUNT;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -20,6 +21,7 @@ import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
+import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
 
@@ -37,6 +39,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	private CountdownProgressBar countdown;
 	private boolean answerLoggedIn;
 	private Question question;
+	private int questionsAnswered = 0;
 
 	/**
 	 * Creates a new QuestionPanel.
@@ -44,7 +47,6 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	public QuestionPanel() {
 		setLayout(new GridBagLayout());
 
-		question = model.getQuestion();
 		initComponents();
 	}
 
@@ -85,7 +87,12 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		c.gridwidth = 2;
 		c.weighty = 0.05;
 		c.insets = new Insets(10, 20, 20, 20);
+
 		countdown = new CountdownProgressBar(SECONDS_PER_ANSWER);
+		countdown.getTimer().addActionListener(e -> {
+			if (!countdown.isRunning())
+				control.setAnswer(-1);
+		});
 		add(countdown, c);
 	}
 
@@ -96,10 +103,11 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		String[] answers = question.getAnswers();
 		for (int i = 0; i < answers.length; i++) {
 			if (answers[i].equals(answerButton.getText())) {
-				// only accept answers once and before the countdown is over
-				if (!countdown.isOver() && !answerLoggedIn) {
+				// only accept answers once and when the countdown is running
+				if (countdown.isRunning() && !answerLoggedIn) {
 					answerLoggedIn = true;
 					control.setAnswer(i);
+					questionsAnswered++;
 				}
 			}
 
@@ -122,31 +130,45 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.MATCH) {
 			Match match = model.getMatch();
-
 			int[][] answersGiven = match.getAnswers();
 
-			// todo
-			for (int a = 0; a < answersGiven.length; a++) {
-				for (int j = 0; j < answersGiven[0].length; j++) {
-
+			int opponentIndex = -1;
+			Account opponent = null;
+			for (int a = 0; a < match.getOpponents().length; a++) {
+				if (match.getOpponents()[a].getID() != GameFrame.getInstance().getUser().getID()) {
+					opponentIndex = a;
+					opponent = match.getOpponents()[a];
 				}
 			}
+
+			int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length - 1];
+			String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
+
+			// make the opponent's answer visible
+			for (JButton answerButton : answerButtons)
+				if (answerButton.getText().equals(opponentAnswer))
+					answerButton.setText(answerButton.getText() + System.lineSeparator() + opponent.getName());
 		}
+
 		if (type == ChangeType.QUESTION) {
-			// prepare the next question
-			question = model.getQuestion();
-			List<String> answers = Arrays.asList(question.getAnswers());
-			questionText.setText(question.getQuestion());
+			if (questionsAnswered < QUESTION_COUNT) {
+				// prepare the next question
+				question = model.getQuestion();
+				List<String> answers = Arrays.asList(question.getAnswers());
+				questionText.setText(question.getQuestion());
 
-			for (int i = 0; i < answerButtons.length; i++) {
-				Collections.shuffle(answers);
-				answerButtons[i].setText(answers.get(0));
-				answerButtons[i].setBackground(Color.WHITE);
-				answerButtons[i].addActionListener(this);
-				answers.remove(0);
-			}
+				for (int i = 0; i < answerButtons.length; i++) {
+					Collections.shuffle(answers);
+					answerButtons[i].setText(answers.get(0));
+					answerButtons[i].setBackground(Color.WHITE);
+					answerButtons[i].addActionListener(this);
+					answers.remove(0);
+				}
 
-			answerLoggedIn = false;
+				answerLoggedIn = false;
+				countdown.restart();
+			} else
+				GameFrame.getInstance().setContentPane(new GameOverPanel());
 		}
 	}
 }

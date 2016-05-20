@@ -21,7 +21,6 @@ public final class GameFrame extends JFrame {
 	private static GameFrame instance;
 
 	private final MenuPanel menuPanel;
-	private final QuestionPanel questionPanel;
 	private Account user;
 
 	/**
@@ -70,16 +69,18 @@ public final class GameFrame extends JFrame {
 	}
 
 	private GameFrame() {
+		super("Quiz Game");
 		setPreferredSize(new Dimension(600, 600));
 		setResizable(false);
-		setLocationRelativeTo(null);
+		setLocationByPlatform(true);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		setContentPane(menuPanel = new MenuPanel());
-		questionPanel = new QuestionPanel();
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
+				// during a game
 				if (user != null && !user.isAvailable()) {
 					JOptionPane.showConfirmDialog(GameFrame.this,
 							"Wenn du QuizGame während des Matches beendest, verlierst du dadurch sofort. Möchstest du das Spiel wirklich schon beenden?",
@@ -88,8 +89,10 @@ public final class GameFrame extends JFrame {
 				}
 
 				dispose();
+				System.exit(1);
 			}
 		});
+		
 		pack();
 		setVisible(true);
 	}
@@ -120,15 +123,6 @@ public final class GameFrame extends JFrame {
 	 */
 	public MenuPanel getMenuPanel() {
 		return menuPanel;
-	}
-
-	/**
-	 * Returns the QuestionPanel.
-	 * 
-	 * @return the QuestionPanel
-	 */
-	public QuestionPanel getQuestionPanel() {
-		return questionPanel;
 	}
 
 	/**

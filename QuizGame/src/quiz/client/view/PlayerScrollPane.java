@@ -36,13 +36,13 @@ public class PlayerScrollPane extends JScrollPane implements IView {
 	 */
 	public PlayerScrollPane() {
 		setMinimumSize(new Dimension(100, Integer.MAX_VALUE));
-		setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
-		setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
-		setBorder(BorderFactory.createEmptyBorder());
+		setPreferredSize(new Dimension(150, Integer.MAX_VALUE));
+		setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
 		
 		JLabel players = new JLabel("Spieler:");
-		players.setAlignmentX(CENTER_ALIGNMENT);
+		players.setHorizontalAlignment(JLabel.CENTER);
 		setColumnHeaderView(players);
+		setBorder(BorderFactory.createEmptyBorder());
 	}
 
 	@Override
@@ -53,11 +53,12 @@ public class PlayerScrollPane extends JScrollPane implements IView {
 
 	@Override
 	public void onChange(ChangeType type, Status status) {
+		// update account statuses
 		if (type == ChangeType.OPPONENTS && status != Status.NO_OPPONENTS_AVAILABLE) {
 			for (Account account : model.getOpponents()) {
 				if (account.isOnline()) {
 					accountStatus.setText(account.getName() + (!account.isAvailable() ? "(Im Spiel)" : "(Online)"));
-					
+
 					if (!accounts.containsKey(account)) {
 						JPanel playerPanel = createPlayerPanel(account);
 						accounts.put(account, playerPanel);
@@ -70,13 +71,16 @@ public class PlayerScrollPane extends JScrollPane implements IView {
 			}
 		}
 	}
-	
+
 	private JPanel createPlayerPanel(Account account) {
 		JPanel playerPanel = new JPanel();
-		playerPanel.setPreferredSize(new Dimension(100, 50));
+		playerPanel.setMinimumSize(new Dimension(100, 50));
+		playerPanel.setPreferredSize(new Dimension(150, 50));
+		playerPanel.setMaximumSize(new Dimension(200, 50));
 		playerPanel.setLayout(new BorderLayout());
 
-		playerPanel.add(accountStatus = new JLabel(account.getName() + (!account.isAvailable() ? "(Im Spiel)" : "(Online)")),
+		playerPanel.add(
+				accountStatus = new JLabel(account.getName() + (!account.isAvailable() ? "(Im Spiel)" : "(Online)")),
 				BorderLayout.CENTER);
 
 		JPopupMenu popupMenu = new JPopupMenu();

@@ -11,7 +11,7 @@ public interface Constants {
 	/**
 	 * The count of Questions per Match.
 	 */
-	public static final int QUESTION_COUNT = 15;
+	public static final int QUESTION_COUNT = 3;
 	/**
 	 * The number of Questions per row and player in the GameOverPanel. QUESTION_COUNT must
 	 * be a multiple of QUESTIONS_PER_ROW.

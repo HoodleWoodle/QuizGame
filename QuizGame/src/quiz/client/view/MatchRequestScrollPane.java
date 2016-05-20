@@ -40,11 +40,13 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 	 */
 	public MatchRequestScrollPane() {
 		setMinimumSize(new Dimension(100, Integer.MAX_VALUE));
-		setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
-		setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
-		setBorder(BorderFactory.createEmptyBorder());
-		setColumnHeaderView(new JLabel("Herausforderungen"));
+		setPreferredSize(new Dimension(150, Integer.MAX_VALUE));
+		setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
 
+		JLabel matchRequests = new JLabel("Herausforderungen:");
+		matchRequests.setHorizontalAlignment(JLabel.CENTER);
+		setColumnHeaderView(matchRequests);
+		setBorder(BorderFactory.createEmptyBorder());
 		lastMatchRequests = new ArrayList<>();
 		matchRequestPanels = new ArrayList<>();
 	}
@@ -107,7 +109,9 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 		public MatchRequestPanel(Match matchRequest) {
 			this.matchRequest = matchRequest;
 
-			setPreferredSize(new Dimension(100, 200));
+			setMinimumSize(new Dimension(100, 200));
+			setPreferredSize(new Dimension(150, 200));
+			setMaximumSize(new Dimension(200, 200));
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 

@@ -1,5 +1,7 @@
 package quiz.client.view;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
@@ -37,18 +38,16 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	 */
 	public MenuPanel() {
 		questionPanel = new QuestionPanel();
-		
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		add(new PlayerScrollPane());
-		add(new JSeparator(JSeparator.VERTICAL));
-		add(Box.createHorizontalGlue());
-		add(createMainPart());
-		add(Box.createHorizontalGlue());
-		add(new JSeparator(JSeparator.VERTICAL));
-		add(new MatchRequestScrollPane());
+		setMinimumSize(new Dimension(200, Integer.MAX_VALUE));
+		setPreferredSize(new Dimension(250, Integer.MAX_VALUE));
+		setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+
+		setLayout(new BorderLayout());
+		add(new PlayerScrollPane(), BorderLayout.LINE_START);
+		add(createMainPart(), BorderLayout.CENTER);
+		add(new MatchRequestScrollPane(), BorderLayout.LINE_END);
 	}
-	
-	
+
 	/**
 	 * Returns the QuestionPanel.
 	 * 
@@ -128,13 +127,13 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.MATCH) {
 			Match match = model.getMatch();
-			if(match != null) {
+			if (match != null) {
 				for (Account account : match.getOpponents()) {
 					// set unavailable during match
 					account.setAvailable(false);
-				}	
+				}
 			}
-			
+
 			GameFrame.getInstance().setContentPane(questionPanel);
 		}
 	}

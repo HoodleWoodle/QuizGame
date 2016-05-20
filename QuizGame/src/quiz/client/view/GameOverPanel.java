@@ -25,7 +25,6 @@ import quiz.model.Question;
 public class GameOverPanel extends JPanel implements IView {
 
 	private IModel model;
-	private IControl control;
 
 	/**
 	 * Creates a new GameOverPanel.
@@ -38,7 +37,6 @@ public class GameOverPanel extends JPanel implements IView {
 	@Override
 	public void init(IModel model, IControl control) {
 		this.model = model;
-		this.control = control;
 	}
 
 	@Override
@@ -54,11 +52,12 @@ public class GameOverPanel extends JPanel implements IView {
 			c.gridy = 0;
 			add(new JLabel(match.getCategory().toString()), c);
 
+			int rows = match.getQuestions().length / QUESTIONS_PER_ROW_AND_PLAYER + 1;
 			for (int a = 0; a < match.getOpponents().length; a++) {
 				c.gridx = (a == 0 ? 1 : 5);
 				add(new JLabel(match.getOpponents()[a].getName()), c);
 
-				for (int y = 1, count = 0; y < match.getQuestions().length / QUESTIONS_PER_ROW_AND_PLAYER + 1; y++) {
+				for (int y = 1, count = 0; y < rows; y++) {
 					c.gridy = y;
 
 					for (int x = a * (QUESTIONS_PER_ROW_AND_PLAYER + 1); x < x
@@ -79,6 +78,14 @@ public class GameOverPanel extends JPanel implements IView {
 					}
 				}
 			}
+			
+			c.gridy = rows + 1;
+			c.gridx = 3;
+			
+			GameFrame gameFrame = GameFrame.getInstance();
+			JButton menu = new JButton("Hauptmenü");
+			menu.addActionListener(e -> gameFrame.setContentPane(gameFrame.getMenuPanel()));
+			add(menu, c);
 		}
 	}
 }

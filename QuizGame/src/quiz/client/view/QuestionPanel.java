@@ -1,7 +1,7 @@
 package quiz.client.view;
 
-import static quiz.Constants.SECONDS_PER_ANSWER;
 import static quiz.Constants.QUESTION_COUNT;
+import static quiz.Constants.SECONDS_PER_ANSWER;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -40,6 +40,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	private boolean answerLoggedIn;
 	private Question question;
 	private int questionsAnswered = 0;
+	private GameOverPanel gameOverPanel;
 
 	/**
 	 * Creates a new QuestionPanel.
@@ -47,7 +48,17 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	public QuestionPanel() {
 		setLayout(new GridBagLayout());
 
+		gameOverPanel = new GameOverPanel();
 		initComponents();
+	}
+	
+	/**
+	 * Returns the GameOverPanel.
+	 * 
+	 * @return the GameOverPanel
+	 */
+	public GameOverPanel getGameOverPanel() {
+		return gameOverPanel;
 	}
 
 	private void initComponents() {
@@ -168,7 +179,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				answerLoggedIn = false;
 				countdown.restart();
 			} else
-				GameFrame.getInstance().setContentPane(new GameOverPanel());
+				GameFrame.getInstance().setContentPane(gameOverPanel);
 		}
 	}
 }

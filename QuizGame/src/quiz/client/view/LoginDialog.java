@@ -54,7 +54,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	public LoginDialog() {
 		setTitle("Anmelden");
 		setModal(true);
-		setLocationRelativeTo(null);
+		setLocationByPlatform(true);
 		setMinimumSize(new Dimension(270, 300));
 		setPreferredSize(new Dimension(300, 330));
 		setMaximumSize(new Dimension(330, 360));
@@ -174,6 +174,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		add(new JSeparator());
 		add(Box.createVerticalGlue());
 		add(okButton = new JButton("Anmelden"));
+		getRootPane().setDefaultButton(okButton);
 		add(Box.createVerticalGlue());
 
 		GameFrame.setProperties(new Dimension(100, 20), new Dimension(150, 30), new Dimension(200, 40), okButton, login,

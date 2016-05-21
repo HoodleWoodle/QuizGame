@@ -95,6 +95,8 @@ public final class GameFrame extends JFrame {
 		
 		pack();
 		setVisible(true);
+		
+		new LoginDialog();
 	}
 
 	/**

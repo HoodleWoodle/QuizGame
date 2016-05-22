@@ -1,6 +1,7 @@
 package quiz.client.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,10 +12,8 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import quiz.client.IControl;
@@ -28,27 +27,22 @@ import quiz.model.Match;
  * @author Eric
  * @version 10.05.16
  */
-public class MatchRequestScrollPane extends JScrollPane implements IView {
+public class MatchRequestListPanel extends JPanel implements IView {
 
 	private IModel model;
 	private IControl control;
 	private List<Match> lastMatchRequests;
-	private List<MatchRequestPanel> matchRequestPanels;
 
 	/**
-	 * Creates a new MatchRequestScrollPane.
+	 * Creates a new MatchRequestListPanel.
 	 */
-	public MatchRequestScrollPane() {
+	public MatchRequestListPanel() {
 		setMinimumSize(new Dimension(100, Integer.MAX_VALUE));
 		setPreferredSize(new Dimension(150, Integer.MAX_VALUE));
 		setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
 
-		JLabel matchRequests = new JLabel("Herausforderungen:");
-		matchRequests.setHorizontalAlignment(JLabel.CENTER);
-		setColumnHeaderView(matchRequests);
-		setBorder(BorderFactory.createEmptyBorder());
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		lastMatchRequests = new ArrayList<>();
-		matchRequestPanels = new ArrayList<>();
 	}
 
 	@Override
@@ -75,15 +69,14 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 			for (Match matchRequest : newMatchRequests) {
 				MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest);
 				add(matchRequestPanel);
-				matchRequestPanels.add(matchRequestPanel);
 			}
 
 			// remove all old match requets
 			lastMatchRequests.removeAll(matchRequests);
 
 			for (Match matchRequest : lastMatchRequests) {
-				for (ListIterator<MatchRequestPanel> it = matchRequestPanels.listIterator(); it.hasNext();) {
-					MatchRequestPanel next = it.next();
+				for (ListIterator<Component> it = Arrays.asList(getComponents()).listIterator(); it.hasNext();) {
+					MatchRequestPanel next = (MatchRequestPanel) it.next();
 					if (next.matchRequest.getID() == matchRequest.getID()) {
 						remove(next);
 						break;
@@ -96,6 +89,11 @@ public class MatchRequestScrollPane extends JScrollPane implements IView {
 		}
 	}
 
+	/**
+	 * 
+	 * @author Eric
+	 * @version 22.05.16
+	 */
 	private class MatchRequestPanel extends JPanel {
 
 		private final Match matchRequest;

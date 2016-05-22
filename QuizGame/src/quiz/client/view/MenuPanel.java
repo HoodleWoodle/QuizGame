@@ -5,12 +5,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
@@ -43,9 +45,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 
 		setLayout(new BorderLayout());
-		add(new PlayerScrollPane(), BorderLayout.LINE_START);
-		add(createMainPart(), BorderLayout.CENTER);
-		add(new MatchRequestScrollPane(), BorderLayout.LINE_END);
+		initComponents();
 	}
 
 	/**
@@ -55,6 +55,27 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	 */
 	public QuestionPanel getQuestionPanel() {
 		return questionPanel;
+	}
+
+	private void initComponents() {
+		JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel());
+		JLabel players = new JLabel("Spieler:");
+		players.setHorizontalAlignment(JLabel.CENTER);
+
+		playerListScrollPane.setColumnHeaderView(players);
+		playerListScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+		add(playerListScrollPane, BorderLayout.LINE_START);
+		add(createMainPart(), BorderLayout.CENTER);
+
+		JScrollPane matchRequestScrollPane = new JScrollPane(new MatchRequestListPanel());
+		JLabel matchRequests = new JLabel("Herausforderungen:");
+		matchRequests.setHorizontalAlignment(JLabel.CENTER);
+
+		matchRequestScrollPane.setColumnHeaderView(matchRequests);
+		matchRequestScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+		add(matchRequests, BorderLayout.LINE_END);
 	}
 
 	private JPanel createMainPart() {

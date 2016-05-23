@@ -32,9 +32,9 @@ public class PlayerListPanel extends JPanel implements IView {
 	 * Creates a new PlayerListPanel.
 	 */
 	public PlayerListPanel() {
-		setMinimumSize(new Dimension(100, Integer.MAX_VALUE));
-		setPreferredSize(new Dimension(150, Integer.MAX_VALUE));
-		setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+		setMinimumSize(new Dimension(100, 200));
+		setPreferredSize(new Dimension(150, 500));
+		setMaximumSize(new Dimension(200, 600));
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 	}

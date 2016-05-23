@@ -40,9 +40,9 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	 */
 	public MenuPanel() {
 		questionPanel = new QuestionPanel();
-		setMinimumSize(new Dimension(200, Integer.MAX_VALUE));
-		setPreferredSize(new Dimension(250, Integer.MAX_VALUE));
-		setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		setMinimumSize(new Dimension(200, 600));
+		setPreferredSize(new Dimension(250, 600));
+		setMaximumSize(new Dimension(300, 600));
 
 		setLayout(new BorderLayout());
 		initComponents();
@@ -75,7 +75,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		matchRequestScrollPane.setColumnHeaderView(matchRequests);
 		matchRequestScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-		add(matchRequests, BorderLayout.LINE_END);
+		add(matchRequestScrollPane, BorderLayout.LINE_END);
 	}
 
 	private JPanel createMainPart() {

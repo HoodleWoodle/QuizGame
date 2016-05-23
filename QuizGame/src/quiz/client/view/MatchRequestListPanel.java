@@ -37,9 +37,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
 	 * Creates a new MatchRequestListPanel.
 	 */
 	public MatchRequestListPanel() {
-		setMinimumSize(new Dimension(100, Integer.MAX_VALUE));
-		setPreferredSize(new Dimension(150, Integer.MAX_VALUE));
-		setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+		setMinimumSize(new Dimension(100, 400));
+		setPreferredSize(new Dimension(150, 500));
+		setMaximumSize(new Dimension(200, 600));
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		lastMatchRequests = new ArrayList<>();

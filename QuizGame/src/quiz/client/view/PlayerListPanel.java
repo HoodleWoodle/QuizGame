@@ -2,6 +2,8 @@ package quiz.client.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,6 +103,13 @@ public class PlayerListPanel extends JPanel implements IView {
 
 			popupMenu.add(matchRequest);
 			add(popupMenu);
+			addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent event) {
+					if(event.isPopupTrigger())
+						popupMenu.show(PlayerPanel.this, event.getX(), event.getY());
+				}
+			});
 		}
 
 		/**

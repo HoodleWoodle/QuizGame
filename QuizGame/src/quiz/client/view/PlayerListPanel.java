@@ -1,5 +1,7 @@
 package quiz.client.view;
 
+import static quiz.Constants.FRAME_HEIGHT;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -34,9 +36,9 @@ public class PlayerListPanel extends JPanel implements IView {
 	 * Creates a new PlayerListPanel.
 	 */
 	public PlayerListPanel() {
-		setMinimumSize(new Dimension(100, 200));
-		setPreferredSize(new Dimension(150, 500));
-		setMaximumSize(new Dimension(200, 600));
+		setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
+		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
+		setMaximumSize(new Dimension(200, FRAME_HEIGHT));
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 	}
@@ -106,7 +108,7 @@ public class PlayerListPanel extends JPanel implements IView {
 			addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseReleased(MouseEvent event) {
-					if(event.isPopupTrigger())
+					if (event.isPopupTrigger())
 						popupMenu.show(PlayerPanel.this, event.getX(), event.getY());
 				}
 			});

@@ -31,7 +31,6 @@ public class GameOverPanel extends JPanel implements IView {
 	 */
 	public GameOverPanel() {
 		setLayout(new GridBagLayout());
-
 	}
 
 	@Override
@@ -78,10 +77,10 @@ public class GameOverPanel extends JPanel implements IView {
 					}
 				}
 			}
-			
+
 			c.gridy = rows + 1;
 			c.gridx = 3;
-			
+
 			GameFrame gameFrame = GameFrame.getInstance();
 			JButton menu = new JButton("Hauptmenü");
 			menu.addActionListener(e -> gameFrame.setContentPane(gameFrame.getMenuPanel()));

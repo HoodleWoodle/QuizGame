@@ -1,6 +1,10 @@
 package quiz.client.view;
 
+import static quiz.Constants.FRAME_HEIGHT;
+import static quiz.Constants.FRAME_WIDTH;
+
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -72,13 +76,16 @@ public final class GameFrame extends JFrame {
 
 	private GameFrame() {
 		super("Quiz Game");
-		setPreferredSize(new Dimension(600, 600));
+		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		setResizable(false);
-		setLocationByPlatform(true);
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((int) (screenSize.getWidth() / 2 - FRAME_WIDTH / 2),
+				(int) (screenSize.getHeight() / 2 - FRAME_HEIGHT / 2));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		setContentPane(menuPanel = new MenuPanel());
-		
+
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
@@ -94,10 +101,10 @@ public final class GameFrame extends JFrame {
 				System.exit(1);
 			}
 		});
-		
+
 		pack();
 		setVisible(true);
-		
+
 		new LoginDialog();
 	}
 
@@ -136,13 +143,13 @@ public final class GameFrame extends JFrame {
 	 */
 	public static void main(String args[]) {
 		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
-		} catch (Exception e) {	
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (Exception e) {
 		}
 		SwingUtilities.invokeLater(() -> {
 			// Swing needs to run on event dispatching thread

@@ -13,8 +13,8 @@ public interface Constants {
 	 */
 	public static final int QUESTION_COUNT = 3;
 	/**
-	 * The number of Questions per row and player in the GameOverPanel. QUESTION_COUNT must
-	 * be a multiple of QUESTIONS_PER_ROW.
+	 * The number of Questions per row and player in the GameOverPanel.
+	 * QUESTION_COUNT must be a multiple of QUESTIONS_PER_ROW.
 	 */
 	public static final int QUESTIONS_PER_ROW_AND_PLAYER = 3;
 	/**
@@ -41,4 +41,12 @@ public interface Constants {
 	 * Time per answer in seconds.
 	 */
 	public static final int SECONDS_PER_ANSWER = 20;
+	/**
+	 * GameFrame's width.
+	 */
+	public static final int FRAME_WIDTH = 600;
+	/**
+	 * GameFrame's height.
+	 */
+	public static final int FRAME_HEIGHT = 600;
 }

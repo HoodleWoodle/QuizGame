@@ -1,5 +1,7 @@
 package quiz.client.view;
 
+import static quiz.Constants.FRAME_HEIGHT;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -40,9 +42,9 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	 */
 	public MenuPanel() {
 		questionPanel = new QuestionPanel();
-		setMinimumSize(new Dimension(200, 600));
-		setPreferredSize(new Dimension(250, 600));
-		setMaximumSize(new Dimension(300, 600));
+		setMinimumSize(new Dimension(200, FRAME_HEIGHT));
+		setPreferredSize(new Dimension(250, FRAME_HEIGHT));
+		setMaximumSize(new Dimension(300, FRAME_HEIGHT));
 
 		setLayout(new BorderLayout());
 		initComponents();

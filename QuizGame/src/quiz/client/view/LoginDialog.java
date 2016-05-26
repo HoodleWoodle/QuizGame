@@ -3,6 +3,7 @@ package quiz.client.view;
 import static quiz.Constants.USERNAME_FILE;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -54,10 +55,14 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	public LoginDialog() {
 		setTitle("Anmelden");
 		setModal(true);
-		setLocationByPlatform(true);
-		setMinimumSize(new Dimension(270, 300));
-		setPreferredSize(new Dimension(300, 330));
-		setMaximumSize(new Dimension(330, 360));
+		Dimension size = new Dimension(250, 300);
+		setMinimumSize(size);
+		setPreferredSize(size);
+		setMaximumSize(size);
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((int) (screenSize.getWidth() / 2 - size.getWidth() / 2),
+				(int) (screenSize.getHeight() / 2 - size.getHeight() / 2));
 		setResizable(false);
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
@@ -101,13 +106,13 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		if (event.getSource() == login) {
 			if (login.isSelected()) {
 				setTitle("Registrieren");
-				setSize(getWidth(), getHeight() + 50);
+				setSize(getWidth(), getHeight() + 60);
 				loginLabels[2].setVisible(true);
 				repeatPassword.setVisible(true);
 				okButton.setText("Registrieren");
 			} else {
 				setTitle("Anmelden");
-				setSize(getWidth(), getHeight() - 50);
+				setSize(getWidth(), getHeight() - 60);
 				loginLabels[2].setVisible(false);
 				repeatPassword.setVisible(false);
 				okButton.setText("Anmelden");
@@ -130,9 +135,11 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 			return;
 		}
 
-		if (login.isSelected() && !password.getPassword().equals(repeatPassword.getPassword())) {
-			exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
-			return;
+		if (login.isSelected()) {
+			if (password.getPassword().equals(repeatPassword.getPassword())) {
+				exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
+				return;
+			}
 		}
 
 		if (keepUsername.isSelected()) {

@@ -136,10 +136,18 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		}
 
 		if (login.isSelected()) {
-			if (password.getPassword().equals(repeatPassword.getPassword())) {
+			char[] pw1 = password.getPassword();
+			char[] pw2 = repeatPassword.getPassword();
+
+			if (pw1.length == pw2.length) {
+				for (int i = 0; i < pw1.length; i++) {
+					if (pw1[i] != pw2[i]) {
+						exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
+						return;
+					}
+				}
+			} else
 				exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
-				return;
-			}
 		}
 
 		if (keepUsername.isSelected()) {

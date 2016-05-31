@@ -6,7 +6,10 @@ import static quiz.Constants.FRAME_WIDTH;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.nio.file.Paths;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -80,6 +83,11 @@ public final class GameFrame extends JFrame {
 
 		setContentPane(menuPanel = new MenuPanel());
 		setResizable(false);
+
+		try {
+			setIconImage(ImageIO.read(Paths.get("data").resolve("icon_image.png").toFile()));
+		} catch (IOException e) {
+		}
 
 		addWindowListener(new WindowAdapter() {
 			@Override

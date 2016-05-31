@@ -3,7 +3,6 @@ package quiz.client.view;
 import static quiz.Constants.USERNAME_FILE;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -60,16 +59,13 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		setPreferredSize(size);
 		setMaximumSize(size);
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((int) (screenSize.getWidth() / 2 - size.getWidth() / 2),
-				(int) (screenSize.getHeight() / 2 - size.getHeight() / 2));
-		setResizable(false);
-
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
 		initComponents();
 		initListeners();
 
+		setResizable(false);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

@@ -51,7 +51,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		gameOverPanel = new GameOverPanel();
 		initComponents();
 	}
-	
+
 	/**
 	 * Returns the GameOverPanel.
 	 * 

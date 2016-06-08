@@ -123,6 +123,21 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
+	public Account getAccount(int ID)
+	{
+		// get all Accounts
+		List<Account> accounts = getAccounts();
+
+		// search Account
+		for (Account account : accounts)
+			if (account.getID() == ID)
+				return account;
+
+		log_err(1);
+		return null;
+	}
+
+	@Override
 	public synchronized List<Account> getAccounts()
 	{
 		// select all Accounts
@@ -140,14 +155,14 @@ public final class DataManager implements IDataManager
 				if (account != null)
 					accounts.add(account);
 				else
-					log_err(1);
+					log_err(2);
 			}
 
 			return accounts;
 		} catch (SQLException e)
 		{
 			// some Exception
-			log_err(2);
+			log_err(3);
 			// e.printStackTrace();
 			return null;
 		}
@@ -184,7 +199,7 @@ public final class DataManager implements IDataManager
 		// insert question into database
 		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (question, category, correct, answer1, answer2, answer3) VALUES ('" + quest + "', '" + category.ordinal() + "', '" + answers[0] + "', '" + answers[1] + "', '" + answers[2] + "', '" + answers[3] + "')"))
 		{
-			log_err(3);
+			log_err(4);
 			return false;
 		}
 
@@ -201,7 +216,7 @@ public final class DataManager implements IDataManager
 		int ID = db.insertReturn("INSERT INTO " + TABLE_ACCOUNTS + " (name, password) VALUES ('" + name + "', '" + password + "')");
 		if (ID == -1)
 		{
-			log_err(4);
+			log_err(5);
 			return null;
 		}
 
@@ -212,28 +227,28 @@ public final class DataManager implements IDataManager
 	public synchronized void removeQuestion(Question question)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'"))
-			log_err(5);
+			log_err(6);
 	}
 
 	@Override
 	public synchronized void removeAccount(Account account)
 	{
 		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'"))
-			log_err(6);
+			log_err(7);
 	}
 
 	@Override
 	public synchronized void updateAccount(Account account, int score)
 	{
 		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
-			log_err(7);
+			log_err(8);
 	}
 
 	@Override
 	public synchronized void close()
 	{
 		if (!db.close())
-			log_err(8);
+			log_err(9);
 	}
 
 	/**
@@ -263,7 +278,7 @@ public final class DataManager implements IDataManager
 		} catch (SQLException e)
 		{
 			// some Exception
-			log_err(9);
+			log_err(10);
 			// e.printStackTrace();
 			return null;
 		}
@@ -285,7 +300,7 @@ public final class DataManager implements IDataManager
 		} catch (SQLException e)
 		{
 			// some Exception
-			log_err(10);
+			log_err(11);
 			// e.printStackTrace();
 			return null;
 		}
@@ -314,7 +329,7 @@ public final class DataManager implements IDataManager
 			// e.printStackTrace();
 		}
 
-		log_err(11);
+		log_err(12);
 		return -1;
 	}
 

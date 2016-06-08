@@ -1,28 +1,89 @@
 package quiz.client;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
 import lib.net.tcp.client.AbstractTCPClient;
+import quiz.Constants;
+import quiz.client.model.IModel;
+import quiz.client.model.Model;
+import quiz.client.view.GameFrame;
 
-public class Client extends AbstractTCPClient
+/**
+ * @author Stefan
+ * @version 08.06.2016
+ */
+public class Client extends AbstractTCPClient // TODO eigener Thread
 {
+	private final IModel model;
 
+	/**
+	 * Creates an instance of Client.
+	 * 
+	 * @param server
+	 *            the server-name
+	 * @param port
+	 *            the server-port
+	 */
 	public Client(String server, int port)
 	{
 		super(server, port);
-		// TODO Auto-generated constructor stub
+		this.model = new Model(new Control(this));
 	}
 
 	@Override
 	protected void received(String message)
 	{
-		// TODO Auto-generated method stub
+		Model model = (Model) this.model;
 
+		// TODO
 	}
 
 	@Override
 	protected void closed()
 	{
-		// TODO Auto-generated method stub
-
 	}
 
+	/**
+	 * Main-method.
+	 * 
+	 * @param args
+	 */
+	public static void main(String args[])
+	{
+		// try to connect to Server
+		Client client = new Client("localhost", 1818); // TODO
+		boolean con = client.connect();
+
+		// initialize LookAndFeel
+		try
+		{
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+			{
+				if (Constants.LOOK_AND_FEEL.equals(info.getName()))
+				{
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (Exception e)
+		{
+			con = false;
+		}
+
+		// some Exception
+		if (con == false)
+		{
+			JOptionPane.showMessageDialog(null, "Cannot start Client!");
+			System.exit(1);
+		}
+
+		// start surface
+		SwingUtilities.invokeLater(() -> {
+			// Swing needs to run on event dispatching thread
+				GameFrame.getInstance();
+			});
+	}
 }

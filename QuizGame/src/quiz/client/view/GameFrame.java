@@ -13,9 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import quiz.model.Account;
 
@@ -138,26 +135,5 @@ public final class GameFrame extends JFrame {
 	 */
 	public MenuPanel getMenuPanel() {
 		return menuPanel;
-	}
-
-	/**
-	 * Main.
-	 * 
-	 * @param args
-	 */
-	public static void main(String args[]) {
-		try {
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (Exception e) {
-		}
-		SwingUtilities.invokeLater(() -> {
-			// Swing needs to run on event dispatching thread
-			GameFrame.getInstance();
-		});
 	}
 }

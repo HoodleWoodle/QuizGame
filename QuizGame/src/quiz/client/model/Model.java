@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import quiz.client.IControl;
-import quiz.client.model.ChangeType;
-import quiz.client.model.IModel;
-import quiz.client.model.Status;
 import quiz.client.view.IView;
 import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
 
+/**
+ * @author Stefan
+ * @version 08.06.2016
+ */
 public class Model implements IModel
 {
 	private final IControl control;
@@ -25,6 +26,12 @@ public class Model implements IModel
 
 	private Status status;
 
+	/**
+	 * Creates an instance of Model.
+	 * 
+	 * @param control
+	 *            the IControl instance
+	 */
 	public Model(IControl control)
 	{
 		this.control = control;
@@ -61,16 +68,35 @@ public class Model implements IModel
 		return requests;
 	}
 
+	/**
+	 * Setter.
+	 * 
+	 * @param status
+	 *            the new Status
+	 */
 	public void setStatus(Status status)
 	{
 		this.status = status;
 	}
 
+	/**
+	 * Setter. Triggers an onChange - event.
+	 * 
+	 * @param account
+	 *            the new Account
+	 */
 	public void setAccount(Account account)
 	{
 		this.account = account;
 		onChange(ChangeType.ACCOUNT);
 	}
+
+	/**
+	 * Setter. Triggers an onChange - event.
+	 * 
+	 * @param match
+	 *            the current Match
+	 */
 
 	public void setMatch(Match match)
 	{
@@ -78,17 +104,38 @@ public class Model implements IModel
 		onChange(ChangeType.MATCH);
 	}
 
+	/**
+	 * Setter. Triggers an onChange - event.
+	 * 
+	 * @param question
+	 *            the current Account
+	 */
+
 	public void setQuestion(Question question)
 	{
 		this.question = question;
 		onChange(ChangeType.QUESTION);
 	}
 
+	/**
+	 * Setter. Triggers an onChange - event.
+	 * 
+	 * @param opponents
+	 *            all the opponents
+	 */
+
 	public void setOpponents(Account[] opponents)
 	{
 		this.opponents = opponents;
 		onChange(ChangeType.OPPONENTS);
 	}
+
+	/**
+	 * Setter. Triggers an onChange - event.
+	 * 
+	 * @param requests
+	 *            all requests
+	 */
 
 	public void setRequests(Match[] requests)
 	{

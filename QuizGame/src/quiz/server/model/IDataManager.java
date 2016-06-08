@@ -17,14 +17,14 @@ public interface IDataManager
 	 * 
 	 * @param category
 	 *            the desired Category
-	 * @return the desired Questions (null by Exception)
+	 * @return the desired Questions (null if Exception)
 	 */
 	List<Question> getQuestions(Category category);
 
 	/**
 	 * Returns all Questions.
 	 * 
-	 * @return the desired Questions (null by Exception)
+	 * @return the desired Questions (null if Exception)
 	 */
 	List<Question> getQuestions();
 
@@ -36,15 +36,24 @@ public interface IDataManager
 	int getQuestionCount();
 
 	/**
-	 * Returns an Account by login-data
+	 * Returns an Account by login-data.
 	 * 
 	 * @param name
 	 *            the name
 	 * @param password
 	 *            the password
-	 * @return the desired Account (null by Exception)
+	 * @return the desired Account (null if Exception)
 	 */
 	Account getAccount(String name, String password);
+
+	/**
+	 * Returns an Account by ID.
+	 * 
+	 * @param ID
+	 *            the ID of the desired Account
+	 * @return the desired Account (null if Exception)
+	 */
+	Account getAccount(int ID);
 
 	/**
 	 * Returns all Accounts.

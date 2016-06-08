@@ -7,14 +7,14 @@ import java.nio.file.Paths;
  * @author Alex, Eric, Quirin, Stefan
  * @version 29.04.2016
  */
-public interface Constants {
+public interface Constants
+{
 	/**
 	 * The count of Questions per Match.
 	 */
 	public static final int QUESTION_COUNT = 3;
 	/**
-	 * The number of Questions per row and player in the GameOverPanel.
-	 * QUESTION_COUNT must be a multiple of QUESTIONS_PER_ROW.
+	 * The number of Questions per row and player in the GameOverPanel. QUESTION_COUNT must be a multiple of QUESTIONS_PER_ROW.
 	 */
 	public static final int QUESTIONS_PER_ROW_AND_PLAYER = 3;
 	/**
@@ -33,6 +33,10 @@ public interface Constants {
 	 * The password to connect to the database.
 	 */
 	public static final String DB_PASSWORD = "qM";
+	/**
+	 * The LookAndFell.
+	 */
+	public static final String LOOK_AND_FEEL = "Nimbus";
 	/**
 	 * The path to the username file.
 	 */

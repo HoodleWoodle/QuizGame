@@ -23,6 +23,7 @@ USER:
 	- list-opponents
 	- list-account-data
 	- list-match-data
+	- ...
 
 ------------------------------------------------
 
@@ -47,7 +48,7 @@ ZUSTAENDIGKEITEN:
 - server / control (Q, S)
 - view (E)
 - model / MasterTool(S)
-- architectural planning (?S?)
+- architectural planning (S)
 - content (A, E, Q)
 
 ------------------------------------------------
@@ -62,7 +63,7 @@ MEILENSTEINE / TIMELINE:
 	- server/client, view
 - checking modules        (01.06)
 - creating data           (10.06)
-- RELEASE                 (??.??)
+- RELEASE                 (28.06)
 
 ------------------------------------------------
 

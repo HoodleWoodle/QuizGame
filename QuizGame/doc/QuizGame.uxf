@@ -7,13 +7,12 @@
       <x>0</x>
       <y>260</y>
       <w>350</w>
-      <h>100</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 quiz.client.view
 *IView*
 --
-+ init (in model : IModel, in control : IControl)
 + onChange (in type : ChangeType, in  status : Status)</panel_attributes>
     <additional_attributes/>
   </element>
@@ -447,12 +446,12 @@ bg=RED</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>160</x>
-      <y>350</y>
+      <y>330</y>
       <w>210</w>
-      <h>110</h>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0;190.0;40.0;190.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;190.0;60.0;190.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>

@@ -3,7 +3,6 @@ package quiz.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import quiz.client.IControl;
 import quiz.client.view.IView;
 import quiz.model.Account;
 import quiz.model.Match;
@@ -15,7 +14,6 @@ import quiz.model.Question;
  */
 public class Model implements IModel
 {
-	private final IControl control;
 	private final List<IView> views;
 
 	private Account account;
@@ -28,13 +26,9 @@ public class Model implements IModel
 
 	/**
 	 * Creates an instance of Model.
-	 * 
-	 * @param control
-	 *            the IControl instance
 	 */
-	public Model(IControl control)
+	public Model()
 	{
-		this.control = control;
 		views = new ArrayList<IView>();
 	}
 
@@ -147,7 +141,6 @@ public class Model implements IModel
 	public void addView(IView view)
 	{
 		views.add(view);
-		view.init(this, control);
 	}
 
 	@Override

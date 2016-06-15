@@ -29,6 +29,16 @@ public abstract class AbstractTCPServer
 	}
 
 	/**
+	 * Getter.
+	 * 
+	 * @return the server-port
+	 */
+	public final int getPort()
+	{
+		return welcome.getPort();
+	}
+
+	/**
 	 * Starts the AbstractTCPServer.
 	 * 
 	 * @return whether it was successful
@@ -57,7 +67,7 @@ public abstract class AbstractTCPServer
 	 * @param message
 	 *            the message to send
 	 */
-	public final void broadcast(String message)
+	public final void broadcast(byte[] message)
 	{
 		// sends a message to all clients
 		for (ClientThread client : clients)
@@ -141,30 +151,20 @@ public abstract class AbstractTCPServer
 	protected abstract boolean register(ClientThread client);
 
 	/**
-	 * When the server receives a message.
+	 * Is called when the server receives a message.
 	 * 
 	 * @param client
 	 *            the client
 	 * @param message
 	 *            the message
 	 */
-	protected abstract void received(ClientThread client, String message);
+	protected abstract void received(ClientThread client, byte[] message);
 
 	/**
-	 * When a client-connection was closed.
+	 * Is called when a client-connection was closed.
 	 * 
 	 * @param client
 	 *            the client
 	 */
 	protected abstract void closed(ClientThread client);
-
-	/**
-	 * Getter.
-	 * 
-	 * @return the server-port
-	 */
-	public final int getPort()
-	{
-		return welcome.getPort();
-	}
 }

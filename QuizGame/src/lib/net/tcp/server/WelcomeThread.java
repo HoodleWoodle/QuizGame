@@ -31,6 +31,16 @@ final class WelcomeThread implements Runnable
 	}
 
 	/**
+	 * Getter.
+	 * 
+	 * @return the server-port
+	 */
+	public int getPort()
+	{
+		return port;
+	}
+
+	/**
 	 * Starts the thread.
 	 * 
 	 * @return whether it was successful
@@ -71,16 +81,6 @@ final class WelcomeThread implements Runnable
 			// e.printStackTrace();
 			return false;
 		}
-	}
-
-	/**
-	 * Getter.
-	 * 
-	 * @return the server-port
-	 */
-	public int getPort()
-	{
-		return port;
 	}
 
 	@Override

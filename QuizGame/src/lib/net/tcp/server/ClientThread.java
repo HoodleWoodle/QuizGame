@@ -54,13 +54,13 @@ public class ClientThread implements Runnable
 	}
 
 	/**
-	 * Sends to the client.
+	 * Sends a message to the client.
 	 * 
 	 * @param message
 	 *            the message to send
 	 * @return whether it was successful
 	 */
-	public final boolean send(String message)
+	public final boolean send(byte[] message)
 	{
 		try
 		{
@@ -117,7 +117,7 @@ public class ClientThread implements Runnable
 			try
 			{
 				// waiting for messge
-				String message = in.readLine();
+				byte[] message = in.readLine().getBytes();
 				if (running)
 					if (message != null)
 						// if client is connected and message is correct

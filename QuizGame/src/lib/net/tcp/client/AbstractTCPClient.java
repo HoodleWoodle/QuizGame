@@ -34,6 +34,26 @@ public abstract class AbstractTCPClient
 	}
 
 	/**
+	 * Getter.
+	 * 
+	 * @return the server-tag
+	 */
+	public final String getServer()
+	{
+		return server;
+	}
+
+	/**
+	 * Getter.
+	 * 
+	 * @return the server-port
+	 */
+	public final int getPort()
+	{
+		return port;
+	}
+
+	/**
 	 * Connects to the server.
 	 * 
 	 * @return whether it was successful
@@ -79,13 +99,13 @@ public abstract class AbstractTCPClient
 	}
 
 	/**
-	 * Sends to the server.
+	 * Sends a message to the server.
 	 * 
 	 * @param message
 	 *            the message to send
 	 * @return whether it was successful
 	 */
-	public final boolean send(String message)
+	public final boolean send(byte[] message)
 	{
 		try
 		{
@@ -102,35 +122,15 @@ public abstract class AbstractTCPClient
 	}
 
 	/**
-	 * When the client receives a message.
+	 * Is called when the client receives a message.
 	 * 
 	 * @param message
 	 *            the received message
 	 */
-	protected abstract void received(String message);
+	protected abstract void received(byte[] message);
 
 	/**
-	 * When the client loses connection to the server.
+	 * Is called when the client loses connection to the server.
 	 */
 	protected abstract void closed();
-
-	/**
-	 * Getter.
-	 * 
-	 * @return the server-tag
-	 */
-	public final String getServer()
-	{
-		return server;
-	}
-
-	/**
-	 * Getter.
-	 * 
-	 * @return the server-port
-	 */
-	public final int getPort()
-	{
-		return port;
-	}
 }

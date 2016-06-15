@@ -1,8 +1,19 @@
 package quiz.client;
 
+import static quiz.net.NetworkMessage.TAG_LOGIN;
+import static quiz.net.NetworkMessage.TAG_REGISTER;
+import static quiz.net.NetworkMessage.TAG_REQUEST;
+import static quiz.net.NetworkMessage.TAG_REQUEST_0;
+import static quiz.net.NetworkMessage.TAG_REQUEST_1;
+import static quiz.net.NetworkMessage.TAG_REQUEST_2;
+import static quiz.net.NetworkMessage.TAG_REQUEST_3;
+import static quiz.net.NetworkMessage.TAG_REQUEST_ACCEPT;
+import static quiz.net.NetworkMessage.TAG_REQUEST_DENY;
+import static quiz.net.NetworkMessage.TAG_SET_ANSWER;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
+import quiz.net.NetworkMessage;
 
 /**
  * @author Stefan
@@ -26,54 +37,63 @@ public class Control implements IControl
 	@Override
 	public void register(String name, String password)
 	{
-		client.send("reg," + name + "," + password);
+		NetworkMessage msg = new NetworkMessage(TAG_REGISTER, new String[] { name, password });
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void login(String name, String password)
 	{
-		client.send("log," + name + "," + password);
+		NetworkMessage msg = new NetworkMessage(TAG_LOGIN, new String[] { name, password });
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void requestMatch(Category category, Account aim)
 	{
-		client.send("req,1," + category.ordinal() + "," + aim.getID());
+		NetworkMessage msg = new NetworkMessage(TAG_REQUEST, new String[] { TAG_REQUEST_0, category.ordinal() + "", aim.getID() + "" });
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void requestMatch(Category category)
 	{
-		client.send("req,2," + category.ordinal());
+		NetworkMessage msg = new NetworkMessage(TAG_REQUEST, new String[] { TAG_REQUEST_1, category.ordinal() + "" });
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void requestMatch(Account aim)
 	{
-		client.send("req,3," + aim.getID());
+		NetworkMessage msg = new NetworkMessage(TAG_REQUEST, new String[] { TAG_REQUEST_2, aim.getID() + "" });
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void requestMatch()
 	{
-		client.send("req,4");
+		NetworkMessage msg = new NetworkMessage(TAG_REQUEST, TAG_REQUEST_3);
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void acceptRequest(Match request)
 	{
-		client.send("acc," + request.getID());
+		NetworkMessage msg = new NetworkMessage(TAG_REQUEST_ACCEPT, request.getID() + "");
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void denyRequest(Match request)
 	{
-		client.send("den," + request.getID());
+		NetworkMessage msg = new NetworkMessage(TAG_REQUEST_DENY, request.getID() + "");
+		client.send(msg.getBytes());
 	}
 
 	@Override
 	public void setAnswer(int index)
 	{
-		client.send("set," + index);
+		NetworkMessage msg = new NetworkMessage(TAG_SET_ANSWER, index + "");
+		client.send(msg.getBytes());
 	}
 }

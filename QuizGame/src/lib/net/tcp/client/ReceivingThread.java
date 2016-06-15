@@ -47,7 +47,7 @@ final class ReceivingThread implements Runnable
 			try
 			{
 				// waiting for message
-				String message = in.readLine();
+				byte[] message = in.readLine().getBytes();
 				if (message != null)
 					// if message is correct
 					client.received(message);

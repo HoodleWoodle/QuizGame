@@ -1,8 +1,6 @@
 package quiz.client.view;
 
-import quiz.client.IControl;
 import quiz.client.model.ChangeType;
-import quiz.client.model.IModel;
 import quiz.client.model.Status;
 
 /**
@@ -11,16 +9,6 @@ import quiz.client.model.Status;
  */
 public interface IView
 {
-	/**
-	 * Initializes the IView.
-	 * 
-	 * @param model
-	 *            the IModel instance
-	 * @param control
-	 *            the IControl instance
-	 */
-	void init(IModel model, IControl control);
-
 	/**
 	 * On change of the IModel.
 	 * 

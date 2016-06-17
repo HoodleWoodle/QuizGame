@@ -205,7 +205,7 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 		// start surface
 		SwingUtilities.invokeLater(() -> {
 			// Swing needs to run on event dispatching thread
-				GameFrame.getInstance();
+				new GameFrame(control, model);
 			});
 	}
 }

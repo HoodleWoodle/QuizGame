@@ -35,18 +35,15 @@ public class PlayerListPanel extends JPanel implements IView {
 	/**
 	 * Creates a new PlayerListPanel.
 	 */
-	public PlayerListPanel() {
+	public PlayerListPanel(IControl control, IModel model) {
+		this.control = control;
+		this.model = model;
+
 		setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
 		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
 		setMaximumSize(new Dimension(200, FRAME_HEIGHT));
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-	}
-
-	@Override
-	public void init(IModel model, IControl control) {
-		this.model = model;
-		this.control = control;
 	}
 
 	@Override

@@ -34,6 +34,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
 	private IModel model;
 	private IControl control;
+	private GameFrame gameFrame;
 	private JTextPane questionText;
 	private JButton[] answerButtons = new JButton[4];
 	private CountdownProgressBar countdown;
@@ -45,10 +46,13 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	/**
 	 * Creates a new QuestionPanel.
 	 */
-	public QuestionPanel() {
+	public QuestionPanel(GameFrame gameFrame, IControl control, IModel model) {
+		this.gameFrame = gameFrame;
+		this.control = control;
+		this.model = model;
 		setLayout(new GridBagLayout());
 
-		gameOverPanel = new GameOverPanel();
+		gameOverPanel = new GameOverPanel(gameFrame, model);
 		initComponents();
 	}
 
@@ -132,12 +136,6 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 	}
 
 	@Override
-	public void init(IModel model, IControl control) {
-		this.model = model;
-		this.control = control;
-	}
-
-	@Override
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.MATCH) {
 			Match match = model.getMatch();
@@ -146,7 +144,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 			int opponentIndex = -1;
 			Account opponent = null;
 			for (int a = 0; a < match.getOpponents().length; a++) {
-				if (match.getOpponents()[a].getID() != GameFrame.getInstance().getUser().getID()) {
+				if (match.getOpponents()[a].getID() != gameFrame.getUser().getID()) {
 					opponentIndex = a;
 					opponent = match.getOpponents()[a];
 				}
@@ -179,7 +177,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				answerLoggedIn = false;
 				countdown.restart();
 			} else
-				GameFrame.getInstance().setContentPane(gameOverPanel);
+				gameFrame.setContentPane(gameOverPanel);
 		}
 	}
 }

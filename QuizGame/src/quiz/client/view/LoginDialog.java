@@ -47,11 +47,16 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	private JLabel[] loginLabels = new JLabel[3];
 	private IModel model;
 	private IControl control;
+	private GameFrame gameFrame;
 
 	/**
 	 * Creates a new LoginDialog.
 	 */
-	public LoginDialog() {
+	public LoginDialog(GameFrame gameFrame, IControl control, IModel model) {
+		this.gameFrame = gameFrame;
+		this.control = control;
+		this.model = model;
+
 		setTitle("Anmelden");
 		setModal(true);
 		Dimension size = new Dimension(250, 300);
@@ -70,16 +75,10 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	}
 
 	@Override
-	public void init(IModel model, IControl control) {
-		this.model = model;
-		this.control = control;
-	}
-
-	@Override
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.ACCOUNT) {
 			if (status == Status.INVALID_LOGIN_DETAILS) {
-				exceptionMessage("Ungültige Kombination von Benutzername und Passwort! Bitte versuche es erneut!");
+				exceptionMessage("Ungï¿½ltige Kombination von Benutzername und Passwort! Bitte versuche es erneut!");
 				return;
 			}
 
@@ -91,7 +90,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 			else if (status == Status.SUCCESS) {
 				Account user = model.getAccount();
 
-				GameFrame.getInstance().setUser(user);
+				gameFrame.setUser(user);
 				dispose();
 			}
 		}

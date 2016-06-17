@@ -1,20 +1,19 @@
 package quiz.client.view;
 
-import static quiz.Constants.FRAME_HEIGHT;
-import static quiz.Constants.FRAME_WIDTH;
+import quiz.client.IControl;
+import quiz.client.model.IModel;
+import quiz.model.Account;
 
-import java.awt.Dimension;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import quiz.model.Account;
+import static quiz.Constants.FRAME_HEIGHT;
+import static quiz.Constants.FRAME_WIDTH;
 
 /**
  * 
@@ -27,18 +26,6 @@ public final class GameFrame extends JFrame {
 
 	private final MenuPanel menuPanel;
 	private Account user;
-
-	/**
-	 * Singleton. Returns the instance of GameFrame.
-	 * 
-	 * @return the instance of GameFrame
-	 */
-	public static GameFrame getInstance() {
-		if (instance == null)
-			instance = new GameFrame();
-
-		return instance;
-	}
 
 	/**
 	 * Sets the standard properties for @param components.
@@ -73,12 +60,12 @@ public final class GameFrame extends JFrame {
 		}
 	}
 
-	private GameFrame() {
+	public GameFrame(IControl control, IModel model) {
 		super("Quiz Game");
 		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		setContentPane(menuPanel = new MenuPanel());
+		setContentPane(menuPanel = new MenuPanel(this, control, model));
 		setResizable(false);
 
 		try {
@@ -92,7 +79,7 @@ public final class GameFrame extends JFrame {
 				// during a game
 				if (user != null && !user.isAvailable()) {
 					JOptionPane.showConfirmDialog(GameFrame.this,
-							"Wenn du QuizGame während des Matches beendest, verlierst du dadurch sofort. Möchstest du das Spiel wirklich schon beenden?",
+							"Wenn du QuizGame wÃ¤hrend des Matches beendest, verlierst du dadurch sofort. MÃ¶chstest du das Spiel wirklich schon beenden?",
 							"QuizGame beenden", JOptionPane.YES_NO_OPTION);
 					return;
 				}
@@ -106,7 +93,7 @@ public final class GameFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 
-		new LoginDialog();
+		new LoginDialog(this, control, model);
 	}
 
 	/**

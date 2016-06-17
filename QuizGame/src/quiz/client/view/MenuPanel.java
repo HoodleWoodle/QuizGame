@@ -30,18 +30,22 @@ import quiz.model.Match;
  */
 public class MenuPanel extends JPanel implements ActionListener, IView {
 
-	private static final String[] MENU_BUTTON_NAMES = { "Gegner suchen", "Zufälliger Gegner" };
+	private static final String[] MENU_BUTTON_NAMES = { "Gegner suchen", "Zufï¿½lliger Gegner" };
 	private JButton[] menuButtons = new JButton[MENU_BUTTON_NAMES.length];
 	private JLabel gameTitle;
 	private IModel model;
 	private IControl control;
 	private final QuestionPanel questionPanel;
+	private GameFrame gameFrame;
 
 	/**
 	 * Creates a new MenuPanel.
 	 */
-	public MenuPanel() {
-		questionPanel = new QuestionPanel();
+	public MenuPanel(GameFrame gameFrame, IControl control, IModel model) {
+		this.gameFrame = gameFrame;
+		this.model = model;
+		this.control = control;
+		questionPanel = new QuestionPanel(gameFrame, control, model);
 		setMinimumSize(new Dimension(200, FRAME_HEIGHT));
 		setPreferredSize(new Dimension(250, FRAME_HEIGHT));
 		setMaximumSize(new Dimension(300, FRAME_HEIGHT));
@@ -60,7 +64,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	}
 
 	private void initComponents() {
-		JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel());
+		JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(control, model));
 		JLabel players = new JLabel("Spieler:");
 		players.setHorizontalAlignment(JLabel.CENTER);
 
@@ -70,7 +74,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		add(playerListScrollPane, BorderLayout.LINE_START);
 		add(createMainPart(), BorderLayout.CENTER);
 
-		JScrollPane matchRequestScrollPane = new JScrollPane(new MatchRequestListPanel());
+		JScrollPane matchRequestScrollPane = new JScrollPane(new MatchRequestListPanel(gameFrame, control, model));
 		JLabel matchRequests = new JLabel("Herausforderungen:");
 		matchRequests.setHorizontalAlignment(JLabel.CENTER);
 
@@ -141,12 +145,6 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 	}
 
 	@Override
-	public void init(IModel model, IControl control) {
-		this.model = model;
-		this.control = control;
-	}
-
-	@Override
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.MATCH) {
 			Match match = model.getMatch();
@@ -157,7 +155,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 				}
 			}
 
-			GameFrame.getInstance().setContentPane(questionPanel);
+			gameFrame.setContentPane(questionPanel);
 		}
 	}
 }

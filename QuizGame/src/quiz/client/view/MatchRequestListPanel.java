@@ -34,23 +34,22 @@ public class MatchRequestListPanel extends JPanel implements IView {
 	private IModel model;
 	private IControl control;
 	private List<Match> lastMatchRequests;
+	private GameFrame gameFrame;
 
 	/**
 	 * Creates a new MatchRequestListPanel.
 	 */
-	public MatchRequestListPanel() {
+	public MatchRequestListPanel(GameFrame gameFrame, IControl control, IModel model) {
+		this.gameFrame = gameFrame;
+		this.control = control;
+		this.model = model;
+
 		setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
 		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
 		setMaximumSize(new Dimension(200, FRAME_HEIGHT));
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		lastMatchRequests = new ArrayList<>();
-	}
-
-	@Override
-	public void init(IModel model, IControl control) {
-		this.model = model;
-		this.control = control;
 	}
 
 	@Override
@@ -121,7 +120,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 		private void initComponents() {
 			Account opponent = null;
 			for (Account account : matchRequest.getOpponents()) {
-				if (account.getID() != GameFrame.getInstance().getUser().getID()) {
+				if (account.getID() != gameFrame.getUser().getID()) {
 					opponent = account;
 					break;
 				}

@@ -19,13 +19,9 @@ public class CountdownProgressBar extends JProgressBar {
 	/**
 	 * Creates a new CountdownProgessBar with the minimum 0, the maximum @param
 	 * max, and the delay 1000.
-	 * 
-	 * @param min
-	 *            the minimum
+	 *
 	 * @param max
 	 *            the maximum
-	 * @param delay
-	 *            the delay in milliseconds
 	 */
 	public CountdownProgressBar(int max) {
 		this(0, max, 1000);
@@ -39,8 +35,6 @@ public class CountdownProgressBar extends JProgressBar {
 	 *            the minimum
 	 * @param max
 	 *            the maximum
-	 * @param delay
-	 *            the delay in milliseconds
 	 */
 	public CountdownProgressBar(int min, int max) {
 		this(min, max, 1000);

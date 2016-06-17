@@ -25,17 +25,15 @@ import quiz.model.Question;
 public class GameOverPanel extends JPanel implements IView {
 
 	private IModel model;
+	private GameFrame gameFrame;
 
 	/**
 	 * Creates a new GameOverPanel.
 	 */
-	public GameOverPanel() {
+	public GameOverPanel(GameFrame gameFrame, IModel model) {
 		setLayout(new GridBagLayout());
-	}
-
-	@Override
-	public void init(IModel model, IControl control) {
 		this.model = model;
+		this.gameFrame = gameFrame;
 	}
 
 	@Override
@@ -81,8 +79,7 @@ public class GameOverPanel extends JPanel implements IView {
 			c.gridy = rows + 1;
 			c.gridx = 3;
 
-			GameFrame gameFrame = GameFrame.getInstance();
-			JButton menu = new JButton("Hauptmenü");
+			JButton menu = new JButton("Hauptmenï¿½");
 			menu.addActionListener(e -> gameFrame.setContentPane(gameFrame.getMenuPanel()));
 			add(menu, c);
 		}

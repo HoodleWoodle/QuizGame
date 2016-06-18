@@ -154,9 +154,9 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		}
 
 		if (login.isSelected())
-			control.register(username.getText(), Arrays.toString(password.getPassword()));
+			control.register(username.getText(), new String(password.getPassword()));
 		else
-			control.login(username.getText(), Arrays.toString(password.getPassword()));
+			control.login(username.getText(), new String(password.getPassword()));
 	}
 
 	private void initComponents() {

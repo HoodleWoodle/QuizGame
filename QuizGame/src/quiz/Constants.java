@@ -34,7 +34,7 @@ public interface Constants
 	 */
 	public static final String DB_PASSWORD = "qM";
 	/**
-	 * The LookAndFell.
+	 * The LookAndFeel.
 	 */
 	public static final String LOOK_AND_FEEL = "Nimbus";
 	/**

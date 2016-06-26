@@ -57,6 +57,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		this.control = control;
 		this.model = model;
 
+		model.addView(this);
 		setTitle("Anmelden");
 		setModal(true);
 		Dimension size = new Dimension(250, 300);

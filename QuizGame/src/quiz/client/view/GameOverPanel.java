@@ -32,6 +32,7 @@ public class GameOverPanel extends JPanel implements IView {
 	 */
 	public GameOverPanel(GameFrame gameFrame, IModel model) {
 		setLayout(new GridBagLayout());
+		model.addView(this);
 		this.model = model;
 		this.gameFrame = gameFrame;
 	}

@@ -45,6 +45,8 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		this.gameFrame = gameFrame;
 		this.model = model;
 		this.control = control;
+
+		model.addView(this);
 		questionPanel = new QuestionPanel(gameFrame, control, model);
 		setMinimumSize(new Dimension(200, FRAME_HEIGHT));
 		setPreferredSize(new Dimension(250, FRAME_HEIGHT));

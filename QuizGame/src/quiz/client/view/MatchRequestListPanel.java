@@ -44,6 +44,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 		this.control = control;
 		this.model = model;
 
+		model.addView(this);
 		setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
 		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
 		setMaximumSize(new Dimension(200, FRAME_HEIGHT));

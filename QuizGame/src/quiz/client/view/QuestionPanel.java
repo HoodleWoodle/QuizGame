@@ -50,6 +50,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		this.gameFrame = gameFrame;
 		this.control = control;
 		this.model = model;
+		model.addView(this);
 		setLayout(new GridBagLayout());
 
 		gameOverPanel = new GameOverPanel(gameFrame, model);

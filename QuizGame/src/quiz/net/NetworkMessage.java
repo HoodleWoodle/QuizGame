@@ -40,16 +40,18 @@ public final class NetworkMessage
 	 */
 	public NetworkMessage(byte[] message)
 	{
-		String msg = new String(message);
-		System.err.println(msg);
+		String msg = new String(message, 1, message.length - 1);
+
+		System.out.println("RECEIVING: " + message[0] + msg);
+
 		String[] columns = msg.split(SPLIT);
 
-		tag = Byte.parseByte(columns[0]);
+		tag = message[0];
 
-		int parameterSize = columns.length - 1;
+		int parameterSize = columns.length;
 		parameters = new String[parameterSize];
 		for (int i = 0; i < parameterSize; i++)
-			parameters[i] = columns[i + 1];
+			parameters[i] = columns[i];
 	}
 
 	/**
@@ -125,7 +127,8 @@ public final class NetworkMessage
 
 		int size = 1;
 		for (String parameter : parameters)
-			size += (splitBytes.length + parameter.length());
+			size += parameter.length();
+		size += (parameters.length - 1) * SPLIT.length();
 
 		byte[] bytes = new byte[size];
 
@@ -136,12 +139,12 @@ public final class NetworkMessage
 			for (byte b : parameter.getBytes())
 				bytes[pointer++] = b;
 
-			if (pointer < size)
+			if (pointer < size - 1)
 				for (byte b : splitBytes)
 					bytes[pointer++] = b;
 		}
 
-		System.err.println(new String(bytes));
+		System.out.println("SENDING: " + new String(bytes));
 
 		return bytes;
 	}

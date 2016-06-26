@@ -1,9 +1,8 @@
 package lib.net.tcp.client;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
@@ -17,7 +16,7 @@ public abstract class AbstractTCPClient
 
 	private ReceivingThread receiver;
 	private Socket socket;
-	private DataOutputStream out;
+	private BufferedOutputStream out;
 
 	/**
 	 * Creates an instance of AbstractTCPClient.
@@ -64,8 +63,8 @@ public abstract class AbstractTCPClient
 		{
 			// try to connect to server
 			socket = new Socket(server, port);
-			receiver = new ReceivingThread(this, new BufferedReader(new InputStreamReader(socket.getInputStream())));
-			out = new DataOutputStream(socket.getOutputStream());
+			receiver = new ReceivingThread(this, new BufferedInputStream(socket.getInputStream()));
+			out = new BufferedOutputStream(socket.getOutputStream());
 			return true;
 		} catch (IOException e)
 		{
@@ -110,7 +109,8 @@ public abstract class AbstractTCPClient
 		try
 		{
 			// try to send a message
-			out.writeBytes(message + "\n");
+			out.write(message);
+			out.flush();
 			return true;
 		} catch (IOException e)
 		{

@@ -1,9 +1,8 @@
 package lib.net.tcp.server;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
@@ -18,8 +17,8 @@ public class ClientThread implements Runnable
 
 	private final AbstractTCPServer server;
 	private final Socket socket;
-	private BufferedReader in;
-	private DataOutputStream out;
+	private BufferedInputStream in;
+	private BufferedOutputStream out;
 
 	private boolean running;
 
@@ -39,8 +38,8 @@ public class ClientThread implements Runnable
 		try
 		{
 			// try to open connection
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			out = new DataOutputStream(socket.getOutputStream());
+			in = new BufferedInputStream(socket.getInputStream());
+			out = new BufferedOutputStream(socket.getOutputStream());
 			// start thread
 			Thread t = new Thread(this);
 			t.start();
@@ -65,7 +64,8 @@ public class ClientThread implements Runnable
 		try
 		{
 			// try to send some message
-			out.writeBytes(message + "\n");
+			out.write(message);
+			out.flush();
 			return true;
 		} catch (IOException e)
 		{
@@ -116,15 +116,15 @@ public class ClientThread implements Runnable
 		while (running)
 			try
 			{
-				// waiting for messge
-				byte[] message = in.readLine().getBytes();
-				if (running)
-					if (message != null)
-						// if client is connected and message is correct
-						server.received(this, message);
-					else
-						throw new IOException();
-			} catch (IOException e)
+				int size = in.available();
+				// waiting for message
+				if (size == 0)
+					continue;
+				byte[] message = new byte[size];
+				in.read(message);
+				if (running)// if client is connected and message is correct
+					server.received(this, message);
+			} catch (Exception e)
 			{
 				// some Exception
 				if (running)

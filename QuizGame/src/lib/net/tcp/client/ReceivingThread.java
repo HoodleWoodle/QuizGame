@@ -1,7 +1,6 @@
 package lib.net.tcp.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.BufferedInputStream;
 
 /**
  * @author Stefan
@@ -10,7 +9,7 @@ import java.io.IOException;
 final class ReceivingThread implements Runnable
 {
 	private final AbstractTCPClient client;
-	private final BufferedReader in;
+	private final BufferedInputStream in;
 
 	private boolean running;
 
@@ -22,7 +21,7 @@ final class ReceivingThread implements Runnable
 	 * @param in
 	 *            the input
 	 */
-	ReceivingThread(AbstractTCPClient client, BufferedReader in)
+	ReceivingThread(AbstractTCPClient client, BufferedInputStream in)
 	{
 		this.client = client;
 		this.in = in;
@@ -46,14 +45,15 @@ final class ReceivingThread implements Runnable
 		while (running)
 			try
 			{
+				int size = in.available();
 				// waiting for message
-				byte[] message = in.readLine().getBytes();
-				if (message != null)
-					// if message is correct
-					client.received(message);
-				else
-					throw new IOException();
-			} catch (IOException e)
+				if (size == 0)
+					continue;
+				byte[] message = new byte[size];
+				in.read(message);
+				// if message is correct
+				client.received(message);
+			} catch (Exception e)
 			{
 				// some Exception
 				client.close();

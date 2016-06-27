@@ -38,6 +38,10 @@ public class MatchRequestListPanel extends JPanel implements IView {
 
 	/**
 	 * Creates a new MatchRequestListPanel.
+	 *
+	 * @param gameFrame the current GameFrame instance
+	 * @param control the IControl implementation
+	 * @param model the IModel implementation
 	 */
 	public MatchRequestListPanel(GameFrame gameFrame, IControl control, IModel model) {
 		this.gameFrame = gameFrame;

@@ -45,6 +45,10 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
 	/**
 	 * Creates a new QuestionPanel.
+	 *
+	 * @param gameFrame the current GameFrame instance
+	 * @param control the IControl implementation
+	 * @param model the IModel implementation
 	 */
 	public QuestionPanel(GameFrame gameFrame, IControl control, IModel model) {
 		this.gameFrame = gameFrame;

@@ -40,6 +40,10 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 
 	/**
 	 * Creates a new MenuPanel.
+	 *
+	 * @param gameFrame the current GameFrame instance
+	 * @param control the IControl implementation
+	 * @param model the IModel implementation
 	 */
 	public MenuPanel(GameFrame gameFrame, IControl control, IModel model) {
 		this.gameFrame = gameFrame;

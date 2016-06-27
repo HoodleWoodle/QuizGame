@@ -34,6 +34,9 @@ public class PlayerListPanel extends JPanel implements IView {
 
 	/**
 	 * Creates a new PlayerListPanel.
+	 *
+	 * @param control the IControl implementation
+	 * @param model the IModel implementation
 	 */
 	public PlayerListPanel(IControl control, IModel model) {
 		this.control = control;

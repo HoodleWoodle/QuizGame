@@ -14,6 +14,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
 import javax.swing.Box;
@@ -146,8 +148,9 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 				exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
 		}
 
+
 		if (keepUsername.isSelected()) {
-			try (BufferedWriter bf = Files.newBufferedWriter(USERNAME_FILE, StandardCharsets.UTF_8)) {
+			try (BufferedWriter bf = Files.newBufferedWriter(USERNAME_FILE, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
 				bf.write(username.getText());
 			} catch (IOException e) {
 				e.printStackTrace();

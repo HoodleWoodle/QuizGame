@@ -29,6 +29,8 @@ public class GameOverPanel extends JPanel implements IView {
 
 	/**
 	 * Creates a new GameOverPanel.
+	 * @param gameFrame the current GameFrame instance
+	 * @param model the IModel implementation
 	 */
 	public GameOverPanel(GameFrame gameFrame, IModel model) {
 		setLayout(new GridBagLayout());

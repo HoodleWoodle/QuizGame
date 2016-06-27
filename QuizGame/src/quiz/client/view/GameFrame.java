@@ -38,7 +38,7 @@ public final class GameFrame extends JFrame {
 	}
 
 	/**
-	 * Sets the poperties minimum Dimension @param min, preferred
+	 * Sets the properties minimum Dimension @param min, preferred
 	 * Dimension @param preferred, and maximum Dimension @param max for the
 	 * components @components.
 	 * 
@@ -60,6 +60,11 @@ public final class GameFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * Creates a new GameFrame with the given implementation of IControl and IModel.
+	 * @param control the control implementation
+	 * @param model the model implementation
+     */
 	public GameFrame(IControl control, IModel model) {
 		super("Quiz Game");
 		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -78,14 +83,15 @@ public final class GameFrame extends JFrame {
 			public void windowClosing(WindowEvent event) {
 				// during a game
 				if (user != null && !user.isAvailable()) {
-					JOptionPane.showConfirmDialog(GameFrame.this,
+					int answer = JOptionPane.showConfirmDialog(GameFrame.this,
 							"Wenn du QuizGame während des Matches beendest, verlierst du dadurch sofort. Möchstest du das Spiel wirklich schon beenden?",
 							"QuizGame beenden", JOptionPane.YES_NO_OPTION);
-					return;
+					if (answer == JOptionPane.YES_OPTION) {
+						dispose();
+						System.exit(1);
+						return;
+					}
 				}
-
-				dispose();
-				System.exit(1);
 			}
 		});
 

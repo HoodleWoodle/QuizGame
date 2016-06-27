@@ -119,7 +119,10 @@ public class ClientThread implements Runnable
 				int size = in.available();
 				// waiting for message
 				if (size == 0)
+				{
+					Thread.sleep(1);
 					continue;
+				}
 				byte[] message = new byte[size];
 				in.read(message);
 				if (running)// if client is connected and message is correct

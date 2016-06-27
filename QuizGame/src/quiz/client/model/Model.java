@@ -152,6 +152,6 @@ public class Model implements IModel
 	private void onChange(ChangeType type)
 	{
 		for (IView view : views)
-			view.onChange(ChangeType.REQUESTS, status);
+			view.onChange(type, status);
 	}
 }

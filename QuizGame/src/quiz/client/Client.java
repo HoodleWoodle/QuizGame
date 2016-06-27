@@ -3,6 +3,9 @@ package quiz.client;
 import static quiz.net.NetworkMessage.SPLIT_SUB;
 import static quiz.net.NetworkMessage.SPLIT_SUB_SUB;
 import static quiz.net.NetworkMessage.SPLIT_SUB_SUB_SUB;
+import static quiz.net.NetworkMessage.TAG_ALREADY_IN_MATCH;
+import static quiz.net.NetworkMessage.TAG_INVALID_LOGIN_DETAILS;
+import static quiz.net.NetworkMessage.TAG_INVALID_REGISTER_DETAILS;
 import static quiz.net.NetworkMessage.TAG_SET_ACCOUNT;
 import static quiz.net.NetworkMessage.TAG_SET_MATCH;
 import static quiz.net.NetworkMessage.TAG_SET_OPPONENTS;
@@ -18,6 +21,7 @@ import lib.net.tcp.client.AbstractTCPClient;
 import quiz.Constants;
 import quiz.client.model.IModel;
 import quiz.client.model.Model;
+import quiz.client.model.Status;
 import quiz.client.view.GameFrame;
 import quiz.model.Account;
 import quiz.model.Category;
@@ -54,8 +58,21 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 
 		Model model = (Model) this.model;
 
+		model.setStatus(Status.SUCCESS);
 		switch (msg.getTag())
 		{
+		case TAG_INVALID_REGISTER_DETAILS:
+			model.setStatus(Status.INVALID_REGISTER_DETAILS);
+			model.setAccount(null);
+			break;
+		case TAG_INVALID_LOGIN_DETAILS:
+			model.setStatus(Status.INVALID_LOGIN_DETAILS);
+			model.setAccount(null);
+			break;
+		case TAG_ALREADY_IN_MATCH:
+			model.setStatus(Status.ALREADY_IN_MATCH);
+			model.setRequests(model.getRequests());
+			break;
 		case TAG_SET_ACCOUNT:
 			model.setAccount(parseAccount(msg.getParameter(0)));
 			break;

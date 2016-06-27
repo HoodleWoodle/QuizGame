@@ -2,6 +2,9 @@ package quiz.server;
 
 import static quiz.net.NetworkMessage.SPLIT_SUB_SUB;
 import static quiz.net.NetworkMessage.SPLIT_SUB_SUB_SUB;
+import static quiz.net.NetworkMessage.TAG_ALREADY_IN_MATCH;
+import static quiz.net.NetworkMessage.TAG_INVALID_LOGIN_DETAILS;
+import static quiz.net.NetworkMessage.TAG_INVALID_REGISTER_DETAILS;
 import static quiz.net.NetworkMessage.TAG_LOGIN;
 import static quiz.net.NetworkMessage.TAG_REGISTER;
 import static quiz.net.NetworkMessage.TAG_REQUEST;
@@ -66,7 +69,6 @@ public class Server extends AbstractTCPServer
 	@Override
 	protected boolean register(ClientThread client)
 	{
-		sendOpponents();
 		return true;
 	}
 
@@ -101,6 +103,8 @@ public class Server extends AbstractTCPServer
 	@Override
 	protected void closed(ClientThread client)
 	{
+		int accountID = accountIDs.remove(client.getID());
+		clientIDs.remove(accountID);
 		sendOpponents();
 	}
 
@@ -121,7 +125,9 @@ public class Server extends AbstractTCPServer
 
 			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
 			client.send(msg.getBytes());
-		}
+			sendOpponents();
+		} else
+			client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workLogin(ClientThread client, NetworkMessage message)
@@ -129,9 +135,14 @@ public class Server extends AbstractTCPServer
 		Account account = dataManager.getAccount(message.getParameter(0), message.getParameter(1));
 		if (account != null)
 		{
+			accountIDs.put(client.getID(), account.getID());
+			clientIDs.put(account.getID(), client.getID());
+
 			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
 			client.send(msg.getBytes());
-		}
+			sendOpponents();
+		} else
+			client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workRequest(ClientThread client, NetworkMessage message)
@@ -196,11 +207,14 @@ public class Server extends AbstractTCPServer
 				otherID = accountID;
 		}
 
-		if (!hasMatch(playerID) && !hasMatch(otherID))
+		if (hasMatch(playerID) || hasMatch(otherID))
 		{
-			requests.remove(matchID);
-			matches.put(match.getID(), match);
+			client.send(new NetworkMessage(TAG_ALREADY_IN_MATCH, new String[0]).getBytes());
+			return;
 		}
+
+		requests.remove(matchID);
+		matches.put(match.getID(), match);
 
 		NetworkMessage msg = new NetworkMessage(TAG_SET_MATCH, convertMatch(match));
 		client.send(msg.getBytes());
@@ -344,7 +358,7 @@ public class Server extends AbstractTCPServer
 	{
 		if (clientIDs.get(ID) == null)
 			return false;
-		return getClient(clientIDs.get(ID)) != null;
+		return true;
 	}
 
 	private boolean hasMatch(int ID)

@@ -50,7 +50,7 @@ public class PlayerListPanel extends JPanel implements IView {
 	@Override
 	public void onChange(ChangeType type, Status status) {
 		// update account statuses
-		if (type == ChangeType.OPPONENTS && status != Status.NO_OPPONENTS_AVAILABLE) {
+		if (type == ChangeType.OPPONENTS) {
 			for (Account account : model.getOpponents()) {
 				if (account.isOnline()) {
 					if (!accounts.containsKey(account)) {

@@ -48,7 +48,10 @@ final class ReceivingThread implements Runnable
 				int size = in.available();
 				// waiting for message
 				if (size == 0)
+				{
+					Thread.sleep(1);
 					continue;
+				}
 				byte[] message = new byte[size];
 				in.read(message);
 				// if message is correct

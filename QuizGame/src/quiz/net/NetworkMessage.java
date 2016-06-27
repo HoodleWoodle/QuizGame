@@ -19,6 +19,10 @@ public final class NetworkMessage
 	public static final byte TAG_SET_MATCH = 3;
 	public static final byte TAG_SET_QUESTION = 4;
 
+	public static final byte TAG_INVALID_REGISTER_DETAILS = 5;
+	public static final byte TAG_INVALID_LOGIN_DETAILS = 6;
+	public static final byte TAG_ALREADY_IN_MATCH = 7;
+
 	public static final String TAG_REQUEST_0 = "0";
 	public static final String TAG_REQUEST_1 = "1";
 	public static final String TAG_REQUEST_2 = "2";
@@ -128,7 +132,8 @@ public final class NetworkMessage
 		int size = 1;
 		for (String parameter : parameters)
 			size += parameter.length();
-		size += (parameters.length - 1) * SPLIT.length();
+		if (parameters.length > 0)
+			size += (parameters.length - 1) * SPLIT.length();
 
 		byte[] bytes = new byte[size];
 

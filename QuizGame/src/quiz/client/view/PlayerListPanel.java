@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -31,6 +32,7 @@ public class PlayerListPanel extends JPanel implements IView {
 	private Map<Account, PlayerPanel> accounts = new HashMap<Account, PlayerPanel>();
 	private IModel model;
 	private IControl control;
+	private ResourceBundle localization = GameFrame.getLocalization();
 
 	/**
 	 * Creates a new PlayerListPanel.
@@ -98,7 +100,7 @@ public class PlayerListPanel extends JPanel implements IView {
 			add(status = new JLabel(), BorderLayout.CENTER);
 
 			JPopupMenu popupMenu = new JPopupMenu();
-			JMenuItem matchRequest = new JMenuItem("Herausfordern");
+			JMenuItem matchRequest = new JMenuItem(localization.getString("CHALLENGE"));
 			matchRequest.addActionListener(event -> {
 				if (!account.isAvailable())
 					control.requestMatch(account);
@@ -119,7 +121,9 @@ public class PlayerListPanel extends JPanel implements IView {
 		 * Reflects the current status of the account in view.
 		 */
 		public void updateStatus() {
-			status.setText(account.getName() + (!account.isAvailable() ? "(Im Spiel)" : "(Online)"));
+			status.setText(account.getName() +
+					(!account.isAvailable() ? "(" + localization.getString("IN_GAME") + ")" :
+							"(" + localization.getString("ONLINE") + ")"));
 		}
 	}
 }

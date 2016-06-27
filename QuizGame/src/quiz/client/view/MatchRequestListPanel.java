@@ -5,10 +5,8 @@ import static quiz.Constants.FRAME_HEIGHT;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.text.MessageFormat;
+import java.util.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -35,6 +33,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 	private IControl control;
 	private List<Match> lastMatchRequests;
 	private GameFrame gameFrame;
+	private ResourceBundle localization = GameFrame.getLocalization();
 
 	/**
 	 * Creates a new MatchRequestListPanel.
@@ -61,8 +60,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.REQUESTS) {
 			if (status == Status.ALREADY_IN_MATCH) {
-				JOptionPane.showMessageDialog(null, "Dieser Spieler befindet sich zurzeit schon in einem Match!",
-						"Fehler", JOptionPane.ERROR);
+				gameFrame.showExceptionMessage(localization.getString("EXCEPTION_ALREADY_IN_MATCH"));
 				return;
 			}
 
@@ -131,7 +129,8 @@ public class MatchRequestListPanel extends JPanel implements IView {
 				}
 			}
 
-			JTextArea textArea = new JTextArea("Du hast eine Herausforderung von " + opponent.getName() + " erhalten!");
+			MessageFormat formatter = new MessageFormat(localization.getString("RECEIVED_MATCHREQUEST"));
+			JTextArea textArea = new JTextArea(formatter.format(opponent.getName()));
 			textArea.setEditable(false);
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
@@ -141,12 +140,12 @@ public class MatchRequestListPanel extends JPanel implements IView {
 			Box row = Box.createHorizontalBox();
 			row.add(Box.createHorizontalGlue());
 
-			JButton accept = new JButton("Annehmen");
+			JButton accept = new JButton(localization.getString("ACCEPT"));
 			accept.addActionListener(e -> control.acceptRequest(matchRequest));
 			row.add(accept);
 			row.add(Box.createHorizontalGlue());
 
-			JButton deny = new JButton("Ablehnen");
+			JButton deny = new JButton(localization.getString("DENY"));
 			deny.addActionListener(e -> control.denyRequest(matchRequest));
 			row.add(deny);
 			row.add(Box.createHorizontalGlue());

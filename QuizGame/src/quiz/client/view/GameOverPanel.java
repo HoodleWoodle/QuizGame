@@ -82,7 +82,7 @@ public class GameOverPanel extends JPanel implements IView {
 			c.gridy = rows + 1;
 			c.gridx = 3;
 
-			JButton menu = new JButton("Hauptmen�");
+			JButton menu = new JButton(GameFrame.getLocalization().getString("MAIN_MENU"));
 			menu.addActionListener(e -> gameFrame.setContentPane(gameFrame.getMenuPanel()));
 			add(menu, c);
 		}

@@ -11,6 +11,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static quiz.Constants.FRAME_HEIGHT;
 import static quiz.Constants.FRAME_WIDTH;
@@ -24,6 +26,7 @@ public final class GameFrame extends JFrame {
 
 	private static GameFrame instance;
 
+	private static final ResourceBundle localization = ResourceBundle.getBundle("quiz.client.view.localization");
 	private final MenuPanel menuPanel;
 	private Account user;
 
@@ -61,12 +64,21 @@ public final class GameFrame extends JFrame {
 	}
 
 	/**
+	 * Returns the ResourceBundle containing the current localization.
+	 *
+	 * @return the ResourceBundle containing the current localization
+     */
+	public static ResourceBundle getLocalization() {
+		return localization;
+	}
+
+	/**
 	 * Creates a new GameFrame with the given implementation of IControl and IModel.
 	 * @param control the control implementation
 	 * @param model the model implementation
      */
 	public GameFrame(IControl control, IModel model) {
-		super("Quiz Game");
+		super(localization.getString("GAME_NAME"));
 		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -84,8 +96,8 @@ public final class GameFrame extends JFrame {
 				// during a game
 				if (user != null && !user.isAvailable()) {
 					int answer = JOptionPane.showConfirmDialog(GameFrame.this,
-							"Wenn du QuizGame während des Matches beendest, verlierst du dadurch sofort. Möchstest du das Spiel wirklich schon beenden?",
-							"QuizGame beenden", JOptionPane.YES_NO_OPTION);
+							localization.getString("CONFIRM_LEAVE"),
+							localization.getString("CONFIRM_LEAVE_SCREEN_TITLE"), JOptionPane.YES_NO_OPTION);
 					if (answer == JOptionPane.YES_OPTION) {
 						dispose();
 						System.exit(1);
@@ -128,5 +140,9 @@ public final class GameFrame extends JFrame {
 	 */
 	public MenuPanel getMenuPanel() {
 		return menuPanel;
+	}
+
+	public void showExceptionMessage(String message) {
+		JOptionPane.showMessageDialog(this, message, localization.getString("EXCEPTION"), JOptionPane.ERROR_MESSAGE);
 	}
 }

@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -50,6 +51,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	private IModel model;
 	private IControl control;
 	private GameFrame gameFrame;
+	private ResourceBundle localization = GameFrame.getLocalization();
 
 	/**
 	 * Creates a new LoginDialog.
@@ -60,7 +62,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		this.model = model;
 
 		model.addView(this);
-		setTitle("Anmelden");
+		setTitle(localization.getString("LOGIN"));
 		setModal(true);
 		Dimension size = new Dimension(250, 300);
 		setMinimumSize(size);
@@ -81,12 +83,12 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	public void onChange(ChangeType type, Status status) {
 		if (type == ChangeType.ACCOUNT) {
 			if (status == Status.INVALID_LOGIN_DETAILS) {
-				exceptionMessage("Ung�ltige Kombination von Benutzername und Passwort! Bitte versuche es erneut!");
+				gameFrame.showExceptionMessage(localization.getString("INVALID_USERNAME_AND_PW"));
 				return;
 			}
 
 			else if (status == Status.INVALID_REGISTER_DETAILS) {
-				exceptionMessage("Es ist ein Fehler bei der Registrierung aufgetreten!");
+				gameFrame.showExceptionMessage(localization.getString("REGISTER_ERROR"));
 				return;
 			}
 
@@ -103,17 +105,19 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 	public void itemStateChanged(ItemEvent event) {
 		if (event.getSource() == login) {
 			if (login.isSelected()) {
-				setTitle("Registrieren");
+				String register = localization.getString("REGISTER");
+				setTitle(register);
 				setSize(getWidth(), getHeight() + 60);
 				loginLabels[2].setVisible(true);
 				repeatPassword.setVisible(true);
-				okButton.setText("Registrieren");
+				okButton.setText(register);
 			} else {
-				setTitle("Anmelden");
+				String login = localization.getString("LOGIN");
+				setTitle(login);
 				setSize(getWidth(), getHeight() - 60);
 				loginLabels[2].setVisible(false);
 				repeatPassword.setVisible(false);
-				okButton.setText("Anmelden");
+				okButton.setText(login);
 			}
 		} else if (event.getSource() == keepUsername) {
 			if (!keepUsername.isSelected()) {
@@ -137,15 +141,22 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 			char[] pw1 = password.getPassword();
 			char[] pw2 = repeatPassword.getPassword();
 
+			boolean wrongPassword = false;
 			if (pw1.length == pw2.length) {
 				for (int i = 0; i < pw1.length; i++) {
 					if (pw1[i] != pw2[i]) {
-						exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
-						return;
+						wrongPassword = true;
+						break;
 					}
 				}
 			} else
-				exceptionMessage("Bitte verwende zweimal das gleiche Passwort!");
+				wrongPassword = true;
+
+			if(wrongPassword) {
+				gameFrame.showExceptionMessage(localization.getString("EXCEPTION_SAME_PW"));
+				repeatPassword.setText("");
+				return;
+			}
 		}
 
 
@@ -165,15 +176,15 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 
 	private void initComponents() {
 		add(Box.createVerticalGlue());
-		add(loginLabels[0] = new JLabel("Benutzername:"));
+		add(loginLabels[0] = new JLabel(localization.getString("USERNAME") + ":"));
 		add(username = new JTextField());
 
 		add(Box.createVerticalGlue());
-		add(loginLabels[1] = new JLabel("Passwort:"));
+		add(loginLabels[1] = new JLabel(localization.getString("PASSWORD") + ":"));
 		add(password = new JPasswordField());
 
 		add(Box.createVerticalGlue());
-		add(loginLabels[2] = new JLabel("Passwort wiederholen:"));
+		add(loginLabels[2] = new JLabel(localization.getString("REPEAT_PASSWORD") + ":"));
 		add(repeatPassword = new JPasswordField());
 
 		loginLabels[2].setVisible(false);
@@ -182,12 +193,12 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		GameFrame.setProperties(new Dimension(100, 20), new Dimension(150, 30), new Dimension(200, 40), username,
 				password, repeatPassword);
 
-		add(keepUsername = new JCheckBox("Benutzernamen merken"));
-		add(login = new JCheckBox("Registrieren"));
+		add(keepUsername = new JCheckBox(localization.getString("KEEP_USERNAME")));
+		add(login = new JCheckBox(localization.getString("REGISTER")));
 		add(Box.createVerticalGlue());
 		add(new JSeparator());
 		add(Box.createVerticalGlue());
-		add(okButton = new JButton("Anmelden"));
+		add(okButton = new JButton(localization.getString("LOGIN")));
 		getRootPane().setDefaultButton(okButton);
 		add(Box.createVerticalGlue());
 
@@ -217,9 +228,5 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		login.addItemListener(this);
 		keepUsername.addItemListener(this);
 		okButton.addActionListener(this);
-	}
-
-	private void exceptionMessage(String message) {
-		JOptionPane.showMessageDialog(null, message, "Fehler", JOptionPane.ERROR_MESSAGE);
 	}
 }

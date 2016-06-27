@@ -122,8 +122,8 @@ public class PlayerListPanel extends JPanel implements IView {
 		 */
 		public void updateStatus() {
 			status.setText(account.getName() +
-					(!account.isAvailable() ? "(" + localization.getString("IN_GAME") + ")" :
-							"(" + localization.getString("ONLINE") + ")"));
+					(!account.isAvailable() ? "(" + localization.getString("STATUS_IN_GAME") + ")" :
+							"(" + localization.getString("STATUS_ONLINE") + ")"));
 		}
 	}
 }

@@ -115,30 +115,32 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == menuButtons[0]) {
-            String opponentName = JOptionPane.showInputDialog(null, localization.getString("GAME_NAME"));
+            String opponentName = JOptionPane.showInputDialog(gameFrame, localization.getString("SEARCH_FOR_OPPONENT"));
 
             if (opponentName != null) {
                 Account[] opponents = model.getOpponents();
 
                 boolean exists = false;
                 for (Account opponent : opponents) {
-                    if (opponent.getName().equals(opponentName)) {
-                        // only online players can accept a match
-                        if (!opponent.isOnline()) {
-                            gameFrame.showExceptionMessage(localization.getString("PLAYER_NOT_ONLINE"));
-                            return;
-                        }
+                    if(opponent != null) {
+                        if (opponent.getName().equals(opponentName)) {
+                            // only online players can accept a match
+                            if (!opponent.isOnline()) {
+                                gameFrame.showExceptionMessage(localization.getString("PLAYER_NOT_ONLINE"));
+                                return;
+                            }
 
-                        // only available players can accept a match
-                        if (!opponent.isAvailable()) {
-                            MessageFormat formatter = new MessageFormat(localization.getString("PLAYER_ALREADY_IN_MATCH"));
-                            gameFrame.showExceptionMessage(formatter.format(opponentName));
-                            return;
-                        }
+                            // only available players can accept a match
+                            if (!opponent.isAvailable()) {
+                                MessageFormat formatter = new MessageFormat(localization.getString("PLAYER_ALREADY_IN_MATCH"));
+                                gameFrame.showExceptionMessage(formatter.format(opponentName));
+                                return;
+                            }
 
-                        control.requestMatch(opponent);
-                        exists = true;
-                        break;
+                            control.requestMatch(opponent);
+                            exists = true;
+                            break;
+                        }
                     }
                 }
 

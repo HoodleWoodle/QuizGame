@@ -131,6 +131,7 @@ public final class GameFrame extends JFrame {
 	 */
 	public void setUser(Account user) {
 		this.user = user;
+		setTitle(getTitle() + " - " + user.getName());
 	}
 
 	/**

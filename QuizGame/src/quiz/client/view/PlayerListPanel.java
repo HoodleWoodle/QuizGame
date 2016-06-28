@@ -115,6 +115,8 @@ public class PlayerListPanel extends JPanel implements IView {
 						popupMenu.show(PlayerPanel.this, event.getX(), event.getY());
 				}
 			});
+
+			setVisible(true);
 		}
 
 		/**

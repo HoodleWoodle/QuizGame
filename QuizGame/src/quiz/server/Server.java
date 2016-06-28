@@ -110,9 +110,11 @@ public class Server extends AbstractTCPServer
 
 	private void sendOpponents()
 	{
-		NetworkMessage msg = new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts());
 		for (int i = 0; i < clients.size(); i++)
-			clients.get(i).send(msg.getBytes());
+		{
+			ClientThread client = clients.get(i);
+			client.send(new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts(accountIDs.get(client.getID()))).getBytes());
+		}
 	}
 
 	private void workRegister(ClientThread client, NetworkMessage message)
@@ -233,21 +235,27 @@ public class Server extends AbstractTCPServer
 		// TODO
 	}
 
-	private String[] convertAccounts()
+	private String[] convertAccounts(int ID)
 	{
 		List<Account> accounts = dataManager.getAccounts();
 
-		String[] result = new String[accounts.size()];
+		String[] result = new String[accounts.size() - 1];
 
+		boolean bool = false;
 		for (int i = 0; i < accounts.size(); i++)
 		{
 			Account account = accounts.get(i);
+			if (account.getID() == ID)
+			{
+				bool = true;
+				continue;
+			}
 
 			account.setOnline(isOnline(account.getID()));
 			if (!hasMatch(account.getID()))
 				account.setAvailable(true);
 
-			result[i] = convertAccount(account);
+			result[i - (bool ? 1 : 0)] = convertAccount(account);
 		}
 
 		return result;

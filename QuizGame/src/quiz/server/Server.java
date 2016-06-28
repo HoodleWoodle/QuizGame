@@ -111,8 +111,8 @@ public class Server extends AbstractTCPServer
 	private void sendOpponents()
 	{
 		NetworkMessage msg = new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts());
-		for (ClientThread client : clients)
-			client.send(msg.getBytes());
+		for (int i = 0; i < clients.size(); i++)
+			clients.get(i).send(msg.getBytes());
 	}
 
 	private void workRegister(ClientThread client, NetworkMessage message)
@@ -147,7 +147,7 @@ public class Server extends AbstractTCPServer
 
 	private void workRequest(ClientThread client, NetworkMessage message)
 	{
-		int playerID = accountIDs.get(client);
+		int playerID = accountIDs.get(client.getID());
 		Category category = null;
 		Account[] accounts = new Account[2];
 
@@ -260,10 +260,13 @@ public class Server extends AbstractTCPServer
 		{
 			Match match = matches.get(key);
 
-			Account[] opponents = matches.get(key).getOpponents();
+			Account[] opponents = match.getOpponents();
 			for (int i = 0; i < opponents.length; i++)
 				if (opponents[i].getID() == ID)
+				{
 					ms.add(match);
+					break;
+				}
 		}
 
 		String[] result = new String[ms.size()];

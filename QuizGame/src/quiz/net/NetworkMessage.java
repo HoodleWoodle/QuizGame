@@ -114,7 +114,7 @@ public final class NetworkMessage
 	 */
 	public String getParameter(int index)
 	{
-		if (index < 0 || tag >= parameters.length)
+		if (index < 0)
 			return null;
 
 		return parameters[index];

@@ -75,7 +75,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 				add(matchRequestPanel);
 			}
 
-			// remove all old match requets
+			// remove all old match requests
 			lastMatchRequests.removeAll(matchRequests);
 
 			for (Match matchRequest : lastMatchRequests) {

@@ -1,37 +1,13 @@
-package quiz.net;
+package lib.net.tcp;
 
 /**
  * @author Stefan
- * @version 14.06.2016
+ * @version 29.04.2016
  */
 public final class NetworkMessage
 {
-	public static final byte TAG_REGISTER = 0;
-	public static final byte TAG_LOGIN = 1;
-	public static final byte TAG_REQUEST = 2;
-	public static final byte TAG_REQUEST_ACCEPT = 3;
-	public static final byte TAG_REQUEST_DENY = 4;
-	public static final byte TAG_SET_ANSWER = 5;
-
-	public static final byte TAG_SET_ACCOUNT = 0;
-	public static final byte TAG_SET_OPPONENTS = 1;
-	public static final byte TAG_SET_REQUESTS = 2;
-	public static final byte TAG_SET_MATCH = 3;
-	public static final byte TAG_SET_QUESTION = 4;
-
-	public static final byte TAG_INVALID_REGISTER_DETAILS = 5;
-	public static final byte TAG_INVALID_LOGIN_DETAILS = 6;
-	public static final byte TAG_ALREADY_IN_MATCH = 7;
-
-	public static final String TAG_REQUEST_0 = "0";
-	public static final String TAG_REQUEST_1 = "1";
-	public static final String TAG_REQUEST_2 = "2";
-	public static final String TAG_REQUEST_3 = "3";
-
-	public static final String SPLIT = ";";
-	public static final String SPLIT_SUB = ",";
-	public static final String SPLIT_SUB_SUB = ":";
-	public static final String SPLIT_SUB_SUB_SUB = ".";
+	public static final byte EOF = -128; // TODO
+	private static final String SPLIT = ";";
 
 	private final byte tag;
 	private final String[] parameters;
@@ -48,10 +24,15 @@ public final class NetworkMessage
 
 		System.out.println("RECEIVING: " + message[0] + msg);
 
-		String[] columns = msg.split(SPLIT);
-
 		tag = message[0];
 
+		if (msg.isEmpty())
+		{
+			parameters = new String[0];
+			return;
+		}
+
+		String[] columns = msg.split(SPLIT);
 		int parameterSize = columns.length;
 		parameters = new String[parameterSize];
 		for (int i = 0; i < parameterSize; i++)
@@ -114,7 +95,7 @@ public final class NetworkMessage
 	 */
 	public String getParameter(int index)
 	{
-		if (index < 0)
+		if (index < 0 || index >= parameters.length)
 			return null;
 
 		return parameters[index];

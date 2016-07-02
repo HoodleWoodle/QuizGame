@@ -1,19 +1,19 @@
 package quiz.client;
 
-import static quiz.net.NetworkMessage.TAG_LOGIN;
-import static quiz.net.NetworkMessage.TAG_REGISTER;
-import static quiz.net.NetworkMessage.TAG_REQUEST;
-import static quiz.net.NetworkMessage.TAG_REQUEST_0;
-import static quiz.net.NetworkMessage.TAG_REQUEST_1;
-import static quiz.net.NetworkMessage.TAG_REQUEST_2;
-import static quiz.net.NetworkMessage.TAG_REQUEST_3;
-import static quiz.net.NetworkMessage.TAG_REQUEST_ACCEPT;
-import static quiz.net.NetworkMessage.TAG_REQUEST_DENY;
-import static quiz.net.NetworkMessage.TAG_SET_ANSWER;
+import static quiz.net.NetworkKeys.TAG_LOGIN;
+import static quiz.net.NetworkKeys.TAG_REGISTER;
+import static quiz.net.NetworkKeys.TAG_REQUEST;
+import static quiz.net.NetworkKeys.TAG_REQUEST_0;
+import static quiz.net.NetworkKeys.TAG_REQUEST_1;
+import static quiz.net.NetworkKeys.TAG_REQUEST_2;
+import static quiz.net.NetworkKeys.TAG_REQUEST_3;
+import static quiz.net.NetworkKeys.TAG_REQUEST_ACCEPT;
+import static quiz.net.NetworkKeys.TAG_REQUEST_DENY;
+import static quiz.net.NetworkKeys.TAG_SET_ANSWER;
+import lib.net.tcp.NetworkMessage;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
-import quiz.net.NetworkMessage;
 
 /**
  * @author Stefan

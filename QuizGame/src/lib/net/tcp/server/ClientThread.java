@@ -1,9 +1,12 @@
 package lib.net.tcp.server;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import lib.net.tcp.NetworkMessage;
 
 /**
  * @author Stefan
@@ -17,8 +20,8 @@ public class ClientThread implements Runnable
 
 	private final AbstractTCPServer server;
 	private final Socket socket;
-	private BufferedInputStream in;
-	private BufferedOutputStream out;
+	private DataInputStream in;
+	private DataOutputStream out;
 
 	private boolean running;
 
@@ -38,8 +41,8 @@ public class ClientThread implements Runnable
 		try
 		{
 			// try to open connection
-			in = new BufferedInputStream(socket.getInputStream());
-			out = new BufferedOutputStream(socket.getOutputStream());
+			in = new DataInputStream(socket.getInputStream());
+			out = new DataOutputStream(socket.getOutputStream());
 			// start thread
 			Thread t = new Thread(this);
 			t.start();
@@ -65,6 +68,7 @@ public class ClientThread implements Runnable
 		{
 			// try to send some message
 			out.write(message);
+			out.write(NetworkMessage.EOF);
 			out.flush();
 			return true;
 		} catch (IOException e)
@@ -114,18 +118,23 @@ public class ClientThread implements Runnable
 	{
 		running = true;
 		while (running)
+		{
+			ArrayList<Byte> bytes = new ArrayList<Byte>();
 			try
 			{
-				int size = in.available();
-				// waiting for message
-				if (size == 0)
+				bytes.clear();
+				byte b = 0;
+				while ((b = (byte) in.read()) != NetworkMessage.EOF)
 				{
-					Thread.sleep(1);
-					continue;
+					if (b == -1)
+						throw new Exception();
+					bytes.add(b);
 				}
-				byte[] message = new byte[size];
-				in.read(message);
-				if (running)// if client is connected and message is correct
+				byte[] message = new byte[bytes.size()];
+				for (int i = 0; i < message.length; i++)
+					message[i] = bytes.get(i);
+				// if a message received
+				if (running)
 					server.received(this, message);
 			} catch (Exception e)
 			{
@@ -137,5 +146,6 @@ public class ClientThread implements Runnable
 				}
 				// e.printStackTrace();
 			}
+		}
 	}
 }

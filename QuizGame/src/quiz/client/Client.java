@@ -1,22 +1,22 @@
 package quiz.client;
 
-import static quiz.net.NetworkMessage.SPLIT_SUB;
-import static quiz.net.NetworkMessage.SPLIT_SUB_SUB;
-import static quiz.net.NetworkMessage.SPLIT_SUB_SUB_SUB;
-import static quiz.net.NetworkMessage.TAG_ALREADY_IN_MATCH;
-import static quiz.net.NetworkMessage.TAG_INVALID_LOGIN_DETAILS;
-import static quiz.net.NetworkMessage.TAG_INVALID_REGISTER_DETAILS;
-import static quiz.net.NetworkMessage.TAG_SET_ACCOUNT;
-import static quiz.net.NetworkMessage.TAG_SET_MATCH;
-import static quiz.net.NetworkMessage.TAG_SET_OPPONENTS;
-import static quiz.net.NetworkMessage.TAG_SET_QUESTION;
-import static quiz.net.NetworkMessage.TAG_SET_REQUESTS;
+import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
+import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
+import static quiz.net.NetworkKeys.TAG_ALREADY_IN_MATCH;
+import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
+import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
+import static quiz.net.NetworkKeys.TAG_SET_ACCOUNT;
+import static quiz.net.NetworkKeys.TAG_SET_MATCH;
+import static quiz.net.NetworkKeys.TAG_SET_OPPONENTS;
+import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
+import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.client.AbstractTCPClient;
 import quiz.Constants;
 import quiz.client.model.IModel;
@@ -27,7 +27,6 @@ import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
 import quiz.model.Question;
-import quiz.net.NetworkMessage;
 
 /**
  * @author Stefan
@@ -94,6 +93,7 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 	@Override
 	protected void closed()
 	{
+		System.out.println();
 	}
 
 	private Account[] parseAccounts(NetworkMessage message)
@@ -118,7 +118,7 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 
 	private Account parseAccount(String parameter)
 	{
-		String[] data = parameter.split(SPLIT_SUB_SUB);
+		String[] data = parameter.split(SPLIT_SUB_SUB_SUB);
 
 		int ID = Integer.parseInt(data[0]);
 		String name = data[1];
@@ -136,26 +136,24 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 
 	private Match parseMatch(String parameter)
 	{
-		String[] data = parameter.split(SPLIT_SUB);
+		String[] data = parameter.split(SPLIT_SUB_SUB);
+		int index = 0;
 
-		int ID = Integer.parseInt(data[0]);
-		Category category = getCategory(Integer.parseInt(data[1]));
+		int ID = Integer.parseInt(data[index++]);
+		Category category = getCategory(Integer.parseInt(data[index++]));
 
-		String[] sub = data[2].split(SPLIT_SUB_SUB);
-		Account[] opponents = new Account[sub.length];
+		Account[] opponents = new Account[2];
 		for (int i = 0; i < opponents.length; i++)
-			opponents[i] = parseAccount(data[2]);
+			opponents[i] = parseAccount(data[index++]);
 
-		sub = data[3].split(SPLIT_SUB_SUB);
-		Question[] questions = new Question[sub.length];
+		Question[] questions = new Question[(data.length - index) / 3];
 		for (int i = 0; i < questions.length; i++)
-			questions[i] = parseQuestion(sub[i]);
+			questions[i] = parseQuestion(data[index++]);
 
-		sub = data[3].split(SPLIT_SUB_SUB);
 		int[][] answers = new int[opponents.length][questions.length];
 		for (int i = 0; i < answers.length; i++)
 			for (int j = 0; j < answers[0].length; j++)
-				answers[i][j] = Integer.parseInt(sub[i + j]);
+				answers[i][j] = Integer.parseInt(data[index++]);
 
 		return new Match(ID, category, opponents, questions, answers);
 	}
@@ -222,7 +220,7 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 		// start surface
 		SwingUtilities.invokeLater(() -> {
 			// Swing needs to run on event dispatching thread
-				new GameFrame(control, model);
+				new GameFrame(client, control, model);
 			});
 	}
 }

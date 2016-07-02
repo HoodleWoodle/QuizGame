@@ -1,33 +1,37 @@
 package quiz.server;
 
-import static quiz.net.NetworkMessage.SPLIT_SUB_SUB;
-import static quiz.net.NetworkMessage.SPLIT_SUB_SUB_SUB;
-import static quiz.net.NetworkMessage.TAG_ALREADY_IN_MATCH;
-import static quiz.net.NetworkMessage.TAG_INVALID_LOGIN_DETAILS;
-import static quiz.net.NetworkMessage.TAG_INVALID_REGISTER_DETAILS;
-import static quiz.net.NetworkMessage.TAG_LOGIN;
-import static quiz.net.NetworkMessage.TAG_REGISTER;
-import static quiz.net.NetworkMessage.TAG_REQUEST;
-import static quiz.net.NetworkMessage.TAG_REQUEST_ACCEPT;
-import static quiz.net.NetworkMessage.TAG_REQUEST_DENY;
-import static quiz.net.NetworkMessage.TAG_SET_ACCOUNT;
-import static quiz.net.NetworkMessage.TAG_SET_ANSWER;
-import static quiz.net.NetworkMessage.TAG_SET_MATCH;
-import static quiz.net.NetworkMessage.TAG_SET_OPPONENTS;
-import static quiz.net.NetworkMessage.TAG_SET_REQUESTS;
+import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
+import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
+import static quiz.net.NetworkKeys.TAG_ALREADY_IN_MATCH;
+import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
+import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
+import static quiz.net.NetworkKeys.TAG_LOGIN;
+import static quiz.net.NetworkKeys.TAG_REGISTER;
+import static quiz.net.NetworkKeys.TAG_REQUEST;
+import static quiz.net.NetworkKeys.TAG_REQUEST_0;
+import static quiz.net.NetworkKeys.TAG_REQUEST_1;
+import static quiz.net.NetworkKeys.TAG_REQUEST_2;
+import static quiz.net.NetworkKeys.TAG_REQUEST_3;
+import static quiz.net.NetworkKeys.TAG_REQUEST_ACCEPT;
+import static quiz.net.NetworkKeys.TAG_REQUEST_DENY;
+import static quiz.net.NetworkKeys.TAG_SET_ACCOUNT;
+import static quiz.net.NetworkKeys.TAG_SET_ANSWER;
+import static quiz.net.NetworkKeys.TAG_SET_MATCH;
+import static quiz.net.NetworkKeys.TAG_SET_OPPONENTS;
+import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
+import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.server.AbstractTCPServer;
 import lib.net.tcp.server.ClientThread;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
 import quiz.model.Question;
-import quiz.net.NetworkMessage;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 
@@ -35,7 +39,7 @@ import quiz.server.model.IDataManager;
  * @author Quirin, Stefan
  * @version XX.XX.XXXX
  */
-public class Server extends AbstractTCPServer
+public class Server extends AbstractTCPServer // TODO closing if exit
 {
 	private final Random random;
 
@@ -108,26 +112,20 @@ public class Server extends AbstractTCPServer
 		sendOpponents();
 	}
 
-	private void sendOpponents()
-	{
-		for (int i = 0; i < clients.size(); i++)
-		{
-			ClientThread client = clients.get(i);
-			client.send(new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts(accountIDs.get(client.getID()))).getBytes());
-		}
-	}
-
 	private void workRegister(ClientThread client, NetworkMessage message)
 	{
 		Account account = dataManager.addAccount(message.getParameter(0), message.getParameter(1));
 		if (account != null)
 		{
-			accountIDs.put(client.getID(), account.getID());
-			clientIDs.put(account.getID(), client.getID());
+			int accountID = account.getID();
+			int clientID = client.getID();
+			accountIDs.put(clientID, accountID);
+			clientIDs.put(accountID, clientID);
 
 			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
 			client.send(msg.getBytes());
 			sendOpponents();
+			sendRequests(accountID);
 		} else
 			client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
 	}
@@ -137,12 +135,15 @@ public class Server extends AbstractTCPServer
 		Account account = dataManager.getAccount(message.getParameter(0), message.getParameter(1));
 		if (account != null)
 		{
-			accountIDs.put(client.getID(), account.getID());
-			clientIDs.put(account.getID(), client.getID());
+			int accountID = account.getID();
+			int clientID = client.getID();
+			accountIDs.put(clientID, accountID);
+			clientIDs.put(accountID, clientID);
 
 			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
 			client.send(msg.getBytes());
 			sendOpponents();
+			sendRequests(accountID);
 		} else
 			client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
 	}
@@ -155,34 +156,31 @@ public class Server extends AbstractTCPServer
 
 		switch (message.getParameter(0))
 		{
-		case NetworkMessage.TAG_REQUEST_0:
+		case TAG_REQUEST_0:
 			category = getCategory(Integer.parseInt(message.getParameter(1)));
 			int opponentID = Integer.parseInt(message.getParameter(2));
 
 			accounts[0] = dataManager.getAccount(playerID);
 			accounts[1] = dataManager.getAccount(opponentID);
 			break;
-		case NetworkMessage.TAG_REQUEST_1:
+		case TAG_REQUEST_1:
 			category = getCategory(Integer.parseInt(message.getParameter(1)));
 
 			accounts[0] = dataManager.getAccount(playerID);
 			accounts[1] = getRandomAccount(playerID, dataManager.getAccounts());
 			break;
-		case NetworkMessage.TAG_REQUEST_2:
+		case TAG_REQUEST_2:
 			category = getRandomCategory();
 			opponentID = Integer.parseInt(message.getParameter(1));
 
 			accounts[0] = dataManager.getAccount(playerID);
 			accounts[1] = dataManager.getAccount(opponentID);
 			break;
-		case NetworkMessage.TAG_REQUEST_3:
+		case TAG_REQUEST_3:
 			category = getRandomCategory();
-			playerID = Integer.parseInt(message.getParameter(1));
 
 			accounts[0] = dataManager.getAccount(playerID);
 			accounts[1] = getRandomAccount(playerID, dataManager.getAccounts());
-			break;
-		default:
 			break;
 		}
 
@@ -190,9 +188,8 @@ public class Server extends AbstractTCPServer
 		requests.put(request.getID(), request);
 
 		int otherID = request.getOpponents()[1].getID();
-		NetworkMessage msg = new NetworkMessage(TAG_SET_REQUESTS, convertMatches(otherID, requests));
-		ClientThread otherClient = getClient(clientIDs.get(otherID));
-		otherClient.send(msg.getBytes());
+		if (isOnline(otherID))
+			sendRequests(otherID);
 	}
 
 	private void workRequestAccept(ClientThread client, NetworkMessage message)
@@ -235,6 +232,26 @@ public class Server extends AbstractTCPServer
 		// TODO
 	}
 
+	private void sendOpponents()
+	{
+		for (int i = 0; i < clients.size(); i++)
+		{
+			ClientThread client = clients.get(i);
+			Integer accountID = accountIDs.get(client.getID());
+			if (accountID == null)
+				continue;
+			NetworkMessage msg = new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts(accountID));
+			client.send(msg.getBytes());
+		}
+	}
+
+	private void sendRequests(int accountID)
+	{
+		NetworkMessage msg = new NetworkMessage(TAG_SET_REQUESTS, convertMatches(accountID, requests));
+		ClientThread client = getClient(clientIDs.get(accountID));
+		client.send(msg.getBytes());
+	}
+
 	private String[] convertAccounts(int ID)
 	{
 		List<Account> accounts = dataManager.getAccounts();
@@ -251,11 +268,7 @@ public class Server extends AbstractTCPServer
 				continue;
 			}
 
-			account.setOnline(isOnline(account.getID()));
-			if (!hasMatch(account.getID()))
-				account.setAvailable(true);
-
-			result[i - (bool ? 1 : 0)] = convertAccount(account);
+			result[i - (bool ? 1 : 0)] = convertAccount(account); // TODO there is always the ME-Account (why checking?)
 		}
 
 		return result;
@@ -268,7 +281,7 @@ public class Server extends AbstractTCPServer
 		{
 			Match match = matches.get(key);
 
-			Account[] opponents = match.getOpponents();
+			Account[] opponents = match.getOpponents(); // TODO online, available
 			for (int i = 0; i < opponents.length; i++)
 				if (opponents[i].getID() == ID)
 				{
@@ -287,16 +300,20 @@ public class Server extends AbstractTCPServer
 
 	private String convertAccount(Account account)
 	{
+		account.setOnline(isOnline(account.getID()));
+		if (!hasMatch(account.getID()))
+			account.setAvailable(true);
+
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(account.getID());
-		builder.append(SPLIT_SUB_SUB);
+		builder.append(SPLIT_SUB_SUB_SUB);
 		builder.append(account.getName());
-		builder.append(SPLIT_SUB_SUB);
+		builder.append(SPLIT_SUB_SUB_SUB);
 		builder.append(account.getScore());
-		builder.append(SPLIT_SUB_SUB);
+		builder.append(SPLIT_SUB_SUB_SUB);
 		builder.append(account.isOnline());
-		builder.append(SPLIT_SUB_SUB);
+		builder.append(SPLIT_SUB_SUB_SUB);
 		builder.append(account.isAvailable());
 
 		return builder.toString();
@@ -308,39 +325,35 @@ public class Server extends AbstractTCPServer
 
 		builder.append(match.getID());
 		builder.append(SPLIT_SUB_SUB);
-		builder.append(match.getCategory());
+		builder.append(match.getCategory().ordinal());
 		builder.append(SPLIT_SUB_SUB);
 
-		StringBuilder subBuilder = new StringBuilder();
+		Question[] questions = match.getQuestions();
+
 		Account[] opponents = match.getOpponents();
 		for (int i = 0; i < opponents.length; i++)
 		{
-			subBuilder.append(opponents[i].getID());
-			if (i < opponents.length - 1)
-				subBuilder.append(SPLIT_SUB_SUB);
+			builder.append(convertAccount(opponents[i]));
+			if (i < opponents.length - 1 || questions.length > 0)
+				builder.append(SPLIT_SUB_SUB);
 		}
-		builder.append(subBuilder.toString());
 
-		subBuilder = new StringBuilder();
-		Question[] questions = match.getQuestions();
+		int[][] answers = match.getAnswers();
+
 		for (int i = 0; i < questions.length; i++)
 		{
-			subBuilder.append(convertQuestion(questions[i]));
-			if (i < questions.length - 1)
-				subBuilder.append(SPLIT_SUB_SUB);
+			builder.append(convertQuestion(questions[i]));
+			if (i < questions.length - 1 || answers[0].length > 0)
+				builder.append(SPLIT_SUB_SUB);
 		}
-		builder.append(subBuilder.toString());
 
-		subBuilder = new StringBuilder();
-		int[][] answers = match.getAnswers();
 		for (int i = 0; i < answers.length; i++)
 			for (int j = 0; j < answers[0].length; j++)
 			{
-				subBuilder.append(answers[i][j]);
+				builder.append(answers[i][j]);
 				if (i * j < answers.length - 1)
-					subBuilder.append(SPLIT_SUB_SUB);
+					builder.append(SPLIT_SUB_SUB);
 			}
-		builder.append(subBuilder.toString());
 
 		return builder.toString();
 	}
@@ -417,6 +430,7 @@ public class Server extends AbstractTCPServer
 	 */
 	public static void main(String[] args)
 	{
+		// TODO
 		// if (args.length != 1)
 		// {
 		// System.err.println("Invalid args!");

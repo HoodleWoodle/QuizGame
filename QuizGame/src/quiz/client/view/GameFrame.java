@@ -1,21 +1,24 @@
 package quiz.client.view;
 
-import quiz.client.IControl;
-import quiz.client.model.IModel;
-import quiz.model.Account;
+import static quiz.Constants.FRAME_HEIGHT;
+import static quiz.Constants.FRAME_WIDTH;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static quiz.Constants.FRAME_HEIGHT;
-import static quiz.Constants.FRAME_WIDTH;
+import javax.imageio.ImageIO;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import lib.net.tcp.client.AbstractTCPClient;
+import quiz.client.IControl;
+import quiz.client.model.IModel;
+import quiz.model.Account;
 
 /**
  * 
@@ -74,10 +77,11 @@ public final class GameFrame extends JFrame {
 
 	/**
 	 * Creates a new GameFrame with the given implementation of IControl and IModel.
+	 * @param client the AbstractTCPClient implementation
 	 * @param control the control implementation
 	 * @param model the model implementation
      */
-	public GameFrame(IControl control, IModel model) {
+	public GameFrame(AbstractTCPClient client, IControl control, IModel model) {
 		super(localization.getString("GAME_NAME"));
 		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -100,6 +104,7 @@ public final class GameFrame extends JFrame {
 							localization.getString("CONFIRM_LEAVE_SCREEN_TITLE"), JOptionPane.YES_NO_OPTION);
 					if (answer == JOptionPane.YES_OPTION) {
 						dispose();
+						client.close();
 						System.exit(1);
 						return;
 					}

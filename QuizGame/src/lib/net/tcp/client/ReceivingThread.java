@@ -1,6 +1,9 @@
 package lib.net.tcp.client;
 
-import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.util.ArrayList;
+
+import lib.net.tcp.NetworkMessage;
 
 /**
  * @author Stefan
@@ -9,7 +12,7 @@ import java.io.BufferedInputStream;
 final class ReceivingThread implements Runnable
 {
 	private final AbstractTCPClient client;
-	private final BufferedInputStream in;
+	private final DataInputStream in;
 
 	private boolean running;
 
@@ -21,7 +24,7 @@ final class ReceivingThread implements Runnable
 	 * @param in
 	 *            the input
 	 */
-	ReceivingThread(AbstractTCPClient client, BufferedInputStream in)
+	ReceivingThread(AbstractTCPClient client, DataInputStream in)
 	{
 		this.client = client;
 		this.in = in;
@@ -43,18 +46,22 @@ final class ReceivingThread implements Runnable
 	{
 		running = true;
 		while (running)
+		{
+			ArrayList<Byte> bytes = new ArrayList<Byte>();
 			try
 			{
-				int size = in.available();
-				// waiting for message
-				if (size == 0)
+				bytes.clear();
+				byte b = 0;
+				while ((b = (byte) in.read()) != NetworkMessage.EOF)
 				{
-					Thread.sleep(1);
-					continue;
+					if (b == -1)
+						throw new Exception();
+					bytes.add(b);
 				}
-				byte[] message = new byte[size];
-				in.read(message);
-				// if message is correct
+				byte[] message = new byte[bytes.size()];
+				for (int i = 0; i < message.length; i++)
+					message[i] = bytes.get(i);
+				// if a message received
 				client.received(message);
 			} catch (Exception e)
 			{
@@ -63,5 +70,6 @@ final class ReceivingThread implements Runnable
 				client.closed();
 				// e.printStackTrace();
 			}
+		}
 	}
 }

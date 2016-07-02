@@ -6,13 +6,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -38,9 +41,12 @@ public class MatchRequestListPanel extends JPanel implements IView {
 	/**
 	 * Creates a new MatchRequestListPanel.
 	 *
-	 * @param gameFrame the current GameFrame instance
-	 * @param control the IControl implementation
-	 * @param model the IModel implementation
+	 * @param gameFrame
+	 *            the current GameFrame instance
+	 * @param control
+	 *            the IControl implementation
+	 * @param model
+	 *            the IModel implementation
 	 */
 	public MatchRequestListPanel(GameFrame gameFrame, IControl control, IModel model) {
 		this.gameFrame = gameFrame;
@@ -65,9 +71,10 @@ public class MatchRequestListPanel extends JPanel implements IView {
 			}
 
 			List<Match> matchRequests = Arrays.asList(model.getRequests());
+			System.out.println(model.getRequests());
 
 			// add all new match requests
-			List<Match> newMatchRequests = new ArrayList<Match>(matchRequests);
+			List<Match> newMatchRequests = new ArrayList<>(matchRequests);
 			newMatchRequests.removeAll(lastMatchRequests);
 
 			for (Match matchRequest : newMatchRequests) {
@@ -129,8 +136,11 @@ public class MatchRequestListPanel extends JPanel implements IView {
 				}
 			}
 
+			JTextArea textArea = new JTextArea();
 			MessageFormat formatter = new MessageFormat(localization.getString("RECEIVED_MATCHREQUEST"));
-			JTextArea textArea = new JTextArea(formatter.format(opponent.getName()));
+
+			String test = formatter.format(new Object[] { opponent.getName() });
+			textArea.setText(test);
 			textArea.setEditable(false);
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);

@@ -198,13 +198,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 		Match match = requests.get(matchID);
 
 		int playerID = accountIDs.get(client.getID());
-		int otherID = -1;
-		for (Account account : match.getOpponents())
-		{
-			int accountID = account.getID();
-			if (accountID != playerID)
-				otherID = accountID;
-		}
+		int otherID = match.getOpponents()[0].getID();
 
 		if (hasMatch(playerID) || hasMatch(otherID))
 		{
@@ -225,6 +219,8 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 	{
 		int matchID = Integer.parseInt(message.getParameter(0));
 		requests.remove(matchID);
+
+		// TODO
 	}
 
 	private void workSetAnswer(ClientThread client, NetworkMessage message)

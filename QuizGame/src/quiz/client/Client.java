@@ -93,7 +93,6 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 	@Override
 	protected void closed()
 	{
-		System.out.println();
 	}
 
 	private Account[] parseAccounts(NetworkMessage message)

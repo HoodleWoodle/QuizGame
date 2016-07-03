@@ -66,9 +66,10 @@ final class ReceivingThread implements Runnable
 			} catch (Exception e)
 			{
 				// some Exception
+				System.err.println("An exception has occured!");
 				client.close();
 				client.closed();
-				// e.printStackTrace();
+				e.printStackTrace(); // TODO
 			}
 		}
 	}

@@ -48,8 +48,6 @@ public class PlayerListPanel extends JPanel implements IView {
 		setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
 		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
 		setMaximumSize(new Dimension(200, FRAME_HEIGHT));
-
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 	}
 
 	@Override
@@ -62,6 +60,7 @@ public class PlayerListPanel extends JPanel implements IView {
 						PlayerPanel playerPanel = new PlayerPanel(account);
 						accounts.put(account, playerPanel);
 						add(playerPanel);
+
 						revalidate();
 						repaint();
 					} else
@@ -102,25 +101,22 @@ public class PlayerListPanel extends JPanel implements IView {
 			setLayout(new BorderLayout());
 
 			add(status = new JLabel(), BorderLayout.CENTER);
+			updateStatus();
 
 			JPopupMenu popupMenu = new JPopupMenu();
 			JMenuItem matchRequest = new JMenuItem(localization.getString("CHALLENGE"));
 			matchRequest.addActionListener(event -> {
-				if (!account.isAvailable())
-					control.requestMatch(account);
+				control.requestMatch(account);
 			});
 
 			popupMenu.add(matchRequest);
-			add(popupMenu);
-			addMouseListener(new MouseAdapter() {
+			status.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseReleased(MouseEvent event) {
 					if (event.isPopupTrigger())
 						popupMenu.show(PlayerPanel.this, event.getX(), event.getY());
 				}
 			});
-
-			setVisible(true);
 		}
 
 		/**
@@ -128,8 +124,8 @@ public class PlayerListPanel extends JPanel implements IView {
 		 */
 		public void updateStatus() {
 			status.setText(account.getName() +
-					(!account.isAvailable() ? "(" + localization.getString("STATUS_IN_GAME") + ")" :
-							"(" + localization.getString("STATUS_ONLINE") + ")"));
+					(!account.isAvailable() ? " (" + localization.getString("STATUS_IN_GAME") + ")" :
+							" (" + localization.getString("STATUS_ONLINE") + ")"));
 		}
 	}
 }

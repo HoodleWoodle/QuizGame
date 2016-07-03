@@ -162,6 +162,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 
 		if (keepUsername.isSelected()) {
 			try (BufferedWriter bf = Files.newBufferedWriter(USERNAME_FILE, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
+				bf.write("");
 				bf.write(username.getText());
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -62,11 +62,15 @@ public class PlayerListPanel extends JPanel implements IView {
 						PlayerPanel playerPanel = new PlayerPanel(account);
 						accounts.put(account, playerPanel);
 						add(playerPanel);
+						revalidate();
+						repaint();
 					} else
 						accounts.get(account).updateStatus();
 
 				} else if (accounts.containsKey(account)) {
 					remove(accounts.get(account));
+					revalidate();
+					repaint();
 					accounts.remove(account);
 				}
 			}

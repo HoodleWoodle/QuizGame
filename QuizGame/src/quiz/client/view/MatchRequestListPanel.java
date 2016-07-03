@@ -58,7 +58,6 @@ public class MatchRequestListPanel extends JPanel implements IView {
 		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
 		setMaximumSize(new Dimension(200, FRAME_HEIGHT));
 
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		lastMatchRequests = new ArrayList<>();
 	}
 
@@ -71,7 +70,6 @@ public class MatchRequestListPanel extends JPanel implements IView {
 			}
 
 			List<Match> matchRequests = Arrays.asList(model.getRequests());
-			System.out.println(model.getRequests());
 
 			// add all new match requests
 			List<Match> newMatchRequests = new ArrayList<>(matchRequests);
@@ -80,6 +78,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
 			for (Match matchRequest : newMatchRequests) {
 				MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest);
 				add(matchRequestPanel);
+
+				revalidate();
+				repaint();
 			}
 
 			// remove all old match requests
@@ -90,6 +91,8 @@ public class MatchRequestListPanel extends JPanel implements IView {
 					MatchRequestPanel next = (MatchRequestPanel) it.next();
 					if (next.matchRequest.getID() == matchRequest.getID()) {
 						remove(next);
+						revalidate();
+						repaint();
 						break;
 					}
 				}

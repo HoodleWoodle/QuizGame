@@ -75,10 +75,10 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		return questionPanel;
 	}
 
-	private void initComponents() {
-		JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(control, model));
-		JLabel players = new JLabel(localization.getString("PLAYERS") + ":");
-		players.setHorizontalAlignment(JLabel.CENTER);
+    private void initComponents() {
+        JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(control, model));
+        JLabel players = new JLabel(localization.getString("PLAYERS") + ":");
+        players.setHorizontalAlignment(JLabel.CENTER);
 
 		playerListScrollPane.setColumnHeaderView(players);
 		playerListScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -158,18 +158,18 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 			control.requestMatch();
 	}
 
-	@Override
-	public void onChange(ChangeType type, Status status) {
-		if (type == ChangeType.MATCH) {
-			Match match = model.getMatch();
-			if (match != null) {
-				for (Account account : match.getOpponents()) {
-					// set unavailable during match
-					account.setAvailable(false);
-				}
-			}
+    @Override
+    public void onChange(ChangeType type, Status status) {
+        if (type == ChangeType.MATCH) {
+            Match match = model.getMatch();
+            if (match != null) {
+                for (Account account : match.getOpponents()) {
+                    // set unavailable during match
+                    account.setAvailable(false);
+                }
 
-			gameFrame.setContentPane(questionPanel);
-		}
-	}
+                gameFrame.setContentPane(questionPanel);
+            }
+        }
+    }
 }

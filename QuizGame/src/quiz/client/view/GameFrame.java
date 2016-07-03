@@ -84,9 +84,11 @@ public final class GameFrame extends JFrame {
         setContentPane(menuPanel = new MenuPanel(this, control, model));
         setResizable(false);
 
+        System.out.println(Paths.get("data").resolve("icon_image.png").toAbsolutePath().toString());
         try {
             setIconImage(ImageIO.read(Paths.get("data").resolve("icon_image.png").toFile()));
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         addWindowListener(new WindowAdapter() {

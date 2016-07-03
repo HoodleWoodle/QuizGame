@@ -54,9 +54,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
 		this.model = model;
 
 		model.addView(this);
-		setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
-		setPreferredSize(new Dimension(150, FRAME_HEIGHT - 100));
-		setMaximumSize(new Dimension(200, FRAME_HEIGHT));
+		setMinimumSize(new Dimension(150, FRAME_HEIGHT - 200));
+		setPreferredSize(new Dimension(200, FRAME_HEIGHT - 100));
+		setMaximumSize(new Dimension(250, FRAME_HEIGHT));
 
 		lastMatchRequests = new ArrayList<>();
 	}
@@ -121,9 +121,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
 		public MatchRequestPanel(Match matchRequest) {
 			this.matchRequest = matchRequest;
 
-			setMinimumSize(new Dimension(100, 200));
-			setPreferredSize(new Dimension(150, 200));
-			setMaximumSize(new Dimension(200, 200));
+			setMinimumSize(new Dimension(150, 50));
+			setPreferredSize(new Dimension(200, 75));
+			setMaximumSize(new Dimension(250, 100));
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -147,6 +147,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 			textArea.setEditable(false);
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
+			textArea.setBackground(Color.LIGHT_GRAY);
 			add(textArea);
 			add(Box.createVerticalGlue());
 

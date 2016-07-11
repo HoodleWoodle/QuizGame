@@ -164,7 +164,7 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 		Category category = getCategory(Integer.parseInt(data[0]));
 		String question = data[1];
 		String[] answers = new String[data.length - 2];
-		for (int i = 2; i < answers.length; i++)
+		for (int i = 0; i < answers.length; i++)
 			answers[i] = data[2 + i];
 
 		return new Question(category, question, answers);

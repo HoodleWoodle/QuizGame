@@ -18,8 +18,10 @@ import static quiz.net.NetworkKeys.TAG_SET_ACCOUNT;
 import static quiz.net.NetworkKeys.TAG_SET_ANSWER;
 import static quiz.net.NetworkKeys.TAG_SET_MATCH;
 import static quiz.net.NetworkKeys.TAG_SET_OPPONENTS;
+import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
 import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.Random;
 import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.server.AbstractTCPServer;
 import lib.net.tcp.server.ClientThread;
+import quiz.Constants;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
@@ -39,7 +42,7 @@ import quiz.server.model.IDataManager;
  * @author Quirin, Stefan
  * @version XX.XX.XXXX
  */
-public class Server extends AbstractTCPServer // TODO closing if exit
+public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zufällig suchen & namen ssuchen wenn offline dann des ggleiche/selbe
 {
 	private final Random random;
 
@@ -63,11 +66,22 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 
 		random = new Random();
 
+		// TODO temps
+		new File(Constants.DB_FILE).delete();
+
 		dataManager = new DataManager();
 		matches = new Hashtable<Integer, Match>();
 		requests = new Hashtable<Integer, Match>();
 		accountIDs = new Hashtable<Integer, Integer>();
 		clientIDs = new Hashtable<Integer, Integer>();
+
+		dataManager.addAccount("1", "1");
+		dataManager.addAccount("2", "2");
+
+		// TODO temp
+		for (Category c : Category.values())
+			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
+				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
 	}
 
 	@Override
@@ -209,9 +223,25 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 		requests.remove(matchID);
 		matches.put(match.getID(), match);
 
+		sendQuestion(match);
+
 		NetworkMessage msg = new NetworkMessage(TAG_SET_MATCH, convertMatch(match));
 		client.send(msg.getBytes());
 		ClientThread otherClient = getClient(clientIDs.get(otherID));
+		otherClient.send(msg.getBytes());
+	}
+
+	private void sendQuestion(Match match)
+	{
+		List<Question> questions = dataManager.getQuestions(match.getCategory());
+		questions.remove(match.getQuestions());
+		Question question = questions.get(random.nextInt(questions.size()));
+
+		NetworkMessage msg = new NetworkMessage(TAG_SET_QUESTION, convertQuestion(question));
+		Account[] opponents = match.getOpponents();
+		ClientThread client = getClient(clientIDs.get(opponents[0].getID()));
+		client.send(msg.getBytes());
+		ClientThread otherClient = getClient(clientIDs.get(opponents[0].getID()));
 		otherClient.send(msg.getBytes());
 	}
 
@@ -220,7 +250,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 		int matchID = Integer.parseInt(message.getParameter(0));
 		requests.remove(matchID);
 
-		// TODO
+		sendRequests(accountIDs.get(client.getID()));
 	}
 
 	private void workSetAnswer(ClientThread client, NetworkMessage message)
@@ -289,7 +319,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 		String[] result = new String[ms.size()];
 
 		for (int i = 0; i < result.length; i++)
-			result[i] = convertMatch(matches.get(i));
+			result[i] = convertMatch(ms.get(i));
 
 		return result;
 	}
@@ -432,6 +462,8 @@ public class Server extends AbstractTCPServer // TODO closing if exit
 		// System.err.println("Invalid args!");
 		// System.exit(1);
 		// }
+
+		// TODO nicht genug fragen
 
 		try
 		{

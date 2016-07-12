@@ -1,9 +1,7 @@
 package quiz.client.view;
 
-import java.awt.Color;
-
-import javax.swing.JProgressBar;
-import javax.swing.Timer;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 
@@ -74,6 +72,7 @@ public class CountdownProgressBar extends JProgressBar {
 				green = (int) (percentage * 2 * 255);
 			}
 
+			if(green > 255) green = 255;
 			setForeground(new Color(red, green, 0));
 			setValue(counter);
 			setString(String.valueOf(counter));

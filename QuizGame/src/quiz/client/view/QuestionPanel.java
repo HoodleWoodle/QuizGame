@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -149,20 +150,22 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				}
 			}
 
-			int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length];
-			String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
+			if(answersGiven[0].length - 1 > 0) {
+				int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length - 1];
+				String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
 
-			// make the opponent's answer visible
-			for (JButton answerButton : answerButtons)
-				if (answerButton.getText().equals(opponentAnswer))
-					answerButton.setText(answerButton.getText() + System.lineSeparator() + opponent.getName());
+				// make the opponent's answer visible
+				for (JButton answerButton : answerButtons)
+					if (answerButton.getText().equals(opponentAnswer))
+						answerButton.setText(answerButton.getText() + System.lineSeparator() + opponent.getName());
+			}
 		}
 
 		if (type == ChangeType.QUESTION) {
 			if (questionsAnswered < QUESTION_COUNT) {
 				// prepare the next question
 				question = model.getQuestion();
-				List<String> answers = Arrays.asList(question.getAnswers());
+				List<String> answers = new ArrayList<String> (Arrays.asList(question.getAnswers()));
 				questionText.setText(question.getQuestion());
 
 				for (int i = 0; i < answerButtons.length; i++) {

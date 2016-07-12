@@ -241,7 +241,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 		Account[] opponents = match.getOpponents();
 		ClientThread client = getClient(clientIDs.get(opponents[0].getID()));
 		client.send(msg.getBytes());
-		ClientThread otherClient = getClient(clientIDs.get(opponents[0].getID()));
+		ClientThread otherClient = getClient(clientIDs.get(opponents[1].getID()));
 		otherClient.send(msg.getBytes());
 	}
 

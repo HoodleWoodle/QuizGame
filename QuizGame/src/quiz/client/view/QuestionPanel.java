@@ -1,22 +1,5 @@
 package quiz.client.view;
 
-import static quiz.Constants.QUESTION_COUNT;
-import static quiz.Constants.SECONDS_PER_ANSWER;
-
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
@@ -24,6 +7,17 @@ import quiz.client.model.Status;
 import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static quiz.Constants.QUESTION_COUNT;
+import static quiz.Constants.SECONDS_PER_ANSWER;
 
 /**
  * 
@@ -89,19 +83,19 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
 		c.gridy = 1;
 		c.insets = new Insets(10, 20, 10, 10);
-		add(answerButtons[0] = new JButton(""), c);
+		add(answerButtons[0] = new JButton(), c);
 
 		c.gridx = GridBagConstraints.RELATIVE;
 		c.insets = new Insets(10, 10, 10, 20);
-		add(answerButtons[1] = new JButton(""), c);
+		add(answerButtons[1] = new JButton(), c);
 
 		c.gridy = 2;
 		c.insets = new Insets(10, 20, 10, 10);
-		add(answerButtons[2] = new JButton(""), c);
+		add(answerButtons[2] = new JButton(), c);
 
 		c.gridx = GridBagConstraints.RELATIVE;
 		c.insets = new Insets(10, 10, 10, 20);
-		add(answerButtons[3] = new JButton(""), c);
+		add(answerButtons[3] = new JButton(), c);
 
 		c.gridy = 3;
 		c.gridwidth = 2;
@@ -155,7 +149,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				}
 			}
 
-			int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length - 1];
+			int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length];
 			String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
 
 			// make the opponent's answer visible

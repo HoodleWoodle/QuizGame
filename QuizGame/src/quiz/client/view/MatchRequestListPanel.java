@@ -1,30 +1,19 @@
 package quiz.client.view;
 
-import static quiz.Constants.FRAME_HEIGHT;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.ResourceBundle;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
 import quiz.model.Account;
 import quiz.model.Match;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.List;
+
+import static quiz.Constants.FRAME_HEIGHT;
 
 /**
  * @author Eric
@@ -125,7 +114,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 			setPreferredSize(new Dimension(200, 75));
 			setMaximumSize(new Dimension(250, 100));
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-			setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			setBorder(BorderFactory.createLoweredBevelBorder());
 
 			initComponents();
 		}

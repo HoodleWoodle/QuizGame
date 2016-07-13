@@ -1,5 +1,6 @@
 package quiz.client.view;
 
+import quiz.Utils;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
@@ -114,37 +115,25 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (username.getText().isEmpty() || password.getPassword().length == 0
-				|| repeatPassword.getPassword().length == 0 && login.isSelected()) {
+		String pw1 = new String(password.getPassword());
+		String pw2 = new String(repeatPassword.getPassword());
+		if (username.getText().trim().isEmpty() || pw1.trim().isEmpty()
+				|| pw2.trim().isEmpty() && login.isSelected()) {
 			return;
 		}
 
-		if (login.isSelected()) {
-			char[] pw1 = password.getPassword();
-			char[] pw2 = repeatPassword.getPassword();
+		if(!Utils.checkString(username.getText()) || !Utils.checkString(pw1) || !Utils.checkString(pw2))
+			return;
 
-			boolean wrongPassword = false;
-			if (pw1.length == pw2.length) {
-				for (int i = 0; i < pw1.length; i++) {
-					if (pw1[i] != pw2[i]) {
-						wrongPassword = true;
-						break;
-					}
-				}
-			} else
-				wrongPassword = true;
-
-			if(wrongPassword) {
-				gameFrame.showExceptionMessage(localization.getString("EXCEPTION_SAME_PW"));
-				repeatPassword.setText("");
-				return;
-			}
+		if (login.isSelected() && !pw1.equals(pw2)) {
+			gameFrame.showExceptionMessage(localization.getString("EXCEPTION_SAME_PW"));
+			repeatPassword.setText("");
+			return;
 		}
 
 
 		if (keepUsername.isSelected()) {
 			try (BufferedWriter bf = Files.newBufferedWriter(USERNAME_FILE, StandardCharsets.UTF_8)) {
-				bf.write("");
 				bf.write(username.getText());
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -152,9 +141,9 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
 		}
 
 		if (login.isSelected())
-			control.register(username.getText(), new String(password.getPassword()));
+			control.register(username.getText(), pw1);
 		else
-			control.login(username.getText(), new String(password.getPassword()));
+			control.login(username.getText(), pw1);
 	}
 
 	private void initComponents() {

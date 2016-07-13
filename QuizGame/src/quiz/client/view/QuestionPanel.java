@@ -82,21 +82,26 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 		c.weightx = 0.5;
 		c.weighty = 0.20;
 
+		for(int i = 0; i < answerButtons.length; i++) {
+			answerButtons[i] = new JButton();
+			answerButtons[i].addActionListener(this);
+		}
+
 		c.gridy = 1;
 		c.insets = new Insets(10, 20, 10, 10);
-		add(answerButtons[0] = new JButton(), c);
+		add(answerButtons[0], c);
 
 		c.gridx = GridBagConstraints.RELATIVE;
 		c.insets = new Insets(10, 10, 10, 20);
-		add(answerButtons[1] = new JButton(), c);
+		add(answerButtons[1], c);
 
 		c.gridy = 2;
 		c.insets = new Insets(10, 20, 10, 10);
-		add(answerButtons[2] = new JButton(), c);
+		add(answerButtons[2], c);
 
 		c.gridx = GridBagConstraints.RELATIVE;
 		c.insets = new Insets(10, 10, 10, 20);
-		add(answerButtons[3] = new JButton(), c);
+		add(answerButtons[3], c);
 
 		c.gridy = 3;
 		c.gridwidth = 2;
@@ -122,14 +127,17 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				if (countdown.isRunning() && !answerLoggedIn) {
 					answerLoggedIn = true;
 					control.setAnswer(i);
+					answerButton.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 5, 5, true));
 					questionsAnswered++;
-				}
-			}
 
-			for (int j = 0; j < answerButtons.length; j++) {
-				if (answerButtons[j].getText().equals(answers[i])) {
-					// first answer is correct
-					answerButtons[j].setBackground((i == 0) ? Color.GREEN : Color.RED);
+					for (int k = 0; k < answers.length; k++) {
+						for (int j = 0; j < answerButtons.length; j++) {
+							if (answerButtons[j].getText().equals(answers[k])) {
+								// first answer is correct
+								answerButtons[j].setBackground((k == 0) ? Color.GREEN : Color.RED);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -157,7 +165,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				// make the opponent's answer visible
 				for (JButton answerButton : answerButtons)
 					if (answerButton.getText().equals(opponentAnswer))
-						answerButton.setText(answerButton.getText() + System.lineSeparator() + opponent.getName());
+						answerButton.setBorder(BorderFactory.createDashedBorder(Color.ORANGE, 2, 5, 5, true));
 			}
 		}
 
@@ -168,11 +176,11 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 				List<String> answers = new ArrayList<String> (Arrays.asList(question.getAnswers()));
 				questionText.setText(question.getQuestion());
 
-				for (int i = 0; i < answerButtons.length; i++) {
+				for (JButton answerButton : answerButtons) {
 					Collections.shuffle(answers);
-					answerButtons[i].setText(answers.get(0));
-					answerButtons[i].setBackground(Color.WHITE);
-					answerButtons[i].addActionListener(this);
+					answerButton.setText(answers.get(0));
+					answerButton.setBackground(Color.WHITE);
+					answerButton.setBorder(BorderFactory.createEmptyBorder());
 					answers.remove(0);
 				}
 

@@ -1,26 +1,20 @@
 package quiz.client.view;
 
-import static quiz.Constants.FRAME_HEIGHT;
+import quiz.client.IControl;
+import quiz.client.model.ChangeType;
+import quiz.client.model.IModel;
+import quiz.client.model.Status;
+import quiz.model.Account;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-
-import quiz.client.IControl;
-import quiz.client.model.ChangeType;
-import quiz.client.model.IModel;
-import quiz.client.model.Status;
-import quiz.model.Account;
+import static quiz.Constants.FRAME_HEIGHT;
 
 /**
  * 
@@ -99,6 +93,7 @@ public class PlayerListPanel extends JPanel implements IView {
 			setPreferredSize(new Dimension(150, 50));
 			setMaximumSize(new Dimension(200, 50));
 			setLayout(new BorderLayout());
+			setBorder(BorderFactory.createLoweredBevelBorder());
 
 			add(status = new JLabel(), BorderLayout.CENTER);
 			updateStatus();

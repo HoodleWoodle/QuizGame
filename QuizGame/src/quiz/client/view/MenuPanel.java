@@ -1,29 +1,19 @@
 package quiz.client.view;
 
-import static quiz.Constants.FRAME_HEIGHT;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
 import quiz.model.Account;
-import quiz.model.Match;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
+import static quiz.Constants.FRAME_HEIGHT;
 
 /**
  * @author Eric
@@ -102,6 +92,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 		mainPart.add(Box.createVerticalGlue());
 		mainPart.add(gameTitle = new JLabel(localization.getString("GAME_NAME")));
 		gameTitle.setAlignmentX(CENTER_ALIGNMENT);
+		gameTitle.setFont(new Font("TimesNewRoman", Font.BOLD, 32));
 
 		for (int i = 0; i < menuButtons.length; i++) {
 			menuButtons[i] = new JButton(MENU_BUTTON_NAMES[i]);
@@ -161,15 +152,8 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
     @Override
     public void onChange(ChangeType type, Status status) {
         if (type == ChangeType.MATCH) {
-            Match match = model.getMatch();
-            if (match != null) {
-                for (Account account : match.getOpponents()) {
-                    // set unavailable during match
-                    account.setAvailable(false);
-                }
-
+            if (model.getMatch() != null)
                 gameFrame.setContentPane(questionPanel);
-            }
         }
     }
 }

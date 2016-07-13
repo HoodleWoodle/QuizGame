@@ -1,9 +1,6 @@
 package lib.net.tcp.client;
 
 import java.io.DataInputStream;
-import java.util.ArrayList;
-
-import lib.net.tcp.NetworkMessage;
 
 /**
  * @author Stefan
@@ -45,22 +42,13 @@ final class ReceivingThread implements Runnable
 	public void run()
 	{
 		running = true;
+
 		while (running)
-		{
-			ArrayList<Byte> bytes = new ArrayList<Byte>();
 			try
 			{
-				bytes.clear();
-				byte b = 0;
-				while ((b = (byte) in.read()) != NetworkMessage.EOF)
-				{
-					if (b == -1)
-						throw new Exception();
-					bytes.add(b);
-				}
-				byte[] message = new byte[bytes.size()];
-				for (int i = 0; i < message.length; i++)
-					message[i] = bytes.get(i);
+				int size = in.readInt();
+				byte[] message = new byte[size];
+				in.read(message);
 				// if a message received
 				client.received(message);
 			} catch (Exception e)
@@ -71,6 +59,5 @@ final class ReceivingThread implements Runnable
 				client.closed();
 				e.printStackTrace(); // TODO
 			}
-		}
 	}
 }

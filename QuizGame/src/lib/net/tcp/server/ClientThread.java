@@ -4,9 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-
-import lib.net.tcp.NetworkMessage;
+import java.nio.ByteBuffer;
 
 /**
  * @author Stefan
@@ -67,8 +65,8 @@ public class ClientThread implements Runnable
 		try
 		{
 			// try to send some message
+			out.write(ByteBuffer.allocate(4).putInt(message.length).array());
 			out.write(message);
-			out.write(NetworkMessage.EOF);
 			out.flush();
 			return true;
 		} catch (IOException e)
@@ -118,21 +116,11 @@ public class ClientThread implements Runnable
 	{
 		running = true;
 		while (running)
-		{
-			ArrayList<Byte> bytes = new ArrayList<Byte>();
 			try
 			{
-				bytes.clear();
-				byte b = 0;
-				while ((b = (byte) in.read()) != NetworkMessage.EOF)
-				{
-					if (b == -1)
-						throw new Exception();
-					bytes.add(b);
-				}
-				byte[] message = new byte[bytes.size()];
-				for (int i = 0; i < message.length; i++)
-					message[i] = bytes.get(i);
+				int size = in.readInt();
+				byte[] message = new byte[size];
+				in.read(message);
 				// if a message received
 				if (running)
 					server.received(this, message);
@@ -147,6 +135,5 @@ public class ClientThread implements Runnable
 				}
 				// e.printStackTrace();
 			}
-		}
 	}
 }

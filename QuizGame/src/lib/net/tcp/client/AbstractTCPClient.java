@@ -4,8 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-
-import lib.net.tcp.NetworkMessage;
+import java.nio.ByteBuffer;
 
 /**
  * @author Stefan
@@ -112,8 +111,8 @@ public abstract class AbstractTCPClient
 		try
 		{
 			// try to send a message
+			out.write(ByteBuffer.allocate(4).putInt(message.length).array());
 			out.write(message);
-			out.write(NetworkMessage.EOF);
 			out.flush();
 			return true;
 		} catch (IOException e)

@@ -6,7 +6,6 @@ package lib.net.tcp;
  */
 public final class NetworkMessage
 {
-	public static final byte EOF = -128; // TODO
 	private static final String SPLIT = ";";
 
 	private final byte tag;

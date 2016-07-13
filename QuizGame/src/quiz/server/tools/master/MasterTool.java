@@ -1,10 +1,11 @@
-package quiz.server.tools;
+package quiz.server.tools.master;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -77,6 +78,11 @@ final class MasterTool extends JPanel
 				}
 			}
 		});
+	}
+
+	public static void invalid()
+	{
+		JOptionPane.showMessageDialog(null, "Invalid Input!");
 	}
 
 	/**

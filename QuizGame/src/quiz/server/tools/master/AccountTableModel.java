@@ -1,21 +1,21 @@
-package quiz.server.tools;
+package quiz.server.tools.master;
 
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import quiz.model.Question;
+import quiz.model.Account;
 
 /**
  * @author Stefan
  * @version 29.04.2016
  */
-final class QuestionTableModel extends AbstractTableModel
+final class AccountTableModel extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<Question> model;
+	private List<Account> model;
 
 	/**
 	 * Updates the tableModel.
@@ -23,10 +23,10 @@ final class QuestionTableModel extends AbstractTableModel
 	 * @param model
 	 *            the model
 	 */
-	void update(List<Question> model)
+	void update(List<Account> model)
 	{
 		this.model = model;
-		Collections.sort(model, (q0, q1) -> q0.getQuestion().compareTo(q1.getQuestion()));
+		Collections.sort(model, (a0, a1) -> a0.getName().compareTo(a1.getName()));
 		fireTableDataChanged();
 	}
 
@@ -37,7 +37,7 @@ final class QuestionTableModel extends AbstractTableModel
 	 *            the row
 	 * @return the row-value
 	 */
-	public Question get(int row)
+	public Account get(int row)
 	{
 		if (row < 0 || row >= model.size())
 			return null;
@@ -48,7 +48,7 @@ final class QuestionTableModel extends AbstractTableModel
 	@Override
 	public int getColumnCount()
 	{
-		return 6;
+		return 4;
 	}
 
 	@Override
@@ -57,17 +57,13 @@ final class QuestionTableModel extends AbstractTableModel
 		switch (column)
 		{
 		case 0:
-			return "Question";
+			return "ID";
 		case 1:
-			return "Correct";
+			return "Name";
 		case 2:
-			return "Answer 1";
+			return "Password";
 		case 3:
-			return "Answer 2";
-		case 4:
-			return "Answer 3";
-		case 5:
-			return "Category";
+			return "Score";
 		default:
 			return null;
 		}
@@ -91,17 +87,13 @@ final class QuestionTableModel extends AbstractTableModel
 		switch (column)
 		{
 		case 0:
-			return model.get(row).getQuestion();
+			return model.get(row).getID();
 		case 1:
-			return model.get(row).getAnswers()[0];
+			return model.get(row).getName();
 		case 2:
-			return model.get(row).getAnswers()[1];
+			return model.get(row).getPassword();
 		case 3:
-			return model.get(row).getAnswers()[2];
-		case 4:
-			return model.get(row).getAnswers()[3];
-		case 5:
-			return model.get(row).getCategory();
+			return model.get(row).getScore();
 		}
 
 		return null;

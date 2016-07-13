@@ -1,4 +1,4 @@
-package quiz.server.tools;
+package quiz.server.tools.master;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import quiz.Utils;
 import quiz.model.Category;
 import quiz.model.Question;
 import quiz.server.model.DataManager;
@@ -166,16 +167,27 @@ final class QuestionPanel extends JPanel
 					as[i] = answers[i].getText();
 				Category ca = (Category) category.getSelectedItem();
 
+				boolean correct = true;
 				// check input
-				if (!DataManager.check(q, 1024))
-					return;
+				if (!DataManager.check(q, 1024) || !Utils.checkString(q))
+					correct = false;
 				for (String a : as)
-					if (!DataManager.check(a))
-						return;
+					if (!DataManager.check(a) || !Utils.checkString(a))
+						correct = false;
+				if (correct)
+					for (int i = 1; i < as.length; i++)
+						if (as[0].equals(as[i]))
+							correct = false;
 				if (ca == null)
-					return;
+					correct = false;
 				if (!dataManager.addQuestion(new Question(ca, q, as)))
+					correct = false;
+
+				if (!correct)
+				{
+					MasterTool.invalid();
 					return;
+				}
 
 				// clear input
 				question.setText("");

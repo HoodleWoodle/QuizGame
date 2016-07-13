@@ -1,4 +1,4 @@
-package quiz.server.tools;
+package quiz.server.tools.master;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import quiz.Utils;
 import quiz.model.Account;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
@@ -143,10 +144,16 @@ final class AccountPanel extends JPanel
 				String p = password.getText();
 
 				// check input
-				if (!DataManager.check(n) || !DataManager.check(p))
+				if (!DataManager.check(n) || !DataManager.check(p) || !Utils.checkString(n) || !Utils.checkString(p))
+				{
+					MasterTool.invalid();
 					return;
+				}
 				if (dataManager.addAccount(n, p) == null)
+				{
+					MasterTool.invalid();
 					return;
+				}
 
 				// clear input
 				name.setText("");

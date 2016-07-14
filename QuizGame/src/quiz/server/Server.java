@@ -38,6 +38,7 @@ import quiz.model.Match;
 import quiz.model.Question;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
+import quiz.server.model.MatchStep;
 
 /**
  * @author Quirin, Stefan
@@ -48,10 +49,11 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 	private final Random random;
 
 	private final IDataManager dataManager;
-	private final Hashtable<Integer, Match> matches;
-	private final Hashtable<Integer, Match> requests;
 	private final Hashtable<Integer, Integer> accountIDs;
 	private final Hashtable<Integer, Integer> clientIDs;
+	private final Hashtable<Integer, Match> requests;
+	private final Hashtable<Integer, Match> matches;
+	private final Hashtable<Integer, MatchStep> matchSteps;
 
 	private int nextMatchID;
 
@@ -70,10 +72,11 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 
 		random = new Random();
 
-		matches = new Hashtable<Integer, Match>();
-		requests = new Hashtable<Integer, Match>();
 		accountIDs = new Hashtable<Integer, Integer>();
 		clientIDs = new Hashtable<Integer, Integer>();
+		requests = new Hashtable<Integer, Match>();
+		matches = new Hashtable<Integer, Match>();
+		matchSteps = new Hashtable<Integer, MatchStep>();
 	}
 
 	@Override
@@ -222,11 +225,7 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		matches.put(match.getID(), match);
 
 		sendQuestion(match);
-
-		NetworkMessage msg = new NetworkMessage(TAG_SET_MATCH, convertMatch(match));
-		client.send(msg.getBytes());
-		ClientThread otherClient = getClient(clientIDs.get(otherID));
-		otherClient.send(msg.getBytes());
+		sendMatch(match);
 	}
 
 	private void workRequestDeny(ClientThread client, NetworkMessage message)
@@ -239,7 +238,23 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 
 	private void workSetAnswer(ClientThread client, NetworkMessage message)
 	{
-		// TODO
+		int answer = Integer.parseInt(message.getParameter(0));
+
+		int accountID = accountIDs.get(client.getID());
+		Match match = getMatch(accountID);
+		MatchStep matchStep = matchSteps.get(match.getID());
+
+		matchStep.setAnswer(dataManager.getAccount(accountID), answer);
+
+		if (matchStep.isDone())
+		{
+			if (match.getQuestions().length < Constants.QUESTION_COUNT)
+			{
+				// TODO
+			} else
+				sendQuestion(match);
+			sendMatch(match);
+		}
 	}
 
 	private void sendOpponents()
@@ -262,13 +277,28 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		client.send(msg.getBytes());
 	}
 
+	private void sendMatch(Match match)
+	{
+		NetworkMessage msg = new NetworkMessage(TAG_SET_MATCH, convertMatch(match));
+
+		sendToOpponents(match, msg);
+	}
+
 	private void sendQuestion(Match match)
 	{
 		List<Question> questions = dataManager.getQuestions(match.getCategory());
 		questions.remove(match.getQuestions());
 		Question question = questions.get(random.nextInt(questions.size()));
 
+		matchSteps.put(match.getID(), new MatchStep(question));
+
 		NetworkMessage msg = new NetworkMessage(TAG_SET_QUESTION, convertQuestion(question));
+
+		sendToOpponents(match, msg);
+	}
+
+	private void sendToOpponents(Match match, NetworkMessage msg)
+	{
 		Account[] opponents = match.getOpponents();
 		ClientThread client = getClient(clientIDs.get(opponents[0].getID()));
 		client.send(msg.getBytes());
@@ -276,9 +306,9 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		otherClient.send(msg.getBytes());
 	}
 
-	private boolean isOnline(int ID)
+	private boolean isOnline(int accountID)
 	{
-		if (clientIDs.get(ID) == null)
+		if (clientIDs.get(accountID) == null)
 			return false;
 		return true;
 	}
@@ -299,25 +329,31 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		return false;
 	}
 
-	private boolean isInMatch(int ID)
+	private boolean isInMatch(int accountID)
+	{
+		return getMatch(accountID) != null;
+	}
+
+	private Match getMatch(int accountID)
 	{
 		for (Integer key : matches.keySet())
 		{
-			Account[] opponents = matches.get(key).getOpponents();
+			Match match = matches.get(key);
+			Account[] opponents = match.getOpponents();
 			for (int i = 0; i < opponents.length; i++)
-				if (opponents[i].getID() == ID)
-					return true;
+				if (opponents[i].getID() == accountID)
+					return match;
 		}
 
-		return false;
+		return null;
 	}
 
-	private Account getRandomAccount(int playerID, List<Account> possibles)
+	private Account getRandomAccount(int accountID, List<Account> possibles)
 	{
 		int rand = random.nextInt(possibles.size());
 		Account account = possibles.remove(rand);
-		if (account.getID() == playerID)
-			return getRandomAccount(playerID, possibles);
+		if (account.getID() == accountID)
+			return getRandomAccount(accountID, possibles);
 		return account;
 	}
 
@@ -328,16 +364,16 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		return categories[rand];
 	}
 
-	private Category getCategory(int ID)
+	private Category getCategory(int categoryID)
 	{
 		Category[] values = Category.values();
-		if (ID > values.length)
+		if (categoryID > values.length)
 			return null;
 
-		return values[ID];
+		return values[categoryID];
 	}
 
-	private String[] convertAccounts(int ID)
+	private String[] convertAccounts(int accountID)
 	{
 		List<Account> accounts = dataManager.getAccounts();
 
@@ -347,7 +383,7 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		for (int i = 0; i < accounts.size(); i++)
 		{
 			Account account = accounts.get(i);
-			if (account.getID() == ID)
+			if (account.getID() == accountID)
 			{
 				bool = true;
 				continue;
@@ -359,7 +395,7 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		return result;
 	}
 
-	private String[] convertMatches(int ID, Hashtable<Integer, Match> matches)
+	private String[] convertMatches(int accountID, Hashtable<Integer, Match> matches)
 	{
 		List<Match> ms = new ArrayList<Match>();
 		for (Integer key : matches.keySet())
@@ -368,7 +404,7 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 
 			Account[] opponents = match.getOpponents();
 			for (int i = 0; i < opponents.length; i++)
-				if (opponents[i].getID() == ID)
+				if (opponents[i].getID() == accountID)
 				{
 					ms.add(match);
 					break;

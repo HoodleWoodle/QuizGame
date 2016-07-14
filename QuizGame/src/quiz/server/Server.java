@@ -44,7 +44,8 @@ import quiz.server.model.MatchStep;
  * @author Quirin, Stefan
  * @version 14.07.2016
  */
-public final class Server extends AbstractTCPServer // TODO Server GUI, --> closing if exit // TODO good commenting
+// TODO Server GUI, --> closing if exit
+public final class Server extends AbstractTCPServer
 {
 	private final Random random;
 

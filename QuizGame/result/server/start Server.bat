@@ -14,6 +14,6 @@ SET /P port=#PORT:
 
 ECHO.
 ECHO  TODO start the Server (Port:%port%)
-#java -jar Server.jar -%port%
+REM java -jar Server.jar -%port%
 
 PAUSE>NUL

@@ -28,7 +28,6 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
     private final String[] MENU_BUTTON_NAMES = {localization.getString("SEARCH_OPPONENT"),
             localization.getString("RANDOM_OPPONENT")};
     private JButton[] menuButtons = new JButton[MENU_BUTTON_NAMES.length];
-    private ChallengeDialog challengeDialog;
 
     /**
      * Creates a new MenuPanel.
@@ -44,7 +43,6 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 
         model.addView(this);
         questionPanel = new QuestionPanel(gameFrame, control, model);
-        challengeDialog = new ChallengeDialog(gameFrame, control, model);
         setMinimumSize(new Dimension(200, FRAME_HEIGHT));
         setPreferredSize(new Dimension(250, FRAME_HEIGHT));
         setMaximumSize(new Dimension(300, FRAME_HEIGHT));
@@ -63,7 +61,7 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
     }
 
     private void initComponents() {
-        JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(control, model));
+        JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(gameFrame, model));
         JLabel players = new JLabel(localization.getString("PLAYERS") + ":");
         players.setHorizontalAlignment(JLabel.CENTER);
 
@@ -105,8 +103,8 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        challengeDialog.setSearchOpponent(event.getSource() == menuButtons[0]);
-        challengeDialog.reset();
+        gameFrame.getChallengeDialog().setSearchOpponent(event.getSource() == menuButtons[0]);
+        gameFrame.getChallengeDialog().reset();
     }
 
     @Override

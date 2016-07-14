@@ -1,6 +1,5 @@
 package quiz.client.view;
 
-import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
@@ -24,17 +23,17 @@ public class PlayerListPanel extends JPanel implements IView {
 
     private Map<Account, PlayerPanel> accounts = new HashMap<Account, PlayerPanel>();
     private IModel model;
-    private IControl control;
     private ResourceBundle localization = GameFrame.getLocalization();
+    private GameFrame gameFrame;
 
     /**
      * Creates a new PlayerListPanel.
      *
-     * @param control the IControl implementation
+     * @param gameFrame the GameFrame
      * @param model   the IModel implementation
      */
-    public PlayerListPanel(IControl control, IModel model) {
-        this.control = control;
+    public PlayerListPanel(GameFrame gameFrame, IModel model) {
+        this.gameFrame = gameFrame;
         this.model = model;
 
         model.addView(this);
@@ -98,7 +97,8 @@ public class PlayerListPanel extends JPanel implements IView {
             JPopupMenu popupMenu = new JPopupMenu();
             JMenuItem matchRequest = new JMenuItem(localization.getString("CHALLENGE"));
             matchRequest.addActionListener(event -> {
-                control.requestMatch(account);
+                gameFrame.getChallengeDialog().setSearchOpponent(true);
+                gameFrame.getChallengeDialog().reset();
             });
 
             popupMenu.add(matchRequest);

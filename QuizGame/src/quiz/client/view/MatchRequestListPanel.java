@@ -108,9 +108,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
         public MatchRequestPanel(Match matchRequest) {
             this.matchRequest = matchRequest;
 
-            setMinimumSize(new Dimension(150, 50));
-            setPreferredSize(new Dimension(200, 75));
-            setMaximumSize(new Dimension(250, 100));
+            setMinimumSize(new Dimension(150, 75));
+            setPreferredSize(new Dimension(200, 100));
+            setMaximumSize(new Dimension(250, 125));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
             setBorder(BorderFactory.createLoweredBevelBorder());
 
@@ -129,7 +129,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
             JTextArea textArea = new JTextArea();
             MessageFormat formatter = new MessageFormat(localization.getString("RECEIVED_MATCHREQUEST"));
 
-            String test = formatter.format(new Object[]{opponent.getName()});
+            String test = formatter.format(new Object[]{matchRequest.getCategory().toString(), opponent.getName()});
             textArea.setText(test);
             textArea.setEditable(false);
             textArea.setLineWrap(true);

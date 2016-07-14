@@ -1,24 +1,21 @@
 package quiz.client.view;
 
-import static quiz.Constants.FRAME_HEIGHT;
-import static quiz.Constants.FRAME_WIDTH;
+import lib.net.tcp.client.AbstractTCPClient;
+import quiz.client.IControl;
+import quiz.client.model.IModel;
+import quiz.model.Account;
 
-import java.awt.Dimension;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import lib.net.tcp.client.AbstractTCPClient;
-import quiz.client.IControl;
-import quiz.client.model.IModel;
-import quiz.model.Account;
+import static quiz.Constants.FRAME_HEIGHT;
+import static quiz.Constants.FRAME_WIDTH;
 
 /**
  * @author Eric
@@ -30,6 +27,7 @@ public final class GameFrame extends JFrame {
 
     private static final ResourceBundle localization = ResourceBundle.getBundle("quiz.client.view.localization");
     private final MenuPanel menuPanel;
+    private final ChallengeDialog challengeDialog;
     private Account user;
 
     /**
@@ -81,6 +79,7 @@ public final class GameFrame extends JFrame {
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
+        challengeDialog = new ChallengeDialog(this, control, model);
         setContentPane(menuPanel = new MenuPanel(this, control, model));
         setResizable(false);
 
@@ -109,6 +108,15 @@ public final class GameFrame extends JFrame {
         setVisible(true);
 
         new LoginDialog(this, control, model);
+    }
+
+    /**
+     * Returns the ChallengeDialog.
+     *
+     * @return the ChallengeDialog
+     */
+    public ChallengeDialog getChallengeDialog() {
+        return challengeDialog;
     }
 
     /**

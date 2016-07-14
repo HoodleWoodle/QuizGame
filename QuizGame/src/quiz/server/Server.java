@@ -118,6 +118,10 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 	{
 		int accountID = accountIDs.remove(client.getID());
 		clientIDs.remove(accountID);
+
+		Account account = dataManager.getAccount(accountID);
+		System.out.println("Account disconnected. (" + account.getName() + "[" + account.getID() + "])");
+
 		sendOpponents();
 	}
 
@@ -126,15 +130,10 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		Account account = dataManager.addAccount(message.getParameter(0), message.getParameter(1));
 		if (account != null)
 		{
-			int accountID = account.getID();
-			int clientID = client.getID();
-			accountIDs.put(clientID, accountID);
-			clientIDs.put(accountID, clientID);
+			System.out.println("Account registered. (" + account.getName() + "[" + account.getID() + "])");
 
-			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
-			client.send(msg.getBytes());
-			sendOpponents();
-			sendRequests(accountID);
+			addAccount(account, client);
+
 		} else
 			client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
 	}
@@ -144,15 +143,9 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 		Account account = dataManager.getAccount(message.getParameter(0), message.getParameter(1));
 		if (account != null)
 		{
-			int accountID = account.getID();
-			int clientID = client.getID();
-			accountIDs.put(clientID, accountID);
-			clientIDs.put(accountID, clientID);
+			System.out.println("Account logged in. (" + account.getName() + "[" + account.getID() + "])");
 
-			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
-			client.send(msg.getBytes());
-			sendOpponents();
-			sendRequests(accountID);
+			addAccount(account, client);
 		} else
 			client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
 	}
@@ -255,6 +248,19 @@ public final class Server extends AbstractTCPServer // TODO Server GUI, --> clos
 				sendQuestion(match);
 			sendMatch(match);
 		}
+	}
+
+	private void addAccount(Account account, ClientThread client)
+	{
+		int accountID = account.getID();
+		int clientID = client.getID();
+		accountIDs.put(clientID, accountID);
+		clientIDs.put(accountID, clientID);
+
+		NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
+		client.send(msg.getBytes());
+		sendOpponents();
+		sendRequests(accountID);
 	}
 
 	private void sendOpponents()

@@ -127,7 +127,7 @@ public final class ClientThread implements Runnable
 			} catch (Exception e)
 			{
 				// some Exception
-				System.err.println("An exception has occured!");
+				System.err.println("An exception has occured!"); // TODO
 				if (running)
 				{
 					close();

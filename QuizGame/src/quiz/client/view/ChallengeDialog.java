@@ -112,20 +112,6 @@ public class ChallengeDialog extends JDialog {
 
                 for (Account opponent : opponents) {
                     if (opponent.getName().equals(opponentName.getText())) {
-                        // only online players can accept a match
-                        if (!opponent.isOnline()) {
-                            gameFrame.showExceptionMessage(localization.getString("PLAYER_NOT_ONLINE"));
-                            return;
-                        }
-
-                        // only available players can accept a match
-                        if (!opponent.isAvailable()) {
-                            MessageFormat formatter = new MessageFormat(
-                                    localization.getString("PLAYER_ALREADY_IN_MATCH"));
-                            gameFrame.showExceptionMessage(formatter.format(new Object[]{opponentName.getText()}));
-                            return;
-                        }
-
                         control.requestMatch(category, opponent);
                         setVisible(false);
                         return;

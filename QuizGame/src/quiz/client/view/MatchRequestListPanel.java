@@ -50,11 +50,6 @@ public class MatchRequestListPanel extends JPanel implements IView {
     @Override
     public void onChange(ChangeType type, Status status) {
         if (type == ChangeType.REQUESTS) {
-            if (status == Status.OPPONENT_NOT_AVAILABLE) {
-                gameFrame.showExceptionMessage(localization.getString("EXCEPTION_ALREADY_IN_MATCH"));
-                return;
-            }
-
             if (status == Status.ALREADY_REQUESTED)
                 return;
 

@@ -5,10 +5,13 @@ import quiz.client.model.IModel;
 import quiz.client.model.Status;
 import quiz.model.Account;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -25,6 +28,7 @@ public class PlayerListPanel extends JPanel implements IView {
     private IModel model;
     private ResourceBundle localization = GameFrame.getLocalization();
     private GameFrame gameFrame;
+    private Icon online, offline, not_available;
 
     /**
      * Creates a new PlayerListPanel.
@@ -35,6 +39,14 @@ public class PlayerListPanel extends JPanel implements IView {
     public PlayerListPanel(GameFrame gameFrame, IModel model) {
         this.gameFrame = gameFrame;
         this.model = model;
+
+        try {
+            online = new ImageIcon(ImageIO.read(Paths.get("data").resolve("icon_online.png").toFile()));
+            not_available = new ImageIcon(ImageIO.read(Paths.get("data").resolve("icon_not_available.png").toFile()));
+            offline = new ImageIcon(ImageIO.read(Paths.get("data").resolve("icon_offline.png").toFile()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         model.addView(this);
         setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));
@@ -47,23 +59,15 @@ public class PlayerListPanel extends JPanel implements IView {
         // update account statuses
         if (type == ChangeType.OPPONENTS) {
             for (Account account : model.getOpponents()) {
-                if (account.isOnline()) {
-                    if (!accounts.containsKey(account)) {
-                        PlayerPanel playerPanel = new PlayerPanel(account);
-                        accounts.put(account, playerPanel);
-                        add(playerPanel);
+                if (!accounts.containsKey(account)) {
+                    PlayerPanel playerPanel = new PlayerPanel(account);
+                    accounts.put(account, playerPanel);
+                    add(playerPanel);
 
-                        revalidate();
-                        repaint();
-                    } else
-                        accounts.get(account).updateStatus();
-
-                } else if (accounts.containsKey(account)) {
-                    remove(accounts.get(account));
                     revalidate();
                     repaint();
-                    accounts.remove(account);
-                }
+                } else
+                    accounts.get(account).updateStatus();
             }
         }
     }
@@ -85,13 +89,15 @@ public class PlayerListPanel extends JPanel implements IView {
         public PlayerPanel(Account account) {
             this.account = account;
 
-            setMinimumSize(new Dimension(100, 50));
-            setPreferredSize(new Dimension(150, 50));
-            setMaximumSize(new Dimension(200, 50));
+            setMinimumSize(new Dimension(100, 15));
+            setPreferredSize(new Dimension(150, 30));
+            setMaximumSize(new Dimension(200, 45));
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createLoweredBevelBorder());
+            setBackground(Color.LIGHT_GRAY);
 
-            add(status = new JLabel(), BorderLayout.CENTER);
+            add(status = new JLabel(account.getName()), BorderLayout.CENTER);
+            status.setIconTextGap(20);
             updateStatus();
 
             JPopupMenu popupMenu = new JPopupMenu();
@@ -112,12 +118,21 @@ public class PlayerListPanel extends JPanel implements IView {
         }
 
         /**
-         * Reflects the current status of the account in view.
+         * Updates the current status of the account in view.
          */
         public void updateStatus() {
-            status.setText(account.getName() +
-                    (!account.isAvailable() ? " (" + localization.getString("STATUS_IN_GAME") + ")" :
-                            " (" + localization.getString("STATUS_ONLINE") + ")"));
+            if(!account.isOnline()) {
+                status.setIcon(offline);
+                status.setToolTipText(localization.getString("STATUS_OFFLINE"));
+            }
+            else if(account.isAvailable()) {
+                status.setIcon(online);
+                status.setToolTipText(localization.getString("STATUS_ONLINE"));
+            }
+            else {
+                status.setIcon(not_available);
+                status.setToolTipText(localization.getString("STATUS_NOT_AVAILABLE"));
+            }
         }
     }
 }

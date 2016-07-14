@@ -1,0 +1,144 @@
+package quiz.client.view;
+
+import quiz.client.IControl;
+import quiz.client.model.IModel;
+import quiz.model.Account;
+import quiz.model.Category;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.ResourceBundle;
+
+/**
+ * @author Eric
+ * @version 13.07.16
+ */
+public class ChallengeDialog extends JDialog {
+
+    private ResourceBundle localization = GameFrame.getLocalization();
+    private IControl control;
+    private IModel model;
+    private JButton challenge;
+    private JTextField opponentName;
+    private GameFrame gameFrame;
+    private JComboBox<String> categories;
+    private boolean searchOpponent = true;
+
+    /**
+     * Creates a new ChallengeDialog.
+     *
+     * @param gameFrame the GameFrame
+     * @param control the IControl
+     * @param model the IModel
+     */
+    public ChallengeDialog(GameFrame gameFrame, IControl control, IModel model) {
+        this.gameFrame = gameFrame;
+        this.control = control;
+        this.model = model;
+
+        setTitle(localization.getString("CHALLENGE"));
+        setModal(true);
+        Dimension size = new Dimension(250, 200);
+        setMinimumSize(size);
+        setPreferredSize(size);
+        setMaximumSize(size);
+
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+
+        initComponents();
+        initListeners();
+
+        setResizable(false);
+        setLocationRelativeTo(null);
+    }
+
+    /**
+     * Returns whether the dialog contains a text field for the opponent name.
+     *
+     * @return whether the dialog contains a text field for the opponent name.
+     */
+    public boolean isSearchOpponent() {
+        return searchOpponent;
+    }
+
+    /**
+     * Sets whether the dialog contains a text field for the opponent name.
+     *
+     * @param searchOpponent whether the dialog contains a text field for the opponent name.
+     */
+    public void setSearchOpponent(boolean searchOpponent) {
+        this.searchOpponent = searchOpponent;
+        opponentName.setVisible(searchOpponent);
+    }
+
+    /**
+     * Resets the dialog.
+     */
+    public void reset() {
+        categories.setSelectedIndex(0);
+        opponentName.setText("");
+        getRootPane().setDefaultButton(challenge);
+        setVisible(true);
+    }
+
+    private void initComponents() {
+        add(Box.createVerticalGlue());
+        add(categories = new JComboBox<String>());
+        Arrays.stream(Category.values()).forEach(category -> categories.addItem(category.toString()));
+        add(Box.createVerticalGlue());
+        add(opponentName = new JTextField(""));
+        add(Box.createVerticalGlue());
+        add(new JSeparator());
+        add(Box.createVerticalGlue());
+        add(challenge = new JButton(localization.getString("CHALLENGE")));
+        add(Box.createVerticalGlue());
+
+        GameFrame.setProperties(new Dimension(100, 20), new Dimension(150, 30), new Dimension(200, 40), categories,
+                challenge, opponentName);
+    }
+
+    private void initListeners() {
+
+        challenge.addActionListener(e -> {
+            Category category = Category.fromString((String) categories.getSelectedItem());
+
+            if (searchOpponent && opponentName.getText() != null) {
+                if(opponentName.getText().trim().isEmpty())
+                    return;
+
+                Account[] opponents = model.getOpponents();
+
+                for (Account opponent : opponents) {
+                    if (opponent.getName().equals(opponentName.getText())) {
+                        // only online players can accept a match
+                        if (!opponent.isOnline()) {
+                            gameFrame.showExceptionMessage(localization.getString("PLAYER_NOT_ONLINE"));
+                            return;
+                        }
+
+                        // only available players can accept a match
+                        if (!opponent.isAvailable()) {
+                            MessageFormat formatter = new MessageFormat(
+                                    localization.getString("PLAYER_ALREADY_IN_MATCH"));
+                            gameFrame.showExceptionMessage(formatter.format(new Object[]{opponentName.getText()}));
+                            return;
+                        }
+
+                        control.requestMatch(category, opponent);
+                        setVisible(false);
+                        return;
+                    }
+                }
+
+                // only existing players can accept a match
+                MessageFormat formatter = new MessageFormat(localization.getString("PLAYER_DOES_NOT_EXIST"));
+                gameFrame.showExceptionMessage(formatter.format(new Object[]{opponentName.getText()}));
+            } else {
+                control.requestMatch(category);
+                setVisible(false);
+            }
+        });
+    }
+}

@@ -21,140 +21,138 @@ import static quiz.Constants.FRAME_HEIGHT;
  */
 public class MatchRequestListPanel extends JPanel implements IView {
 
-	private IModel model;
-	private IControl control;
-	private List<Match> lastMatchRequests;
-	private GameFrame gameFrame;
-	private ResourceBundle localization = GameFrame.getLocalization();
+    private IModel model;
+    private IControl control;
+    private List<Match> lastMatchRequests;
+    private GameFrame gameFrame;
+    private ResourceBundle localization = GameFrame.getLocalization();
 
-	/**
-	 * Creates a new MatchRequestListPanel.
-	 *
-	 * @param gameFrame
-	 *            the current GameFrame instance
-	 * @param control
-	 *            the IControl implementation
-	 * @param model
-	 *            the IModel implementation
-	 */
-	public MatchRequestListPanel(GameFrame gameFrame, IControl control, IModel model) {
-		this.gameFrame = gameFrame;
-		this.control = control;
-		this.model = model;
+    /**
+     * Creates a new MatchRequestListPanel.
+     *
+     * @param gameFrame the current GameFrame instance
+     * @param control   the IControl implementation
+     * @param model     the IModel implementation
+     */
+    public MatchRequestListPanel(GameFrame gameFrame, IControl control, IModel model) {
+        this.gameFrame = gameFrame;
+        this.control = control;
+        this.model = model;
 
-		model.addView(this);
-		setMinimumSize(new Dimension(150, FRAME_HEIGHT - 200));
-		setPreferredSize(new Dimension(200, FRAME_HEIGHT - 100));
-		setMaximumSize(new Dimension(250, FRAME_HEIGHT));
+        model.addView(this);
+        setMinimumSize(new Dimension(150, FRAME_HEIGHT - 200));
+        setPreferredSize(new Dimension(200, FRAME_HEIGHT - 100));
+        setMaximumSize(new Dimension(250, FRAME_HEIGHT));
 
-		lastMatchRequests = new ArrayList<>();
-	}
+        lastMatchRequests = new ArrayList<>();
+    }
 
-	@Override
-	public void onChange(ChangeType type, Status status) {
-		if (type == ChangeType.REQUESTS) {
-			if (status == Status.ALREADY_IN_MATCH) {
-				gameFrame.showExceptionMessage(localization.getString("EXCEPTION_ALREADY_IN_MATCH"));
-				return;
-			}
+    @Override
+    public void onChange(ChangeType type, Status status) {
+        if (type == ChangeType.REQUESTS) {
+            if (status == Status.OPPONENT_NOT_AVAILABLE) {
+                gameFrame.showExceptionMessage(localization.getString("EXCEPTION_ALREADY_IN_MATCH"));
+                return;
+            }
 
-			List<Match> matchRequests = Arrays.asList(model.getRequests());
+            if (status == Status.ALREADY_REQUESTED)
+                return;
 
-			// add all new match requests
-			List<Match> newMatchRequests = new ArrayList<>(matchRequests);
-			newMatchRequests.removeAll(lastMatchRequests);
+            List<Match> matchRequests = Arrays.asList(model.getRequests());
 
-			for (Match matchRequest : newMatchRequests) {
-				MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest);
-				add(matchRequestPanel);
+            // add all new match requests
+            List<Match> newMatchRequests = new ArrayList<>(matchRequests);
+            newMatchRequests.removeAll(lastMatchRequests);
 
-				revalidate();
-				repaint();
-			}
+            for (Match matchRequest : newMatchRequests) {
+                MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest);
+                add(matchRequestPanel);
 
-			// remove all old match requests
-			lastMatchRequests.removeAll(matchRequests);
+                revalidate();
+                repaint();
+            }
 
-			for (Match matchRequest : lastMatchRequests) {
-				for (ListIterator<Component> it = Arrays.asList(getComponents()).listIterator(); it.hasNext();) {
-					MatchRequestPanel next = (MatchRequestPanel) it.next();
-					if (next.matchRequest.getID() == matchRequest.getID()) {
-						remove(next);
-						revalidate();
-						repaint();
-						break;
-					}
-				}
-			}
+            // remove all old match requests
+            lastMatchRequests.removeAll(matchRequests);
 
-			// update match requests
-			lastMatchRequests = matchRequests;
-		}
-	}
+            for (Match matchRequest : lastMatchRequests) {
+                for (ListIterator<Component> it = Arrays.asList(getComponents()).listIterator(); it.hasNext(); ) {
+                    MatchRequestPanel next = (MatchRequestPanel) it.next();
+                    if (next.matchRequest.getID() == matchRequest.getID()) {
+                        remove(next);
+                        revalidate();
+                        repaint();
+                        break;
+                    }
+                }
+            }
 
-	/**
-	 * 
-	 * @author Eric
-	 * @version 22.05.16
-	 */
-	private class MatchRequestPanel extends JPanel {
+            // update match requests
+            lastMatchRequests = matchRequests;
+        }
+    }
 
-		private final Match matchRequest;
+    /**
+     * @author Eric
+     * @version 22.05.16
+     */
+    private class MatchRequestPanel extends JPanel {
 
-		/**
-		 * Creates a new MatchRequestPanel.
-		 * 
-		 * @param matchRequest
-		 *            the matchRequest
-		 */
-		public MatchRequestPanel(Match matchRequest) {
-			this.matchRequest = matchRequest;
+        private final Match matchRequest;
 
-			setMinimumSize(new Dimension(150, 50));
-			setPreferredSize(new Dimension(200, 75));
-			setMaximumSize(new Dimension(250, 100));
-			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-			setBorder(BorderFactory.createLoweredBevelBorder());
+        /**
+         * Creates a new MatchRequestPanel.
+         *
+         * @param matchRequest the matchRequest
+         */
+        public MatchRequestPanel(Match matchRequest) {
+            this.matchRequest = matchRequest;
 
-			initComponents();
-		}
+            setMinimumSize(new Dimension(150, 50));
+            setPreferredSize(new Dimension(200, 75));
+            setMaximumSize(new Dimension(250, 100));
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+            setBorder(BorderFactory.createLoweredBevelBorder());
 
-		private void initComponents() {
-			Account opponent = null;
-			for (Account account : matchRequest.getOpponents()) {
-				if (account.getID() != gameFrame.getUser().getID()) {
-					opponent = account;
-					break;
-				}
-			}
+            initComponents();
+        }
 
-			JTextArea textArea = new JTextArea();
-			MessageFormat formatter = new MessageFormat(localization.getString("RECEIVED_MATCHREQUEST"));
+        private void initComponents() {
+            Account opponent = null;
+            for (Account account : matchRequest.getOpponents()) {
+                if (account.getID() != gameFrame.getUser().getID()) {
+                    opponent = account;
+                    break;
+                }
+            }
 
-			String test = formatter.format(new Object[] { opponent.getName() });
-			textArea.setText(test);
-			textArea.setEditable(false);
-			textArea.setLineWrap(true);
-			textArea.setWrapStyleWord(true);
-			textArea.setBackground(Color.LIGHT_GRAY);
-			add(textArea);
-			add(Box.createVerticalGlue());
+            JTextArea textArea = new JTextArea();
+            MessageFormat formatter = new MessageFormat(localization.getString("RECEIVED_MATCHREQUEST"));
 
-			Box row = Box.createHorizontalBox();
-			row.add(Box.createHorizontalGlue());
+            String test = formatter.format(new Object[]{opponent.getName()});
+            textArea.setText(test);
+            textArea.setEditable(false);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setBackground(Color.LIGHT_GRAY);
+            add(textArea);
+            add(Box.createVerticalGlue());
 
-			JButton accept = new JButton(localization.getString("ACCEPT"));
-			accept.addActionListener(e -> control.acceptRequest(matchRequest));
-			row.add(accept);
-			row.add(Box.createHorizontalGlue());
+            Box row = Box.createHorizontalBox();
+            row.add(Box.createHorizontalGlue());
 
-			JButton deny = new JButton(localization.getString("DENY"));
-			deny.addActionListener(e -> control.denyRequest(matchRequest));
-			row.add(deny);
-			row.add(Box.createHorizontalGlue());
+            JButton accept = new JButton(localization.getString("ACCEPT"));
+            accept.addActionListener(e -> control.acceptRequest(matchRequest));
+            row.add(accept);
+            row.add(Box.createHorizontalGlue());
 
-			add(row);
-			add(Box.createVerticalGlue());
-		}
-	}
+            JButton deny = new JButton(localization.getString("DENY"));
+            deny.addActionListener(e -> control.denyRequest(matchRequest));
+            row.add(deny);
+            row.add(Box.createHorizontalGlue());
+
+            add(row);
+            add(Box.createVerticalGlue());
+        }
+    }
 }

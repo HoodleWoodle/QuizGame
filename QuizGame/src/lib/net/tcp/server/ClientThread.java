@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
  * @author Stefan
  * @version 29.04.2016
  */
-public class ClientThread implements Runnable
+public final class ClientThread implements Runnable
 {
 	private static int ID_NEXT;
 
@@ -60,7 +60,7 @@ public class ClientThread implements Runnable
 	 *            the message to send
 	 * @return whether it was successful
 	 */
-	public final boolean send(byte[] message)
+	public boolean send(byte[] message)
 	{
 		try
 		{
@@ -84,7 +84,7 @@ public class ClientThread implements Runnable
 	 * 
 	 * @return whether closing was successful
 	 */
-	final boolean close()
+	boolean close()
 	{
 		try
 		{
@@ -106,13 +106,13 @@ public class ClientThread implements Runnable
 	 * 
 	 * @return the client-ID
 	 */
-	public final int getID()
+	public int getID()
 	{
 		return ID;
 	}
 
 	@Override
-	public final void run()
+	public void run()
 	{
 		running = true;
 		while (running)

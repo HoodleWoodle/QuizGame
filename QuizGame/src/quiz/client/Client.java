@@ -2,9 +2,9 @@ package quiz.client;
 
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
-import static quiz.net.NetworkKeys.TAG_ALREADY_IN_MATCH;
 import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
 import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
+import static quiz.net.NetworkKeys.TAG_OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.TAG_SET_ACCOUNT;
 import static quiz.net.NetworkKeys.TAG_SET_MATCH;
 import static quiz.net.NetworkKeys.TAG_SET_OPPONENTS;
@@ -32,7 +32,7 @@ import quiz.model.Question;
  * @author Stefan
  * @version 08.06.2016
  */
-public class Client extends AbstractTCPClient // TODO eigener Thread
+public final class Client extends AbstractTCPClient
 {
 	private final IModel model;
 
@@ -68,8 +68,8 @@ public class Client extends AbstractTCPClient // TODO eigener Thread
 			model.setStatus(Status.INVALID_LOGIN_DETAILS);
 			model.setAccount(null);
 			break;
-		case TAG_ALREADY_IN_MATCH:
-			model.setStatus(Status.ALREADY_IN_MATCH);
+		case TAG_OPPONENT_NOT_AVAILABLE:
+			model.setStatus(Status.OPPONENT_NOT_AVAILABLE);
 			model.setRequests(model.getRequests());
 			break;
 		case TAG_SET_ACCOUNT:

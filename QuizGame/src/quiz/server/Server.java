@@ -2,10 +2,11 @@ package quiz.server;
 
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
-import static quiz.net.NetworkKeys.TAG_ALREADY_IN_MATCH;
+import static quiz.net.NetworkKeys.TAG_ALREADY_REQUESTED;
 import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
 import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
 import static quiz.net.NetworkKeys.TAG_LOGIN;
+import static quiz.net.NetworkKeys.TAG_OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.TAG_REGISTER;
 import static quiz.net.NetworkKeys.TAG_REQUEST;
 import static quiz.net.NetworkKeys.TAG_REQUEST_0;
@@ -40,9 +41,9 @@ import quiz.server.model.IDataManager;
 
 /**
  * @author Quirin, Stefan
- * @version XX.XX.XXXX
+ * @version 14.07.2016
  */
-public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zufällig suchen & namen ssuchen wenn offline dann des ggleiche/selbe
+public final class Server extends AbstractTCPServer // TODO closing if exit //TODO methodennamen überarbeiten
 {
 	private final Random random;
 
@@ -52,7 +53,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 	private final Hashtable<Integer, Integer> accountIDs;
 	private final Hashtable<Integer, Integer> clientIDs;
 
-	private int matchID;
+	private int nextMatchID;
 
 	/**
 	 * Creates an instance of Server.
@@ -66,7 +67,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 
 		random = new Random();
 
-		// TODO temps
+		// TODO temp
 		new File(Constants.DB_FILE).delete();
 
 		dataManager = new DataManager();
@@ -198,7 +199,13 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 			break;
 		}
 
-		Match request = new Match(matchID++, category, accounts, new Question[0], new int[0][0]);
+		if (existsRequest(playerID, accounts[1].getID()))
+		{
+			client.send(new NetworkMessage(TAG_ALREADY_REQUESTED, new String[0]).getBytes());
+			return;
+		}
+
+		Match request = new Match(nextMatchID++, category, accounts, new Question[0], new int[0][0]);
 		requests.put(request.getID(), request);
 
 		int otherID = request.getOpponents()[1].getID();
@@ -214,9 +221,9 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 		int playerID = accountIDs.get(client.getID());
 		int otherID = match.getOpponents()[0].getID();
 
-		if (hasMatch(playerID) || hasMatch(otherID))
+		if (!isOnline(otherID) || isInMatch(playerID) || isInMatch(otherID))
 		{
-			client.send(new NetworkMessage(TAG_ALREADY_IN_MATCH, new String[0]).getBytes());
+			client.send(new NetworkMessage(TAG_OPPONENT_NOT_AVAILABLE, new String[0]).getBytes());
 			return;
 		}
 
@@ -228,20 +235,6 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 		NetworkMessage msg = new NetworkMessage(TAG_SET_MATCH, convertMatch(match));
 		client.send(msg.getBytes());
 		ClientThread otherClient = getClient(clientIDs.get(otherID));
-		otherClient.send(msg.getBytes());
-	}
-
-	private void sendQuestion(Match match)
-	{
-		List<Question> questions = dataManager.getQuestions(match.getCategory());
-		questions.remove(match.getQuestions());
-		Question question = questions.get(random.nextInt(questions.size()));
-
-		NetworkMessage msg = new NetworkMessage(TAG_SET_QUESTION, convertQuestion(question));
-		Account[] opponents = match.getOpponents();
-		ClientThread client = getClient(clientIDs.get(opponents[0].getID()));
-		client.send(msg.getBytes());
-		ClientThread otherClient = getClient(clientIDs.get(opponents[1].getID()));
 		otherClient.send(msg.getBytes());
 	}
 
@@ -276,6 +269,81 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 		NetworkMessage msg = new NetworkMessage(TAG_SET_REQUESTS, convertMatches(accountID, requests));
 		ClientThread client = getClient(clientIDs.get(accountID));
 		client.send(msg.getBytes());
+	}
+
+	private void sendQuestion(Match match)
+	{
+		List<Question> questions = dataManager.getQuestions(match.getCategory());
+		questions.remove(match.getQuestions());
+		Question question = questions.get(random.nextInt(questions.size()));
+
+		NetworkMessage msg = new NetworkMessage(TAG_SET_QUESTION, convertQuestion(question));
+		Account[] opponents = match.getOpponents();
+		ClientThread client = getClient(clientIDs.get(opponents[0].getID()));
+		client.send(msg.getBytes());
+		ClientThread otherClient = getClient(clientIDs.get(opponents[1].getID()));
+		otherClient.send(msg.getBytes());
+	}
+
+	private boolean isOnline(int ID)
+	{
+		if (clientIDs.get(ID) == null)
+			return false;
+		return true;
+	}
+
+	private boolean existsRequest(int accountID_0, int accountID_1)
+	{
+		for (Integer key : requests.keySet())
+		{
+			Account[] opponents = requests.get(key).getOpponents();
+
+			boolean first = opponents[0].getID() == accountID_0 || opponents[1].getID() == accountID_0;
+			boolean second = opponents[0].getID() == accountID_1 || opponents[1].getID() == accountID_1;
+
+			if (first && second)
+				return true;
+		}
+
+		return false;
+	}
+
+	private boolean isInMatch(int ID)
+	{
+		for (Integer key : matches.keySet())
+		{
+			Account[] opponents = matches.get(key).getOpponents();
+			for (int i = 0; i < opponents.length; i++)
+				if (opponents[i].getID() == ID)
+					return true;
+		}
+
+		return false;
+	}
+
+	private Account getRandomAccount(int playerID, List<Account> possibles)
+	{
+		int rand = random.nextInt(possibles.size());
+		Account account = possibles.remove(rand);
+		if (account.getID() == playerID)
+			return getRandomAccount(playerID, possibles);
+		return account;
+	}
+
+	private Category getRandomCategory()
+	{
+		Category[] categories = Category.values();
+		int rand = random.nextInt(categories.length);
+		return categories[rand];
+	}
+
+	private Category getCategory(int ID)
+	{
+		Category[] values = Category.values();
+		if (ID > values.length)
+			return null;
+
+		return values[ID];
 	}
 
 	private String[] convertAccounts(int ID)
@@ -327,7 +395,7 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 	private String convertAccount(Account account)
 	{
 		account.setOnline(isOnline(account.getID()));
-		if (!hasMatch(account.getID()))
+		if (!isInMatch(account.getID()))
 			account.setAvailable(true);
 
 		StringBuilder builder = new StringBuilder();
@@ -402,51 +470,6 @@ public class Server extends AbstractTCPServer // TODO closing if exit // TODO Zu
 		}
 
 		return builder.toString();
-	}
-
-	private boolean isOnline(int ID)
-	{
-		if (clientIDs.get(ID) == null)
-			return false;
-		return true;
-	}
-
-	private boolean hasMatch(int ID)
-	{
-		for (Integer key : matches.keySet())
-		{
-			Account[] opponents = matches.get(key).getOpponents();
-			for (int i = 0; i < opponents.length; i++)
-				if (opponents[i].getID() == ID)
-					return true;
-		}
-
-		return false;
-	}
-
-	private Category getRandomCategory()
-	{
-		Category[] categories = Category.values();
-		int rand = random.nextInt(categories.length);
-		return categories[rand];
-	}
-
-	private Account getRandomAccount(int playerID, List<Account> possibles)
-	{
-		int rand = random.nextInt(possibles.size());
-		Account account = possibles.remove(rand);
-		if (account.getID() == playerID)
-			return getRandomAccount(playerID, possibles);
-		return account;
-	}
-
-	private Category getCategory(int ID)
-	{
-		Category[] values = Category.values();
-		if (ID > values.length)
-			return null;
-
-		return values[ID];
 	}
 
 	/**

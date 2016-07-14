@@ -19,7 +19,7 @@ import quiz.model.Match;
  * @author Stefan
  * @version 08.06.2016
  */
-public class Control implements IControl
+public final class Control implements IControl
 {
 	private final Client client;
 

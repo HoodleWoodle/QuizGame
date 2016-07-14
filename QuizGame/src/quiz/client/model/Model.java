@@ -12,7 +12,7 @@ import quiz.model.Question;
  * @author Stefan
  * @version 08.06.2016
  */
-public class Model implements IModel
+public final class Model implements IModel
 {
 	private final List<IView> views;
 

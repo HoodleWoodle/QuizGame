@@ -1,5 +1,10 @@
 package quiz.net;
 
+/**
+ * @author Stefan
+ * @version 14.07.2016
+ */
+@SuppressWarnings("javadoc")
 public interface NetworkKeys
 {
 	public static final byte TAG_REGISTER = 0;
@@ -17,7 +22,8 @@ public interface NetworkKeys
 
 	public static final byte TAG_INVALID_REGISTER_DETAILS = 5;
 	public static final byte TAG_INVALID_LOGIN_DETAILS = 6;
-	public static final byte TAG_ALREADY_IN_MATCH = 7;
+	public static final byte TAG_OPPONENT_NOT_AVAILABLE = 7;
+	public static final byte TAG_ALREADY_REQUESTED = 8;
 
 	public static final String TAG_REQUEST_0 = "0";
 	public static final String TAG_REQUEST_1 = "1";

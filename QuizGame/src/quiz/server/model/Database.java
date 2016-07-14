@@ -11,7 +11,7 @@ import java.sql.Statement;
  * @author Stefan
  * @version 29.04.2016
  */
-class Database
+final class Database
 {
 	private final String database;
 	private final String user;

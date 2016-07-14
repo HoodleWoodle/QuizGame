@@ -3,7 +3,8 @@ package quiz;
 import quiz.net.NetworkKeys;
 
 /**
- * @author Hoodle
+ * @author Stefan
+ * @version 14.07.2016
  */
 public final class Utils
 {

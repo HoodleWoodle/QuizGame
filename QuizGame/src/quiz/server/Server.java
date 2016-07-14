@@ -43,7 +43,7 @@ import quiz.server.model.IDataManager;
  * @author Quirin, Stefan
  * @version 14.07.2016
  */
-public final class Server extends AbstractTCPServer // TODO closing if exit //TODO methodennamen überarbeiten
+public final class Server extends AbstractTCPServer // TODO Server GUI, --> closing if exit // TODO good commenting
 {
 	private final Random random;
 
@@ -58,31 +58,22 @@ public final class Server extends AbstractTCPServer // TODO closing if exit //TO
 	/**
 	 * Creates an instance of Server.
 	 * 
+	 * @param dataManager
+	 * 
 	 * @param port
 	 *            the desired Server-port
 	 */
-	public Server(int port)
+	public Server(IDataManager dataManager, int port)
 	{
 		super(port);
+		this.dataManager = dataManager;
 
 		random = new Random();
 
-		// TODO temp
-		new File(Constants.DB_FILE).delete();
-
-		dataManager = new DataManager();
 		matches = new Hashtable<Integer, Match>();
 		requests = new Hashtable<Integer, Match>();
 		accountIDs = new Hashtable<Integer, Integer>();
 		clientIDs = new Hashtable<Integer, Integer>();
-
-		dataManager.addAccount("1", "1");
-		dataManager.addAccount("2", "2");
-
-		// TODO temp
-		for (Category c : Category.values())
-			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
 	}
 
 	@Override
@@ -362,7 +353,7 @@ public final class Server extends AbstractTCPServer // TODO closing if exit //TO
 				continue;
 			}
 
-			result[i - (bool ? 1 : 0)] = convertAccount(account); // TODO there is always the ME-Account (why checking?)
+			result[i - (bool ? 1 : 0)] = convertAccount(account);
 		}
 
 		return result;
@@ -375,7 +366,7 @@ public final class Server extends AbstractTCPServer // TODO closing if exit //TO
 		{
 			Match match = matches.get(key);
 
-			Account[] opponents = match.getOpponents(); // TODO online, available
+			Account[] opponents = match.getOpponents();
 			for (int i = 0; i < opponents.length; i++)
 				if (opponents[i].getID() == ID)
 				{
@@ -483,15 +474,33 @@ public final class Server extends AbstractTCPServer // TODO closing if exit //TO
 		// if (args.length != 1)
 		// {
 		// System.err.println("Invalid args!");
-		// System.exit(1);
+		// return;
 		// }
 
-		// TODO nicht genug fragen
+		// TODO TEMP
+		new File(Constants.DB_FILE).delete();
+
+		IDataManager dataManager = new DataManager();
+
+		// TODO TEMP
+		for (Category c : Category.values())
+			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
+				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
+
+		dataManager.addAccount("1", "1");
+		dataManager.addAccount("2", "2");
+
+		for (Category category : Category.values())
+			if (dataManager.getQuestions(category).size() < Constants.QUESTION_COUNT)
+			{
+				System.err.println("Invalid question count ('" + category.toString() + "')!");
+				return;
+			}
 
 		try
 		{
 			int port = 5555;// Integer.parseInt(args[0]);
-			Server server = new Server(port);
+			Server server = new Server(dataManager, port);
 			System.out.println("Starting Server!");
 			if (!server.start())
 				throw new Exception();

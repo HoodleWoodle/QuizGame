@@ -25,6 +25,8 @@ public class ChallengeDialog extends JDialog {
     private GameFrame gameFrame;
     private JComboBox<String> categories;
     private boolean searchOpponent = true;
+    private Dimension bigSize = new Dimension(180, 200);
+    private Dimension smallSize = new Dimension(180, 150);
 
     /**
      * Creates a new ChallengeDialog.
@@ -40,10 +42,7 @@ public class ChallengeDialog extends JDialog {
 
         setTitle(localization.getString("CHALLENGE"));
         setModal(true);
-        Dimension size = new Dimension(250, 200);
-        setMinimumSize(size);
-        setPreferredSize(size);
-        setMaximumSize(size);
+        setSize(bigSize);
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
@@ -71,6 +70,7 @@ public class ChallengeDialog extends JDialog {
     public void setSearchOpponent(boolean searchOpponent) {
         this.searchOpponent = searchOpponent;
         opponentName.setVisible(searchOpponent);
+        setSize(searchOpponent ? bigSize : smallSize);
     }
 
     /**
@@ -95,14 +95,14 @@ public class ChallengeDialog extends JDialog {
         add(challenge = new JButton(localization.getString("CHALLENGE")));
         add(Box.createVerticalGlue());
 
-        GameFrame.setProperties(new Dimension(100, 20), new Dimension(150, 30), new Dimension(200, 40), categories,
+        GameFrame.setProperties(new Dimension(75, 20), new Dimension(100, 30), new Dimension(125, 40), categories,
                 challenge, opponentName);
     }
 
     private void initListeners() {
 
         challenge.addActionListener(e -> {
-            Category category = Category.fromString((String) categories.getSelectedItem());
+            Category category = Category.values()[categories.getSelectedIndex()];
 
             if (searchOpponent && opponentName.getText() != null) {
                 if(opponentName.getText().trim().isEmpty())

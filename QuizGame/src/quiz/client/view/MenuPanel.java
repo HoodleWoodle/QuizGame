@@ -105,8 +105,8 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        challengeDialog.reset();
         challengeDialog.setSearchOpponent(event.getSource() == menuButtons[0]);
+        challengeDialog.reset();
     }
 
     @Override

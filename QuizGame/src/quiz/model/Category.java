@@ -23,21 +23,6 @@ public enum Category {
 
     private static ResourceBundle localization = GameFrame.getLocalization();
 
-    public static Category fromString(String value) {
-        if (value.equalsIgnoreCase(localization.getString("ENTERTAINMENT")))
-            return ENTERTAINMENT;
-        else if (value.equalsIgnoreCase(localization.getString("GAMING")))
-            return GAMING;
-        else if (value.equalsIgnoreCase(localization.getString("HISTORY")))
-            return HISTORY;
-        else if (value.equalsIgnoreCase(localization.getString("SCIENCE")))
-            return SCIENCE;
-        else if (value.equalsIgnoreCase(localization.getString("TECHNOLOGY")))
-            return TECHNOLOGY;
-        else
-            return null;
-    }
-
     @Override
     public String toString() {
         switch (this) {

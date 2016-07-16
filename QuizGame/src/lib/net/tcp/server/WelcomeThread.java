@@ -40,6 +40,11 @@ final class WelcomeThread implements Runnable
 		return port;
 	}
 
+	boolean isRunning()
+	{
+		return running;
+	}
+
 	/**
 	 * Starts the thread.
 	 * 

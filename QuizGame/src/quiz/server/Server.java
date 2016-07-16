@@ -42,6 +42,7 @@ import quiz.model.Question;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 import quiz.server.model.MatchStep;
+import quiz.server.view.ServerView;
 
 /**
  * @author Quirin, Stefan
@@ -544,23 +545,46 @@ public final class Server extends AbstractTCPServer
 	}
 
 	/**
+	 * Starts the Server.
+	 * 
+	 * @param dataManager
+	 *            the IDataManager instance
+	 * @param port
+	 *            the port of the Server
+	 * @return the created Server instance
+	 */
+	public static Server start(IDataManager dataManager, int port)
+	{
+		Server server = new Server(dataManager, port);
+		System.out.println("Starting Server!");
+
+		try
+		{
+			if (!server.start())
+				throw new Exception();
+		} catch (Exception e)
+		{
+			System.out.println("Cannot start Server!");
+			return null;
+		}
+
+		return server;
+	}
+
+	/**
 	 * Main-method.
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args)
 	{
-		// TODO
-		// if (args.length != 1)
-		// {
-		// System.err.println("Invalid args!");
-		// return;
-		// }
-
 		// TODO TEMP
 		new File(Constants.DB_FILE).delete();
+		// TODO TEMP
 
+		ServerView serverView = new ServerView();
 		IDataManager dataManager = new DataManager();
+		serverView.open(dataManager);
 
 		// TODO TEMP
 		for (Category c : Category.values())
@@ -569,6 +593,7 @@ public final class Server extends AbstractTCPServer
 
 		dataManager.addAccount("1", "1");
 		dataManager.addAccount("2", "2");
+		// TODO TEMP
 
 		for (Category category : Category.values())
 			if (dataManager.getQuestions(category).size() < Constants.QUESTION_COUNT)
@@ -576,17 +601,5 @@ public final class Server extends AbstractTCPServer
 				System.out.println("Invalid question count ('" + category.toString() + "')!");
 				return;
 			}
-
-		try
-		{
-			int port = 5555;// Integer.parseInt(args[0]);
-			Server server = new Server(dataManager, port);
-			System.out.println("Starting Server!");
-			if (!server.start())
-				throw new Exception();
-		} catch (Exception e)
-		{
-			System.out.println("Cannot start Server!");
-		}
 	}
 }

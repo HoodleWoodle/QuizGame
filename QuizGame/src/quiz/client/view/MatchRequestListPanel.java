@@ -23,7 +23,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
 
     private IModel model;
     private IControl control;
-    private List<Match> lastMatchRequests;
+    private List<Match> lastMatchRequests, lastSentMatchRequests;
     private GameFrame gameFrame;
     private ResourceBundle localization = GameFrame.getLocalization();
 
@@ -60,7 +60,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
             newMatchRequests.removeAll(lastMatchRequests);
 
             for (Match matchRequest : newMatchRequests) {
-                MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest);
+                MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest, MatchRequestPanel.RECEIVED);
                 add(matchRequestPanel);
 
                 revalidate();
@@ -85,6 +85,40 @@ public class MatchRequestListPanel extends JPanel implements IView {
             // update match requests
             lastMatchRequests = matchRequests;
         }
+
+        if(type == ChangeType.SENT_REQUESTS) {
+            List<Match> matchRequests = Arrays.asList(model.getSentRequests());
+
+            // add all new sent match requests
+            List<Match> newMatchRequests = new ArrayList<>(matchRequests);
+            newMatchRequests.removeAll(lastSentMatchRequests);
+
+            for (Match matchRequest : newMatchRequests) {
+                MatchRequestPanel matchRequestPanel = new MatchRequestPanel(matchRequest, MatchRequestPanel.SENT);
+                add(matchRequestPanel);
+
+                revalidate();
+                repaint();
+            }
+
+            // remove all old sent match requests
+            lastSentMatchRequests.removeAll(matchRequests);
+
+            for (Match matchRequest : lastSentMatchRequests) {
+                for (ListIterator<Component> it = Arrays.asList(getComponents()).listIterator(); it.hasNext(); ) {
+                    MatchRequestPanel next = (MatchRequestPanel) it.next();
+                    if (next.matchRequest.getID() == matchRequest.getID()) {
+                        remove(next);
+                        revalidate();
+                        repaint();
+                        break;
+                    }
+                }
+            }
+
+            // update sent match requests
+            lastSentMatchRequests = matchRequests;
+        }
     }
 
     /**
@@ -93,14 +127,23 @@ public class MatchRequestListPanel extends JPanel implements IView {
      */
     private class MatchRequestPanel extends JPanel {
 
+        public static final int SENT = 1;
+        public static final int RECEIVED = 2;
         private final Match matchRequest;
+        private int type;
 
         /**
          * Creates a new MatchRequestPanel.
          *
          * @param matchRequest the matchRequest
+         * @param type the match request type
+         *
+         * @throws IllegalArgumentException when type is neither SENT nor RECEIVED
          */
-        public MatchRequestPanel(Match matchRequest) {
+        public MatchRequestPanel(Match matchRequest, int type) {
+            if(type < 1 || type > 2)
+                throw new IllegalArgumentException("Type must either be SENT or RECEIVED!");
+            this.type = type;
             this.matchRequest = matchRequest;
 
             setMinimumSize(new Dimension(150, 75));
@@ -121,10 +164,15 @@ public class MatchRequestListPanel extends JPanel implements IView {
                 }
             }
 
+            String text = null;
+            if(type == SENT)
+                text = localization.getString("SENT_MATCHREQUEST");
+            else if(type == RECEIVED)
+                text = localization.getString("RECEIVED_MATCHREQUEST");
             JTextArea textArea = new JTextArea();
-            MessageFormat formatter = new MessageFormat(localization.getString("RECEIVED_MATCHREQUEST"));
+            MessageFormat formatter = new MessageFormat(text);
 
-            String test = formatter.format(new Object[]{matchRequest.getCategory().toString(), opponent.getName()});
+            String test = formatter.format(new Object[]{opponent.getName(), matchRequest.getCategory().toString()});
             textArea.setText(test);
             textArea.setEditable(false);
             textArea.setLineWrap(true);

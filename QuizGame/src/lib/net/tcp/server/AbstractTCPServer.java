@@ -39,6 +39,16 @@ public abstract class AbstractTCPServer
 	}
 
 	/**
+	 * Returns whether AbstractTCPServer is running.
+	 * 
+	 * @return whether AbstractTCPServer is running
+	 */
+	public final boolean isRunning()
+	{
+		return welcome.isRunning();
+	}
+
+	/**
 	 * Starts the AbstractTCPServer.
 	 * 
 	 * @return whether it was successful

@@ -212,7 +212,7 @@ public final class Client extends AbstractTCPClient
 	public static void main(String args[])
 	{
 		// try to connect to Server
-		Client client = new Client("localhost", 5555); // TODO
+		Client client = new Client("localhost", 1819); // TODO
 		boolean con = client.connect();
 
 		IModel model = client.model;

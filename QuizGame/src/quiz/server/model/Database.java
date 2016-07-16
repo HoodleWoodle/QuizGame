@@ -60,7 +60,7 @@ final class Database
 		} catch (ClassNotFoundException | SQLException e)
 		{
 			// some Exception
-			System.err.println("Cannot connect to database!");
+			System.out.println("Cannot connect to database!");
 			// e.printStackTrace();
 			return false;
 		}
@@ -86,7 +86,7 @@ final class Database
 		} catch (SQLException e)
 		{
 			// some Exception
-			System.err.println("Cannot close database!");
+			System.out.println("Cannot close database!");
 			// e.printStackTrace();
 			return false;
 		}

@@ -21,6 +21,7 @@ public final class Model implements IModel
 	private Question question;
 	private Account[] opponents;
 	private Match[] requests;
+	private Match[] sentRequests;
 
 	private Status status;
 
@@ -62,6 +63,12 @@ public final class Model implements IModel
 		return requests;
 	}
 
+	@Override
+	public Match[] getSentRequests()
+	{
+		return sentRequests;
+	}
+
 	/**
 	 * Setter.
 	 * 
@@ -91,7 +98,6 @@ public final class Model implements IModel
 	 * @param match
 	 *            the current Match
 	 */
-
 	public void setMatch(Match match)
 	{
 		this.match = match;
@@ -104,7 +110,6 @@ public final class Model implements IModel
 	 * @param question
 	 *            the current Account
 	 */
-
 	public void setQuestion(Question question)
 	{
 		this.question = question;
@@ -117,7 +122,6 @@ public final class Model implements IModel
 	 * @param opponents
 	 *            all the opponents
 	 */
-
 	public void setOpponents(Account[] opponents)
 	{
 		this.opponents = opponents;
@@ -130,11 +134,22 @@ public final class Model implements IModel
 	 * @param requests
 	 *            all requests
 	 */
-
 	public void setRequests(Match[] requests)
 	{
 		this.requests = requests;
 		onChange(ChangeType.REQUESTS);
+	}
+
+	/**
+	 * Setter. Triggers an onChange - event.
+	 * 
+	 * @param sentRequests
+	 *            all requests sent by this
+	 */
+	public void setSentRequests(Match[] sentRequests)
+	{
+		this.sentRequests = sentRequests;
+		onChange(ChangeType.SENT_REQUESTS);
 	}
 
 	@Override

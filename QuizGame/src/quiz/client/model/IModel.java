@@ -47,6 +47,13 @@ public interface IModel
 	Match[] getRequests();
 
 	/**
+	 * Getter.
+	 * 
+	 * @return the match-requests sent by this
+	 */
+	Match[] getSentRequests();
+
+	/**
 	 * Adds a IView to the IModel (Observer-Pattern).
 	 * 
 	 * @param view

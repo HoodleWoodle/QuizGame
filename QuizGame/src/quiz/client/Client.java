@@ -1,15 +1,25 @@
 package quiz.client;
 
+import static quiz.client.model.Status.ALREADY_LOGGED_IN;
+import static quiz.client.model.Status.ALREADY_REQUESTED;
+import static quiz.client.model.Status.INVALID_LOGIN_DETAILS;
+import static quiz.client.model.Status.INVALID_REGISTER_DETAILS;
+import static quiz.client.model.Status.NO_OPPONENTS_AVAILABLE;
+import static quiz.client.model.Status.OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
+import static quiz.net.NetworkKeys.TAG_ALREADY_LOGGED_IN;
+import static quiz.net.NetworkKeys.TAG_ALREADY_REQUESTED;
 import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
 import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
+import static quiz.net.NetworkKeys.TAG_NO_OPPONENTS_AVAILABLE;
 import static quiz.net.NetworkKeys.TAG_OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.TAG_SET_ACCOUNT;
 import static quiz.net.NetworkKeys.TAG_SET_MATCH;
 import static quiz.net.NetworkKeys.TAG_SET_OPPONENTS;
 import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
 import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
+import static quiz.net.NetworkKeys.TAG_SET_SENT_REQUESTS;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -61,19 +71,37 @@ public final class Client extends AbstractTCPClient
 		switch (msg.getTag())
 		{
 		case TAG_INVALID_REGISTER_DETAILS:
-			model.setStatus(Status.INVALID_REGISTER_DETAILS);
+			model.setStatus(INVALID_REGISTER_DETAILS);
 			model.setAccount(null);
 			break;
 		case TAG_INVALID_LOGIN_DETAILS:
-			model.setStatus(Status.INVALID_LOGIN_DETAILS);
+			model.setStatus(INVALID_LOGIN_DETAILS);
 			model.setAccount(null);
 			break;
+		case TAG_NO_OPPONENTS_AVAILABLE:
+			model.setStatus(NO_OPPONENTS_AVAILABLE);
+			model.setRequests(model.getRequests());
+			break;
 		case TAG_OPPONENT_NOT_AVAILABLE:
-			model.setStatus(Status.OPPONENT_NOT_AVAILABLE);
+			model.setStatus(OPPONENT_NOT_AVAILABLE);
+			model.setRequests(model.getRequests());
+			break;
+		case TAG_ALREADY_LOGGED_IN:
+			model.setStatus(ALREADY_LOGGED_IN);
+			model.setAccount(null);
+			break;
+		case TAG_ALREADY_REQUESTED:
+			model.setStatus(ALREADY_REQUESTED);
 			model.setRequests(model.getRequests());
 			break;
 		case TAG_SET_ACCOUNT:
 			model.setAccount(parseAccount(msg.getParameter(0)));
+			break;
+		case TAG_SET_MATCH:
+			model.setMatch(parseMatch(msg.getParameter(0)));
+			break;
+		case TAG_SET_QUESTION:
+			model.setQuestion(parseQuestion(msg.getParameter(0)));
 			break;
 		case TAG_SET_OPPONENTS:
 			model.setOpponents(parseAccounts(msg));
@@ -81,11 +109,8 @@ public final class Client extends AbstractTCPClient
 		case TAG_SET_REQUESTS:
 			model.setRequests(parseMatches(msg));
 			break;
-		case TAG_SET_MATCH:
-			model.setMatch(parseMatch(msg.getParameter(0)));
-			break;
-		case TAG_SET_QUESTION:
-			model.setQuestion(parseQuestion(msg.getParameter(0)));
+		case TAG_SET_SENT_REQUESTS:
+			model.setSentRequests(parseMatches(msg));
 			break;
 		}
 	}
@@ -219,7 +244,7 @@ public final class Client extends AbstractTCPClient
 		// start surface
 		SwingUtilities.invokeLater(() -> {
 			// Swing needs to run on event dispatching thread
-				new GameFrame(client, control, model);
-			});
+			new GameFrame(client, control, model);
+		});
 	}
 }

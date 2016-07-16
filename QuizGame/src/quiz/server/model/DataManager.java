@@ -11,8 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Question;
@@ -44,9 +42,9 @@ public final class DataManager implements IDataManager
 		if (!db.connect())
 		{
 			// if connecting fails
-			JOptionPane.showMessageDialog(null, "Cannot connect to database!");
+			System.out.println("Cannot connect to database!");
 			// shut down process
-			System.exit(1);
+			System.exit(1); // TODO all System.exits removen
 		}
 
 		if (create)

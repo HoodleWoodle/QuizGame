@@ -25,5 +25,9 @@ public enum ChangeType
 	/**
 	 * If the requests have changed.
 	 */
-	REQUESTS;
+	REQUESTS,
+	/**
+	 * If the requests sent by this have changed.
+	 */
+	SENT_REQUESTS;
 }

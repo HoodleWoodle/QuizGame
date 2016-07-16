@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.1">
+<diagram program="umlet" version="13.3">
   <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
@@ -87,9 +87,9 @@ quiz.model
     <id>UMLClass</id>
     <coordinates>
       <x>710</x>
-      <y>190</y>
+      <y>210</y>
       <w>150</w>
-      <h>140</h>
+      <h>160</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 quiz.client.model
@@ -99,7 +99,8 @@ ACCOUNT
 MATCH
 QUESTION
 OPPONENTS
-REQUESTS</panel_attributes>
+REQUESTS
+SENT_REQUESTS</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -258,7 +259,7 @@ quiz
       <x>440</x>
       <y>40</y>
       <w>200</w>
-      <h>180</h>
+      <h>190</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 quiz.client.model
@@ -269,6 +270,7 @@ quiz.client.model
 + getQuestion : Question
 + getOpponents : Account[]
 + getRequests : Match[]
++ getSentRequests : Match[]
 + addView (in view : IView)
 + removeView (in view : IView)</panel_attributes>
     <additional_attributes/>
@@ -333,12 +335,12 @@ quiz.client
     <id>Relation</id>
     <coordinates>
       <x>530</x>
-      <y>210</y>
+      <y>220</y>
       <w>30</w>
-      <h>100</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -435,12 +437,12 @@ bg=RED</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>360</x>
-      <y>210</y>
+      <y>220</y>
       <w>190</w>
-      <h>250</h>
+      <h>240</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>170.0;10.0;170.0;50.0;10.0;50.0;10.0;230.0</additional_attributes>
+    <additional_attributes>170.0;10.0;170.0;40.0;10.0;40.0;10.0;220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -496,7 +498,7 @@ quiz.model
       <x>650</x>
       <y>40</y>
       <w>210</w>
-      <h>140</h>
+      <h>160</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 quiz.client.model
@@ -506,6 +508,7 @@ SUCCESS
 INVALID_REGISTER_DETAILS
 INVALID_LOGIN_DETAILS
 OPPONENT_NOT_AVAILABLE
+ALREADY_LOGGED_IN
 ALREADY_REQUESTED</panel_attributes>
     <additional_attributes/>
   </element>

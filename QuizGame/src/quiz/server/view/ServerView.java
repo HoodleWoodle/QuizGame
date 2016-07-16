@@ -73,18 +73,18 @@ public final class ServerView extends JPanel
 		clear.setMargin(new Insets(0, 0, 0, 0));
 		clear.setBounds(295, 5, 100, 25);
 
-		add(information = new JTextArea("QuizGame is coded by  : 'Alex, Eric, Quirin, Stefan'\nQuestions are made of : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!"));
+		add(information = new JTextArea("QuizGame is coded by  : 'Alex, Eric, Quirin, Stefan'\nQuestions are created by : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!"));
 		information.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 		information.setFont(new Font("Arial", Font.BOLD, 12));
 		information.setLineWrap(true);
 		information.setWrapStyleWord(true);
 		information.setEditable(false);
-		information.setBounds(5, 35, 390, 68);
+		information.setBounds(5, 35, 390, 63);
 
 		add(scroll = new JScrollPane(output = new JTextArea()));
 		OutputPrintStream.get(output);
 		output.setEditable(false);
-		scroll.setBounds(5, 107, 390, 190);
+		scroll.setBounds(5, 103, 390, 192);
 	}
 
 	private boolean selected = false;
@@ -187,6 +187,5 @@ public final class ServerView extends JPanel
 		});
 
 		frame.setVisible(true);
-
 	}
 }

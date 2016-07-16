@@ -43,6 +43,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
         setPreferredSize(new Dimension(175, FRAME_HEIGHT - 100));
 
         lastMatchRequests = new ArrayList<>();
+        lastSentMatchRequests = new ArrayList<>();
     }
 
     @Override

@@ -166,6 +166,7 @@ public class MenuPanel extends JPanel implements IView {
                         control.requestMatch(opponent);
                     else
                         control.requestMatch(category, opponent);
+                    return;
                 }
             }
 

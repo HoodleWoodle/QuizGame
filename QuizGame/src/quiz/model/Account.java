@@ -130,4 +130,31 @@ public final class Account
 	{
 		this.available = available;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Account account = (Account) o;
+
+		if (ID != account.ID) return false;
+		if (score != account.score) return false;
+		if (online != account.online) return false;
+		if (available != account.available) return false;
+		if (name != null ? !name.equals(account.name) : account.name != null) return false;
+		return password != null ? password.equals(account.password) : account.password == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = ID;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (password != null ? password.hashCode() : 0);
+		result = 31 * result + score;
+		result = 31 * result + (online ? 1 : 0);
+		result = 31 * result + (available ? 1 : 0);
+		return result;
+	}
 }

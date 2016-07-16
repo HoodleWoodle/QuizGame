@@ -25,7 +25,6 @@ public final class GameFrame extends JFrame {
 
     private static final ResourceBundle localization = ResourceBundle.getBundle("quiz.client.view.localization");
     private final MenuPanel menuPanel;
-    private final ChallengeDialog challengeDialog;
     private Account user;
 
     /**
@@ -77,7 +76,6 @@ public final class GameFrame extends JFrame {
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        challengeDialog = new ChallengeDialog(this, control, model);
         setContentPane(menuPanel = new MenuPanel(this, control, model));
         setResizable(false);
 
@@ -107,15 +105,6 @@ public final class GameFrame extends JFrame {
         setVisible(true);
 
         new LoginDialog(this, control, model);
-    }
-
-    /**
-     * Returns the ChallengeDialog.
-     *
-     * @return the ChallengeDialog
-     */
-    public ChallengeDialog getChallengeDialog() {
-        return challengeDialog;
     }
 
     /**

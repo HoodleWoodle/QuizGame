@@ -4,20 +4,20 @@ import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
+import quiz.model.Account;
+import quiz.model.Category;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.ResourceBundle;
-
-import static quiz.Constants.FRAME_HEIGHT;
 
 /**
  * @author Eric
  * @version 1.05.16
  */
-public class MenuPanel extends JPanel implements ActionListener, IView {
+public class MenuPanel extends JPanel implements IView {
 
     private JLabel gameTitle;
     private IModel model;
@@ -25,9 +25,10 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
     private final QuestionPanel questionPanel;
     private GameFrame gameFrame;
     private ResourceBundle localization = GameFrame.getLocalization();
-    private final String[] MENU_BUTTON_NAMES = {localization.getString("SEARCH_OPPONENT"),
-            localization.getString("RANDOM_OPPONENT")};
-    private JButton[] menuButtons = new JButton[MENU_BUTTON_NAMES.length];
+    private JButton challenge;
+    private JTextField opponentName;
+    private JComboBox<String> categories;
+    private JCheckBox randomOpponent, randomCategory;
 
     /**
      * Creates a new MenuPanel.
@@ -43,9 +44,8 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
 
         model.addView(this);
         questionPanel = new QuestionPanel(gameFrame, control, model);
-        setPreferredSize(new Dimension(100, FRAME_HEIGHT));
 
-        setLayout(new BorderLayout());
+        setLayout(new GridBagLayout());
         initComponents();
     }
 
@@ -58,25 +58,52 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
         return questionPanel;
     }
 
+    /**
+     * Returns the text field for the opponent's name.
+     *
+     * @return the text field for the opponent's name
+     */
+    public JTextField getOpponentNameField() {
+        return opponentName;
+    }
+
     private void initComponents() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.25;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+
         JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(gameFrame, model));
         JLabel players = new JLabel(localization.getString("PLAYERS") + ":");
         players.setHorizontalAlignment(JLabel.CENTER);
 
         playerListScrollPane.setColumnHeaderView(players);
         playerListScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        add(playerListScrollPane, c);
 
-        add(playerListScrollPane, BorderLayout.LINE_START);
-        add(createMainPart(), BorderLayout.CENTER);
+        c.gridx = GridBagConstraints.RELATIVE;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 0.5;
+        add(createMainPart(), c);
 
         JScrollPane matchRequestScrollPane = new JScrollPane(new MatchRequestListPanel(gameFrame, control, model));
         JLabel matchRequests = new JLabel(localization.getString("MATCH_REQUESTS") + ":");
         matchRequests.setHorizontalAlignment(JLabel.CENTER);
-
         matchRequestScrollPane.setColumnHeaderView(matchRequests);
         matchRequestScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        add(matchRequestScrollPane, BorderLayout.LINE_END);
+        c.gridx = GridBagConstraints.RELATIVE;
+        c.weightx = 0.25;
+        c.anchor = GridBagConstraints.FIRST_LINE_END;
+        add(matchRequestScrollPane, c);
+
+        c.gridy = GridBagConstraints.RELATIVE;
+        c.gridx = 1;
+        c.gridheight = 1;
+        c.weightx = 0.5;
+        c.anchor = GridBagConstraints.CENTER;
     }
 
     private JPanel createMainPart() {
@@ -85,29 +112,66 @@ public class MenuPanel extends JPanel implements ActionListener, IView {
         mainPart.add(Box.createVerticalGlue());
         mainPart.add(gameTitle = new JLabel(localization.getString("GAME_NAME")));
         gameTitle.setAlignmentX(CENTER_ALIGNMENT);
-        gameTitle.setFont(new Font("TimesNewRoman", Font.BOLD, 32));
+        gameTitle.setFont(new Font("Arial", Font.BOLD, 40));
 
-        for (int i = 0; i < menuButtons.length; i++) {
-            menuButtons[i] = new JButton(MENU_BUTTON_NAMES[i]);
-            menuButtons[i].addActionListener(this);
-            GameFrame.setStandardProperties(menuButtons[i]);
-            mainPart.add(Box.createVerticalGlue());
-            mainPart.add(menuButtons[i]);
-        }
+        mainPart.add(Box.createVerticalGlue());
+        mainPart.add(categories = new JComboBox<>());
+        mainPart.add(randomCategory = new JCheckBox(localization.getString("RANDOM_CATEGORY")));
+        mainPart.add(Box.createVerticalStrut(10));
+        Arrays.stream(Category.values()).forEach(category -> categories.addItem(category.toString()));
+        mainPart.add(opponentName = new JTextField(""));
+        mainPart.add(randomOpponent = new JCheckBox(localization.getString("RANDOM_OPPONENT")));
+
+        mainPart.add(Box.createVerticalGlue());
+        mainPart.add(challenge = new JButton(localization.getString("CHALLENGE")));
+        gameFrame.getRootPane().setDefaultButton(challenge);
         mainPart.add(Box.createVerticalGlue());
 
-        return mainPart;
-    }
+        GameFrame.setProperties(new Dimension(125, 30), new Dimension(150, 35), new Dimension(175, 40), categories,
+                challenge, opponentName, randomCategory, randomOpponent);
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        gameFrame.getChallengeDialog().setSearchOpponent(event.getSource() == menuButtons[0]);
-        gameFrame.getChallengeDialog().reset();
+        challenge.addActionListener(e -> {
+            if(!randomCategory.isSelected() && !randomOpponent.isSelected()) {
+                searchOpponent(opponentName.getText(), Category.values()[categories.getSelectedIndex()]);
+            } else if(!randomCategory.isSelected())
+                control.requestMatch(Category.values()[categories.getSelectedIndex()]);
+            else if(!randomOpponent.isSelected())
+                searchOpponent(opponentName.getText(), null);
+            else
+                control.requestMatch();
+        });
+
+        randomCategory.addItemListener(e -> categories.setEnabled(!randomCategory.isSelected()));
+        randomOpponent.addItemListener(e -> opponentName.setEnabled(!randomOpponent.isSelected()));
+
+        return mainPart;
     }
 
     @Override
     public void onChange(ChangeType type, Status status) {
         if (type == ChangeType.MATCH && model.getMatch() != null)
             gameFrame.setContentPane(questionPanel);
+
+        if(type == ChangeType.REQUESTS && status == Status.NO_OPPONENTS_AVAILABLE)
+            gameFrame.showExceptionMessage(localization.getString("NO_OPPONENTS_AVAILABLE"));
+    }
+
+    private void searchOpponent(String opponentName, Category category) {
+        if (opponentName != null && !opponentName.trim().isEmpty()) {
+            Account[] opponents = model.getOpponents();
+
+            for (Account opponent : opponents) {
+                if (opponent.getName().equals(opponentName)) {
+                    if(category == null)
+                        control.requestMatch(opponent);
+                    else
+                        control.requestMatch(category, opponent);
+                }
+            }
+
+            // only existing players can accept a match
+            MessageFormat formatter = new MessageFormat(localization.getString("PLAYER_DOES_NOT_EXIST"));
+            gameFrame.showExceptionMessage(formatter.format(new Object[]{opponentName}));
+        }
     }
 }

@@ -65,11 +65,11 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
     public void onChange(ChangeType type, Status status) {
         if (type == ChangeType.ACCOUNT) {
             if (status == Status.INVALID_LOGIN_DETAILS) {
-                gameFrame.showExceptionMessage(localization.getString("INVALID_USERNAME_AND_PW"));
-                return;
+                gameFrame.showExceptionMessage(localization.getString("INVALID_LOGIN_DETAILS"));
             } else if (status == Status.INVALID_REGISTER_DETAILS) {
-                gameFrame.showExceptionMessage(localization.getString("REGISTER_ERROR"));
-                return;
+                gameFrame.showExceptionMessage(localization.getString("INVALID_REGISTER_DETAILS"));
+            } else if(status == Status.ALREADY_LOGGED_IN) {
+                gameFrame.showExceptionMessage(localization.getString("ALREADY_LOGGED_IN"));
             } else if (status == Status.SUCCESS) {
                 Account user = model.getAccount();
 

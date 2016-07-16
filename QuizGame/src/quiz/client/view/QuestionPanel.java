@@ -4,7 +4,6 @@ import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
-import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
 
@@ -149,11 +148,9 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
             int[][] answersGiven = match.getAnswers();
 
             int opponentIndex = -1;
-            Account opponent = null;
             for (int a = 0; a < match.getOpponents().length; a++) {
                 if (match.getOpponents()[a].getID() != gameFrame.getUser().getID()) {
                     opponentIndex = a;
-                    opponent = match.getOpponents()[a];
                 }
             }
 
@@ -172,7 +169,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
             if (questionsAnswered < QUESTION_COUNT) {
                 // prepare the next question
                 question = model.getQuestion();
-                List<String> answers = new ArrayList<String>(Arrays.asList(question.getAnswers()));
+                List<String> answers = new ArrayList<>(Arrays.asList(question.getAnswers()));
                 questionText.setText(question.getQuestion());
 
                 for (JButton answerButton : answerButtons) {

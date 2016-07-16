@@ -24,7 +24,7 @@ import static quiz.Constants.FRAME_HEIGHT;
  */
 public class PlayerListPanel extends JPanel implements IView {
 
-    private Map<Account, PlayerPanel> accounts = new HashMap<Account, PlayerPanel>();
+    private Map<Account, PlayerPanel> accounts = new HashMap<>();
     private IModel model;
     private ResourceBundle localization = GameFrame.getLocalization();
     private GameFrame gameFrame;
@@ -89,11 +89,9 @@ public class PlayerListPanel extends JPanel implements IView {
         public PlayerPanel(Account account) {
             this.account = account;
 
-            setMinimumSize(new Dimension(100, 15));
-            setPreferredSize(new Dimension(150, 30));
-            setMaximumSize(new Dimension(200, 45));
+            setPreferredSize(new Dimension(175, 30));
             setLayout(new BorderLayout());
-            setBorder(BorderFactory.createLoweredBevelBorder());
+            setBorder(BorderFactory.createRaisedBevelBorder());
             setBackground(Color.LIGHT_GRAY);
 
             add(status = new JLabel(account.getName()), BorderLayout.CENTER);
@@ -131,7 +129,7 @@ public class PlayerListPanel extends JPanel implements IView {
             }
             else {
                 status.setIcon(not_available);
-                status.setToolTipText(localization.getString("STATUS_NOT_AVAILABLE"));
+                status.setToolTipText(localization.getString("STATUS_IN_GAME"));
             }
         }
     }

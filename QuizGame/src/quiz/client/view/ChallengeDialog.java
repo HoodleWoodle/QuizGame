@@ -1,7 +1,9 @@
 package quiz.client.view;
 
 import quiz.client.IControl;
+import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
+import quiz.client.model.Status;
 import quiz.model.Account;
 import quiz.model.Category;
 
@@ -15,7 +17,7 @@ import java.util.ResourceBundle;
  * @author Eric
  * @version 13.07.16
  */
-public class ChallengeDialog extends JDialog {
+public class ChallengeDialog extends JDialog implements IView {
 
     private ResourceBundle localization = GameFrame.getLocalization();
     private IControl control;
@@ -85,7 +87,7 @@ public class ChallengeDialog extends JDialog {
 
     private void initComponents() {
         add(Box.createVerticalGlue());
-        add(categories = new JComboBox<String>());
+        add(categories = new JComboBox<>());
         Arrays.stream(Category.values()).forEach(category -> categories.addItem(category.toString()));
         add(Box.createVerticalGlue());
         add(opponentName = new JTextField(""));
@@ -100,10 +102,8 @@ public class ChallengeDialog extends JDialog {
     }
 
     private void initListeners() {
-
         challenge.addActionListener(e -> {
             Category category = Category.values()[categories.getSelectedIndex()];
-
             if (searchOpponent && opponentName.getText() != null) {
                 if(opponentName.getText().trim().isEmpty())
                     return;
@@ -126,5 +126,12 @@ public class ChallengeDialog extends JDialog {
                 setVisible(false);
             }
         });
+    }
+
+    @Override
+    public void onChange(ChangeType type, Status status) {
+        if(type == ChangeType.REQUESTS && status == Status.NO_OPPONENTS_AVAILABLE) {
+            gameFrame.showExceptionMessage(localization.getString("NO_OPPONENTS_AVAILABLE"));
+        }
     }
 }

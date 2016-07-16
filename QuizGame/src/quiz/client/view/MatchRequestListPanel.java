@@ -40,9 +40,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
         this.model = model;
 
         model.addView(this);
-        setMinimumSize(new Dimension(150, FRAME_HEIGHT - 200));
-        setPreferredSize(new Dimension(200, FRAME_HEIGHT - 100));
-        setMaximumSize(new Dimension(250, FRAME_HEIGHT));
+        setPreferredSize(new Dimension(175, FRAME_HEIGHT - 100));
 
         lastMatchRequests = new ArrayList<>();
     }
@@ -50,8 +48,10 @@ public class MatchRequestListPanel extends JPanel implements IView {
     @Override
     public void onChange(ChangeType type, Status status) {
         if (type == ChangeType.REQUESTS) {
-            if (status == Status.ALREADY_REQUESTED)
+            if (status == Status.ALREADY_REQUESTED) {
+                gameFrame.showExceptionMessage(localization.getString("ALREADY_REQUESTED"));
                 return;
+            }
 
             List<Match> matchRequests = Arrays.asList(model.getRequests());
 

@@ -23,8 +23,6 @@ import static quiz.Constants.FRAME_WIDTH;
  */
 public final class GameFrame extends JFrame {
 
-    private static GameFrame instance;
-
     private static final ResourceBundle localization = ResourceBundle.getBundle("quiz.client.view.localization");
     private final MenuPanel menuPanel;
     private final ChallengeDialog challengeDialog;
@@ -86,6 +84,7 @@ public final class GameFrame extends JFrame {
         try {
             setIconImage(ImageIO.read(Paths.get("data").resolve("icon_image.png").toFile()));
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         addWindowListener(new WindowAdapter() {

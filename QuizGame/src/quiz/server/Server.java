@@ -25,6 +25,7 @@ import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
 import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 import static quiz.net.NetworkKeys.TAG_SET_SENT_REQUESTS;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -38,8 +39,10 @@ import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
 import quiz.model.Question;
+import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 import quiz.server.model.MatchStep;
+import quiz.server.view.ServerView;
 
 /**
  * @author Quirin, Stefan
@@ -566,5 +569,37 @@ public final class Server extends AbstractTCPServer
 		}
 
 		return server;
+	}
+
+	/**
+	 * Main-method.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args)
+	{
+		// TODO TEMP
+		new File(Constants.DB_FILE).delete();
+		// TODO TEMP
+
+		ServerView serverView = new ServerView();
+		IDataManager dataManager = new DataManager();
+		serverView.open(dataManager);
+
+		// TODO TEMP
+		for (Category c : Category.values())
+			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
+				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
+
+		dataManager.addAccount("1", "1");
+		dataManager.addAccount("2", "2");
+		// TODO TEMP
+
+		for (Category category : Category.values())
+			if (dataManager.getQuestions(category).size() < Constants.QUESTION_COUNT)
+			{
+				System.out.println("Invalid question count ('" + category.toString() + "')!");
+				return;
+			}
 	}
 }

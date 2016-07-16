@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,11 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import quiz.Constants;
-import quiz.model.Category;
-import quiz.model.Question;
 import quiz.server.Server;
-import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 
 /**
@@ -148,12 +143,10 @@ public final class ServerView extends JPanel
 		});
 	}
 
-	private void init(IDataManager dataManager)
-	{
-		this.dataManager = dataManager;
-	}
-
-	private void stop()
+	/**
+	 * Stops the Server.
+	 */
+	public void stop()
 	{
 		if (server != null)
 			server.close();
@@ -167,22 +160,18 @@ public final class ServerView extends JPanel
 	}
 
 	/**
-	 * Main-method.
+	 * Opens the ServerView.
 	 * 
-	 * @param args
+	 * @param dataManager
+	 *            the IDataManager instance
 	 */
-	public static void main(String[] args)
+	public void open(IDataManager dataManager)
 	{
-		// TODO TEMP
-		new File(Constants.DB_FILE).delete();
-
-		ServerView serverView = new ServerView();
-		IDataManager dataManager = new DataManager();
-		serverView.init(dataManager);
+		this.dataManager = dataManager;
 
 		JFrame frame = new JFrame("QuizGame - Server");
 		frame.setResizable(false);
-		frame.add(serverView);
+		frame.add(this);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 
@@ -191,7 +180,7 @@ public final class ServerView extends JPanel
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				serverView.stop();
+				stop();
 				dataManager.close();
 				System.exit(0);
 			}
@@ -199,19 +188,5 @@ public final class ServerView extends JPanel
 
 		frame.setVisible(true);
 
-		// TODO TEMP
-		for (Category c : Category.values())
-			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
-
-		dataManager.addAccount("1", "1");
-		dataManager.addAccount("2", "2");
-
-		for (Category category : Category.values())
-			if (dataManager.getQuestions(category).size() < Constants.QUESTION_COUNT)
-			{
-				System.out.println("Invalid question count ('" + category.toString() + "')!");
-				return;
-			}
 	}
 }

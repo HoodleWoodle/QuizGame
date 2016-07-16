@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import javax.swing.JTextArea;
 
 /**
- * @author Hoodle
+ * @author Stefan
  * @version 16.07.2016
  */
 public final class OutputPrintStream extends OutputStream

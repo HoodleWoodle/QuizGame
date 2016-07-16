@@ -28,7 +28,7 @@ import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 
 /**
- * @author Hoodle
+ * @author Stefan
  * @version 16.07.2016
  */
 public final class ServerView extends JPanel

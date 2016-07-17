@@ -2,6 +2,8 @@ package lib.net.tcp.client;
 
 import java.io.DataInputStream;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author Stefan
  * @version 29.04.2016
@@ -58,6 +60,8 @@ final class ReceivingThread implements Runnable
 				client.close();
 				client.closed();
 				e.printStackTrace(); // TODO
+				JOptionPane.showMessageDialog(null, "Connection lost!");
+				System.exit(1);
 			}
 	}
 }

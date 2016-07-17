@@ -234,6 +234,8 @@ public final class Server extends AbstractTCPServer
 		sendSentRequests(otherID);
 		sendRequests(playerID);
 
+		sendOpponents();
+
 		sendQuestion(match);
 		sendMatch(match);
 	}
@@ -557,6 +559,12 @@ public final class Server extends AbstractTCPServer
 	{
 		Server server = new Server(dataManager, port);
 		System.out.println("Starting Server!");
+
+		server.accountIDs.clear();
+		server.clientIDs.clear();
+		server.matches.clear();
+		server.matchSteps.clear();
+		server.requests.clear();
 
 		try
 		{

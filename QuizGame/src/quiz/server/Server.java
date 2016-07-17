@@ -415,10 +415,18 @@ public final class Server extends AbstractTCPServer
 			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
 		}
 
-		NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[0]));
-		getClient(clientIDs.get(accountID)).send(msg.getBytes());
-		msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[1]));
-		getClient(clientIDs.get(otherID)).send(msg.getBytes());
+		ClientThread client = getClient(clientIDs.get(accountID));
+		if (client != null)
+		{
+			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[0]));
+			client.send(msg.getBytes());
+		}
+		ClientThread other = getClient(clientIDs.get(otherID));
+		if (other != null)
+		{
+			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[1]));
+			other.send(msg.getBytes());
+		}
 	}
 
 	private void updateAccounts(Match match)

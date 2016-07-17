@@ -89,7 +89,7 @@ public final class GameFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent event) {
                 // during a game
-                if (user != null && !user.isAvailable()) {
+                if (model.getAccount() != null && !model.getAccount().isAvailable()) {
                     int answer = JOptionPane.showConfirmDialog(GameFrame.this,
                             localization.getString("CONFIRM_LEAVE"),
                             localization.getString("CONFIRM_LEAVE_SCREEN_TITLE"), JOptionPane.YES_NO_OPTION);
@@ -105,25 +105,6 @@ public final class GameFrame extends JFrame {
         setVisible(true);
 
         new LoginDialog(this, control, model);
-    }
-
-    /**
-     * Returns the currently logged in user.
-     *
-     * @return the currently logged in user
-     */
-    public Account getUser() {
-        return user;
-    }
-
-    /**
-     * Sets the currently logged in user.
-     *
-     * @param user the currently logged in user
-     */
-    public void setUser(Account user) {
-        this.user = user;
-        setTitle(getTitle() + " - " + user.getName());
     }
 
     /**

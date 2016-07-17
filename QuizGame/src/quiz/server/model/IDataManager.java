@@ -112,8 +112,9 @@ public interface IDataManager
 	 *            the Account to update
 	 * @param score
 	 *            the new score
+	 * @return the updated Account
 	 */
-	void updateAccount(Account account, int score);
+	Account updateAccount(Account account, int score);
 
 	/**
 	 * Closes the IDataManager.

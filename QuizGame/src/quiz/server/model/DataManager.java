@@ -236,10 +236,11 @@ public final class DataManager implements IDataManager
 	}
 
 	@Override
-	public synchronized void updateAccount(Account account, int score)
+	public synchronized Account updateAccount(Account account, int score)
 	{
 		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
 			log_err(8);
+		return new Account(account.getID(), account.getName(), score);
 	}
 
 	@Override

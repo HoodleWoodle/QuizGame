@@ -56,7 +56,7 @@ quiz.server.model
 + addAccount (in name : String, in password : String) : Account
 + removeQuestion (in question : Question)
 + removeAccount (in account : Account)
-+ updateAccount (in account : Account, in score : int)
++ updateAccount (in account : Account, in score : int) : Account
 + close</panel_attributes>
     <additional_attributes/>
   </element>
@@ -64,7 +64,7 @@ quiz.server.model
     <id>UMLClass</id>
     <coordinates>
       <x>870</x>
-      <y>310</y>
+      <y>330</y>
       <w>580</w>
       <h>200</h>
     </coordinates>
@@ -107,7 +107,7 @@ SENT_REQUESTS</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>870</x>
-      <y>520</y>
+      <y>540</y>
       <w>460</w>
       <h>340</h>
     </coordinates>
@@ -159,7 +159,7 @@ quiz.server
       <x>870</x>
       <y>40</y>
       <w>710</w>
-      <h>260</h>
+      <h>280</h>
     </coordinates>
     <panel_attributes>&lt;&lt;class&gt;&gt;
 quiz.model
@@ -177,7 +177,8 @@ quiz.model
 + getCategory : Category
 + getOpponents : Account[]
 + getQuestions : Question[]
-+ getAnswers : int[][]</panel_attributes>
++ getAnswers : int[][]
++ getWinner : Account</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -238,7 +239,7 @@ quiz.server.tools
     <id>UMLClass</id>
     <coordinates>
       <x>1340</x>
-      <y>590</y>
+      <y>610</y>
       <w>260</w>
       <h>140</h>
     </coordinates>
@@ -482,7 +483,7 @@ bg=RED</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1340</x>
-      <y>520</y>
+      <y>540</y>
       <w>260</w>
       <h>60</h>
     </coordinates>

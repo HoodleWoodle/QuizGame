@@ -84,4 +84,26 @@ public final class Match
 	{
 		return answers;
 	}
+
+	/**
+	 * Returns the Account winning the Match. (null while tie)
+	 * 
+	 * @return the Account winning the Match
+	 */
+	public Account getWinner()
+	{
+		int[] wins = new int[opponents.length];
+
+		for (int i = 0; i < answers.length; i++)
+			for (int j = 0; j < answers[0].length; j++)
+				wins[i] += answers[i][j] == 0 ? 1 : 0;
+
+		for (int i = 0; i < opponents.length; i++)
+		{
+			int j = (i + 1) % opponents.length;
+			if (wins[i] > wins[j])
+				return opponents[i];
+		}
+		return null;
+	}
 }

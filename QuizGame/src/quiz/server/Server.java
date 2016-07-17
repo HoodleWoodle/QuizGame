@@ -1,5 +1,8 @@
 package quiz.server;
 
+import static quiz.Constants.SCORE_DISTANCE;
+import static quiz.Constants.SCORE_FOOL;
+import static quiz.Constants.SCORE_WIN;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
 import static quiz.net.NetworkKeys.TAG_ALREADY_LOGGED_IN;
@@ -48,7 +51,6 @@ import quiz.server.view.ServerView;
  * @author Quirin, Stefan
  * @version 14.07.2016
  */
-// TODO Server GUI, --> closing if exit
 public final class Server extends AbstractTCPServer
 {
 	private final Random random;
@@ -125,6 +127,9 @@ public final class Server extends AbstractTCPServer
 		if (accountID == null)
 			return;
 		clientIDs.remove(accountID);
+
+		if (isInMatch(accountID))
+			endMatch(getMatch(accountID), false);
 
 		Account account = dataManager.getAccount(accountID);
 		System.out.println("Account disconnected. (" + account.getName() + "[" + account.getID() + "])");
@@ -263,7 +268,8 @@ public final class Server extends AbstractTCPServer
 		{
 			if (match.getQuestions().length < Constants.QUESTION_COUNT)
 			{
-				// TODO
+				endMatch(match, true);
+				sendOpponents();
 			} else
 				sendQuestion(match);
 			sendMatch(match);
@@ -387,6 +393,49 @@ public final class Server extends AbstractTCPServer
 		}
 
 		return null;
+	}
+
+	private void endMatch(Match match, boolean ready)
+	{
+		int matchID = match.getID();
+		matches.remove(matchID);
+		matchSteps.remove(matchID);
+		Account[] opponents = match.getOpponents();
+		int accountID = opponents[0].getID();
+		int otherID = opponents[1].getID();
+
+		if (!ready)
+		{
+			updateAccounts(match);
+			opponents[0] = dataManager.getAccount(accountID);
+			opponents[1] = dataManager.getAccount(otherID);
+		} else
+		{
+			opponents[0] = dataManager.updateAccount(opponents[0], opponents[0].getScore() + SCORE_WIN);
+			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
+		}
+
+		NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[0]));
+		getClient(clientIDs.get(accountID)).send(msg.getBytes());
+		msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[1]));
+		getClient(clientIDs.get(otherID)).send(msg.getBytes());
+	}
+
+	private void updateAccounts(Match match)
+	{
+		Account[] opponents = match.getOpponents();
+		int[][] answers = match.getAnswers();
+		int[] wins = new int[opponents.length];
+
+		for (int i = 0; i < answers.length; i++)
+			for (int j = 0; j < answers[0].length; j++)
+				wins[i] += answers[i][j] == 0 ? 1 : 0;
+
+		for (int i = 0; i < opponents.length; i++)
+		{
+			int j = (i + 1) % opponents.length;
+			dataManager.updateAccount(opponents[i], opponents[i].getScore() + (wins[i] > wins[j] ? SCORE_WIN : -SCORE_WIN) + (wins[i] - wins[j]) * SCORE_DISTANCE);
+		}
 	}
 
 	private Account getRandomAccount(int accountID, List<Account> possibles)

@@ -284,25 +284,22 @@ public final class Server extends AbstractTCPServer
 
 		if (isOnline(accountID))
 		{
-			NetworkMessage msg = new NetworkMessage(TAG_ALREADY_LOGGED_IN, new String[0]);
-			client.send(msg.getBytes());
+			client.send(new NetworkMessage(TAG_ALREADY_LOGGED_IN, new String[0]).getBytes());
 			return;
 		}
 
 		accountIDs.put(clientID, accountID);
 		clientIDs.put(accountID, clientID);
 
-		NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account));
-		client.send(msg.getBytes());
+		client.send(new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(account)).getBytes());
+
 		sendOpponents();
 		sendRequests(accountID);
 	}
 
 	private void sendMatch(Match match)
 	{
-		NetworkMessage msg = new NetworkMessage(TAG_SET_MATCH, convertMatch(match));
-
-		sendToOpponents(match, msg);
+		sendToOpponents(match, new NetworkMessage(TAG_SET_MATCH, convertMatch(match)));
 	}
 
 	private void sendQuestion(Match match)
@@ -313,9 +310,7 @@ public final class Server extends AbstractTCPServer
 
 		matchSteps.put(match.getID(), new MatchStep(question));
 
-		NetworkMessage msg = new NetworkMessage(TAG_SET_QUESTION, convertQuestion(question));
-
-		sendToOpponents(match, msg);
+		sendToOpponents(match, new NetworkMessage(TAG_SET_QUESTION, convertQuestion(question)));
 	}
 
 	private void sendOpponents()
@@ -326,32 +321,36 @@ public final class Server extends AbstractTCPServer
 			Integer accountID = accountIDs.get(client.getID());
 			if (accountID == null)
 				continue;
-			NetworkMessage msg = new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts(accountID));
-			client.send(msg.getBytes());
+			client.send(new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts(accountID)).getBytes());
 		}
 	}
 
 	private void sendRequests(int accountID)
 	{
-		NetworkMessage msg = new NetworkMessage(TAG_SET_REQUESTS, convertMatches(accountID, false));
-		ClientThread client = getClient(clientIDs.get(accountID));
-		client.send(msg.getBytes());
+		sendTo(accountID, new NetworkMessage(TAG_SET_REQUESTS, convertMatches(accountID, false)));
 	}
 
 	private void sendSentRequests(int accountID)
 	{
-		NetworkMessage msg = new NetworkMessage(TAG_SET_SENT_REQUESTS, convertMatches(accountID, true));
-		ClientThread client = getClient(clientIDs.get(accountID));
-		client.send(msg.getBytes());
+		sendTo(accountID, new NetworkMessage(TAG_SET_SENT_REQUESTS, convertMatches(accountID, true)));
+	}
+
+	private void sendTo(int accountID, NetworkMessage msg)
+	{
+		Integer clientID = clientIDs.get(accountID);
+		if (clientID != null)
+		{
+			ClientThread client = getClient(clientIDs.get(accountID));
+			if (client != null)
+				client.send(msg.getBytes());
+		}
 	}
 
 	private void sendToOpponents(Match match, NetworkMessage msg)
 	{
 		Account[] opponents = match.getOpponents();
-		ClientThread client = getClient(clientIDs.get(opponents[0].getID()));
-		client.send(msg.getBytes());
-		ClientThread otherClient = getClient(clientIDs.get(opponents[1].getID()));
-		otherClient.send(msg.getBytes());
+		sendTo(opponents[0].getID(), msg);
+		sendTo(opponents[1].getID(), msg);
 	}
 
 	private boolean isOnline(int accountID)
@@ -416,18 +415,8 @@ public final class Server extends AbstractTCPServer
 			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
 		}
 
-		ClientThread client = getClient(clientIDs.get(accountID));
-		if (client != null)
-		{
-			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[0]));
-			client.send(msg.getBytes());
-		}
-		ClientThread other = getClient(clientIDs.get(otherID));
-		if (other != null)
-		{
-			NetworkMessage msg = new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[1]));
-			other.send(msg.getBytes());
-		}
+		sendTo(accountID, new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[0])));
+		sendTo(otherID, new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[1])));
 	}
 
 	private void updateAccounts(Match match)

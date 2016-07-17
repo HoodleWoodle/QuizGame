@@ -147,9 +147,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
             this.type = type;
             this.matchRequest = matchRequest;
 
-            setMinimumSize(new Dimension(150, 75));
-            setPreferredSize(new Dimension(200, 100));
-            setMaximumSize(new Dimension(250, 125));
+            setMinimumSize(new Dimension(150, (type == SENT) ?  50 : 75));
+            setPreferredSize(new Dimension(200, (type == SENT) ? 75 : 100));
+            setMaximumSize(new Dimension(250, (type == SENT) ? 100 : 125));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
             setBorder(BorderFactory.createLoweredBevelBorder());
 
@@ -185,18 +185,20 @@ public class MatchRequestListPanel extends JPanel implements IView {
             Box row = Box.createHorizontalBox();
             row.add(Box.createHorizontalGlue());
 
-            JButton accept = new JButton(localization.getString("ACCEPT"));
-            accept.addActionListener(e -> control.acceptRequest(matchRequest));
-            row.add(accept);
-            row.add(Box.createHorizontalGlue());
+            if(type == RECEIVED) {
+                JButton accept = new JButton(localization.getString("ACCEPT"));
+                accept.addActionListener(e -> control.acceptRequest(matchRequest));
+                row.add(accept);
+                row.add(Box.createHorizontalGlue());
 
-            JButton deny = new JButton(localization.getString("DENY"));
-            deny.addActionListener(e -> control.denyRequest(matchRequest));
-            row.add(deny);
-            row.add(Box.createHorizontalGlue());
+                JButton deny = new JButton(localization.getString("DENY"));
+                deny.addActionListener(e -> control.denyRequest(matchRequest));
+                row.add(deny);
+                row.add(Box.createHorizontalGlue());
 
-            add(row);
-            add(Box.createVerticalGlue());
+                add(row);
+                add(Box.createVerticalGlue());
+            }
         }
     }
 }

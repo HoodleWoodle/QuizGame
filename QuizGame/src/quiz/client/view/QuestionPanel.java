@@ -127,6 +127,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     control.setAnswer(i);
                     answerButton.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 5, 5, true));
                     questionsAnswered++;
+                    countdown.setCounter(0);
 
                     for (int k = 0; k < answers.length; k++) {
                         for (int j = 0; j < answerButtons.length; j++) {

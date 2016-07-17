@@ -48,8 +48,6 @@ public class CountdownProgressBar extends JProgressBar {
         this.delay = delay;
         setCounter(max);
         setForeground(new Color(0, 255, 0));
-        setStringPainted(true);
-        setString(String.valueOf(counter));
 
         timer = new Timer(delay, event -> {
             counter--;
@@ -65,7 +63,7 @@ public class CountdownProgressBar extends JProgressBar {
                 green = (int) (percentage * 2 * 255);
             }
 
-            if (green > 255) green = 255;
+            if (green  < 0) green = 0;
             setForeground(new Color(red, green, 0));
             setValue(counter);
             setString(String.valueOf(counter));

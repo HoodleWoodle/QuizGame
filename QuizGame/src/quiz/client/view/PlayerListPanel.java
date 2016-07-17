@@ -103,7 +103,7 @@ public class PlayerListPanel extends JPanel implements IView {
 
             JPopupMenu popupMenu = new JPopupMenu();
             JMenuItem matchRequest = new JMenuItem(localization.getString("CHALLENGE"));
-            matchRequest.addActionListener(event -> gameFrame.getMenuPanel().getOpponentNameField().setText(account.getName()));
+            matchRequest.addActionListener(event -> gameFrame.getMenuPanel().getOpponentName().setText(account.getName()));
 
             popupMenu.add(matchRequest);
             status.addMouseListener(new MouseAdapter() {

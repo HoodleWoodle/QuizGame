@@ -26,7 +26,8 @@ public class MenuPanel extends JPanel implements IView {
     private GameFrame gameFrame;
     private ResourceBundle localization = GameFrame.getLocalization();
     private JButton challenge;
-    private JTextField opponentName;
+    private JTextField opponentNameField;
+    private JLabel opponentName, category;
     private JComboBox<String> categories;
     private JCheckBox randomOpponent, randomCategory;
 
@@ -63,8 +64,8 @@ public class MenuPanel extends JPanel implements IView {
      *
      * @return the text field for the opponent's name
      */
-    public JTextField getOpponentNameField() {
-        return opponentName;
+    public JTextField getOpponentName() {
+        return opponentNameField;
     }
 
     private void initComponents() {
@@ -115,12 +116,17 @@ public class MenuPanel extends JPanel implements IView {
         gameTitle.setFont(new Font("Arial", Font.BOLD, 40));
 
         mainPart.add(Box.createVerticalGlue());
-        mainPart.add(categories = new JComboBox<>());
-        mainPart.add(randomCategory = new JCheckBox(localization.getString("RANDOM_CATEGORY")));
-        mainPart.add(Box.createVerticalStrut(10));
-        Arrays.stream(Category.values()).forEach(category -> categories.addItem(category.toString()));
-        mainPart.add(opponentName = new JTextField(""));
+        mainPart.add(opponentName = new JLabel(localization.getString("OPPONENT_NAME") + ":"));
+        opponentName.setFont(opponentName.getFont().deriveFont(Font.BOLD, 14));
+        mainPart.add(opponentNameField = new JTextField(""));
         mainPart.add(randomOpponent = new JCheckBox(localization.getString("RANDOM_OPPONENT")));
+
+        mainPart.add(Box.createVerticalStrut(10));
+        mainPart.add(category = new JLabel(localization.getString("CATEGORY") + ":"));
+        category.setFont(category.getFont().deriveFont(Font.BOLD, 14));
+        mainPart.add(categories = new JComboBox<>());
+        Arrays.stream(Category.values()).forEach(category -> categories.addItem(category.toString()));
+        mainPart.add(randomCategory = new JCheckBox(localization.getString("RANDOM_CATEGORY")));
 
         mainPart.add(Box.createVerticalGlue());
         mainPart.add(challenge = new JButton(localization.getString("CHALLENGE")));
@@ -128,21 +134,21 @@ public class MenuPanel extends JPanel implements IView {
         mainPart.add(Box.createVerticalGlue());
 
         GameFrame.setProperties(new Dimension(125, 30), new Dimension(150, 35), new Dimension(175, 40), categories,
-                challenge, opponentName, randomCategory, randomOpponent);
+                challenge, opponentNameField, randomCategory, randomOpponent, opponentName, category);
 
         challenge.addActionListener(e -> {
             if(!randomCategory.isSelected() && !randomOpponent.isSelected()) {
-                searchOpponent(opponentName.getText(), Category.values()[categories.getSelectedIndex()]);
+                searchOpponent(opponentNameField.getText(), Category.values()[categories.getSelectedIndex()]);
             } else if(!randomCategory.isSelected())
                 control.requestMatch(Category.values()[categories.getSelectedIndex()]);
             else if(!randomOpponent.isSelected())
-                searchOpponent(opponentName.getText(), null);
+                searchOpponent(opponentNameField.getText(), null);
             else
                 control.requestMatch();
         });
 
         randomCategory.addItemListener(e -> categories.setEnabled(!randomCategory.isSelected()));
-        randomOpponent.addItemListener(e -> opponentName.setEnabled(!randomOpponent.isSelected()));
+        randomOpponent.addItemListener(e -> opponentNameField.setEnabled(!randomOpponent.isSelected()));
 
         return mainPart;
     }

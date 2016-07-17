@@ -18,6 +18,7 @@ import java.util.List;
 
 import static quiz.Constants.QUESTION_COUNT;
 import static quiz.Constants.SECONDS_PER_ANSWER;
+import static quiz.Constants.DELAY_BETWEEN_QUESTIONS;
 
 /**
  * @author Eric
@@ -49,8 +50,6 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         this.model = model;
         model.addView(this);
         setLayout(new GridBagLayout());
-
-        gameOverPanel = new GameOverPanel(gameFrame, model);
         initComponents();
     }
 
@@ -167,24 +166,35 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         }
 
         if (type == ChangeType.QUESTION) {
-            if (questionsAnswered < QUESTION_COUNT) {
-                // prepare the next question
-                question = model.getQuestion();
-                List<String> answers = new ArrayList<>(Arrays.asList(question.getAnswers()));
-                questionText.setText(question.getQuestion());
+            int delay = (questionsAnswered == 0) ? 0 : DELAY_BETWEEN_QUESTIONS;
+            Timer timer = new Timer(delay, event -> {
+                if (questionsAnswered < QUESTION_COUNT) {
+                    // prepare the next question
+                    question = model.getQuestion();
+                    List<String> answers = new ArrayList<>(Arrays.asList(question.getAnswers()));
+                    questionText.setText(question.getQuestion());
 
-                for (JButton answerButton : answerButtons) {
-                    Collections.shuffle(answers);
-                    answerButton.setText(answers.get(0));
-                    answerButton.setBackground(Color.WHITE);
-                    answerButton.setBorder(BorderFactory.createEmptyBorder());
-                    answers.remove(0);
+                    for (JButton answerButton : answerButtons) {
+                        Collections.shuffle(answers);
+                        answerButton.setText(answers.get(0));
+                        answerButton.setBackground(Color.WHITE);
+                        answerButton.setBorder(BorderFactory.createEmptyBorder());
+                        answers.remove(0);
+                    }
+
+                    answerLoggedIn = false;
+                    countdown.setCounter(countdown.getMaximum());
+                    countdown.restart();
+                    repaint();
+                    revalidate();
+                } else {
+                    gameFrame.setContentPane(new GameOverPanel(gameFrame, model));
+                    repaint();
+                    revalidate();
                 }
-
-                answerLoggedIn = false;
-                countdown.restart();
-            } else
-                gameFrame.setContentPane(gameOverPanel);
+            });
+            timer.setRepeats(false);
+            timer.start();
         }
     }
 }

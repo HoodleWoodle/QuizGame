@@ -47,8 +47,8 @@ public class CountdownProgressBar extends JProgressBar {
 
         this.delay = delay;
         setCounter(max);
-        UIManager.put("nimbusOrange", new Color(0, 255, 0));
-        setForeground(new Color(0, 255, 0));
+        UIManager.put("nimbusOrange", Color.GREEN);
+        setForeground(Color.GREEN);
 
         timer = new Timer(delay, event -> {
             counter--;
@@ -91,7 +91,9 @@ public class CountdownProgressBar extends JProgressBar {
         if (!timer.isRunning())
             start();
 
-        setForeground(new Color(0, 255, 0));
+        setCounter(getMaximum());
+        UIManager.put("nimbusOrange", Color.GREEN);
+        setForeground(Color.GREEN);
         timer.restart();
     }
 

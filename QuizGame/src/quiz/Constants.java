@@ -12,69 +12,73 @@ public interface Constants
 	/**
 	 * The path of the data folder.
 	 */
-	public static final String DATA = "data";
+	String DATA = "data";
 	/**
 	 * The count of Questions per Match.
 	 */
-	public static final int QUESTION_COUNT = 3;
+	 int QUESTION_COUNT = 3;
 	/**
 	 * The score-increase for the winner.
 	 */
-	public static final int SCORE_WIN = 3;
+	 int SCORE_WIN = 3;
 	/**
 	 * The score-increase for each distance.
 	 */
-	public static final int SCORE_DISTANCE = 1;
+	 int SCORE_DISTANCE = 1;
 	/**
 	 * The score-increase for a fool.
 	 */
-	public static final int SCORE_FOOL = -5;
+	 int SCORE_FOOL = -5;
 	/**
 	 * The number of Questions per row and player in the GameOverPanel. QUESTION_COUNT must be a multiple of QUESTIONS_PER_ROW.
 	 */
-	public static final int QUESTIONS_PER_ROW_AND_PLAYER = 3;
+	 int QUESTIONS_PER_ROW_AND_PLAYER = 3;
 	/**
 	 * The name of the database.
 	 */
-	public static final String DB_FILE = DATA + "/quizDB.mv.db";
+	 String DB_FILE = DATA + "/quizDB.mv.db";
 	/**
 	 * The name of the database.
 	 */
-	public static final String DB_PATH = "jdbc:h2:./" + DATA + "/quizDB";
+	 String DB_PATH = "jdbc:h2:./" + DATA + "/quizDB";
 	/**
 	 * The path of the ini file.
 	 */
-	public static final String INI_FILE = DATA + "/quiz.ini";
+	 String INI_FILE = DATA + "/quiz.ini";
 	/**
 	 * The path of the icon file.
 	 */
-	public static final String ICON_FILE = DATA + "/icon_image.png";
+	 String ICON_FILE = DATA + "/icon_image.png";
 	/**
 	 * The user-name to connect to the database.
 	 */
-	public static final String DB_USERNAME = "quizMaster";
+	 String DB_USERNAME = "quizMaster";
 	/**
 	 * The password to connect to the database.
 	 */
-	public static final String DB_PASSWORD = "qM";
+	 String DB_PASSWORD = "qM";
 	/**
 	 * The LookAndFeel.
 	 */
-	public static final String LOOK_AND_FEEL = "Nimbus";
+	 String LOOK_AND_FEEL = "Nimbus";
 	/**
 	 * The path to the username file.
 	 */
-	public static final Path USERNAME_FILE = Paths.get("data").resolve("username.txt");
+	 Path USERNAME_FILE = Paths.get("data").resolve("username.txt");
 	/**
 	 * Time per answer in seconds.
 	 */
-	public static final int SECONDS_PER_ANSWER = 20;
+	 int SECONDS_PER_ANSWER = 20;
 	/**
 	 * GameFrame's width.
 	 */
-	public static final int FRAME_WIDTH = 700;
+	 int FRAME_WIDTH = 700;
 	/**
 	 * GameFrame's height.
 	 */
-	public static final int FRAME_HEIGHT = 700;
+	 int FRAME_HEIGHT = 700;
+	/**
+	 * The delay in milliseconds until the next question is displayed.
+     */
+	 int DELAY_BETWEEN_QUESTIONS = 2000;
 }

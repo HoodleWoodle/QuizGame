@@ -19,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import quiz.Utils;
 import quiz.server.Server;
 import quiz.server.model.IDataManager;
 
@@ -60,18 +61,18 @@ public final class ServerView extends JPanel
 		portLabel.setBounds(5, 5, 40, 25);
 
 		add(port = new JTextField("1819"));
-		port.setBounds(50, 5, 50, 25);
+		port.setBounds(45, 5, 50, 26);
 
 		add(start = new JToggleButton("START"));
-		start.setBounds(115, 5, 80, 25);
+		start.setBounds(100, 5, 80, 25);
 
 		add(stop = new JToggleButton("STOP"));
 		stop.setEnabled(false);
-		stop.setBounds(205, 5, 80, 25);
+		stop.setBounds(185, 5, 80, 25);
 
 		add(clear = new JButton("CLEAR SCREEN"));
 		clear.setMargin(new Insets(0, 0, 0, 0));
-		clear.setBounds(295, 5, 100, 25);
+		clear.setBounds(270, 5, 125, 25);
 
 		add(information = new JTextArea("QuizGame is coded by  : 'Alex, Eric, Quirin, Stefan'\nQuestions are created by : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!"));
 		information.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
@@ -170,6 +171,7 @@ public final class ServerView extends JPanel
 		this.dataManager = dataManager;
 
 		JFrame frame = new JFrame("QuizGame - Server");
+		frame.setIconImage(Utils.loadIcon());
 		frame.setResizable(false);
 		frame.add(this);
 		frame.pack();

@@ -75,20 +75,20 @@ final class AccountPanel extends JPanel
 
 		// initialize fields
 		add(name = new JTextField());
-		name.setBounds(70, 241, 223, 22);
+		name.setBounds(70, 239, 223, 26);
 		add(password = new JTextField());
-		password.setBounds(70, 266, 223, 22);
+		password.setBounds(70, 264, 223, 26);
 
 		// initialize buttons
 		add(get = new JButton("get"));
 		get.setMargin(new Insets(0, 0, 0, 0));
-		get.setBounds(2, 345, 120, 25);
+		get.setBounds(2, 345, 120, 26);
 		add(remove = new JButton("remove"));
 		remove.setMargin(new Insets(0, 0, 0, 0));
-		remove.setBounds(238, 345, 120, 25);
+		remove.setBounds(238, 345, 120, 26);
 		add(add = new JButton("add"));
 		add.setMargin(new Insets(0, 0, 0, 0));
-		add.setBounds(473, 345, 120, 25);
+		add.setBounds(473, 345, 120, 26);
 	}
 
 	/**

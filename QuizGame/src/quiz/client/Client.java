@@ -23,12 +23,10 @@ import static quiz.net.NetworkKeys.TAG_SET_SENT_REQUESTS;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.client.AbstractTCPClient;
-import quiz.Constants;
+import quiz.Utils;
 import quiz.client.model.IModel;
 import quiz.client.model.Model;
 import quiz.client.model.Status;
@@ -218,21 +216,7 @@ public final class Client extends AbstractTCPClient
 		IModel model = client.model;
 		IControl control = new Control(client);
 
-		// initialize LookAndFeel
-		try
-		{
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-			{
-				if (Constants.LOOK_AND_FEEL.equals(info.getName()))
-				{
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (Exception e)
-		{
-			con = false;
-		}
+		Utils.initalizeLAF();
 
 		// some Exception
 		if (con == false)

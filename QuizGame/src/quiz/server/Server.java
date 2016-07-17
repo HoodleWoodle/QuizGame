@@ -38,6 +38,7 @@ import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.server.AbstractTCPServer;
 import lib.net.tcp.server.ClientThread;
 import quiz.Constants;
+import quiz.Utils;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Match;
@@ -643,6 +644,8 @@ public final class Server extends AbstractTCPServer
 	 */
 	public static void main(String[] args)
 	{
+		Utils.initalizeLAF();
+
 		// TODO TEMP
 		new File(Constants.DB_FILE).delete();
 		// TODO TEMP

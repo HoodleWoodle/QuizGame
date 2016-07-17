@@ -85,16 +85,16 @@ final class QuestionPanel extends JPanel
 
 		// initialize fields/boxes
 		add(question = new JTextField());
-		question.setBounds(70, 241, 525, 22);
+		question.setBounds(70, 239, 525, 26);
 		answers = new JTextField[4];
 		add(answers[0] = new JTextField());
-		answers[0].setBounds(70, 266, 223, 22);
+		answers[0].setBounds(70, 264, 223, 26);
 		add(answers[1] = new JTextField());
-		answers[1].setBounds(372, 266, 223, 22);
+		answers[1].setBounds(372, 264, 223, 26);
 		add(answers[2] = new JTextField());
-		answers[2].setBounds(70, 291, 223, 22);
+		answers[2].setBounds(70, 289, 223, 26);
 		add(answers[3] = new JTextField());
-		answers[3].setBounds(372, 291, 223, 22);
+		answers[3].setBounds(372, 289, 223, 26);
 		add(category = new JComboBox<Category>(Category.values()));
 		category.setBounds(70, 316, 120, 23);
 

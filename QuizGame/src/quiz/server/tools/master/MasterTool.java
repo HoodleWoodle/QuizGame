@@ -11,6 +11,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import quiz.Utils;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 
@@ -90,10 +91,13 @@ final class MasterTool extends JPanel
 	 */
 	public static void main(String[] args)
 	{
+		Utils.initalizeLAF();
+
 		MasterTool tool = new MasterTool();
 
 		// initialize frame
 		JFrame frame = new JFrame("QuizGame - MasterTool");
+		frame.setIconImage(Utils.loadIcon());
 		frame.setResizable(false);
 		frame.add(tool);
 		frame.pack();

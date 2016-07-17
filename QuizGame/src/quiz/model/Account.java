@@ -139,7 +139,6 @@ public final class Account
 		Account account = (Account) o;
 
 		if (ID != account.ID) return false;
-		if (score != account.score) return false;
 		if (name != null ? !name.equals(account.name) : account.name != null) return false;
 		return password != null ? password.equals(account.password) : account.password == null;
 
@@ -150,7 +149,6 @@ public final class Account
 		int result = ID;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + score;
 		return result;
 	}
 }

@@ -93,11 +93,11 @@ public class PlayerListPanel extends JPanel implements IView {
             this.account = account;
 
             setPreferredSize(new Dimension(175, 30));
-            setLayout(new BorderLayout());
+            setLayout(new FlowLayout());
             setBorder(BorderFactory.createRaisedBevelBorder());
             setBackground(Color.LIGHT_GRAY);
 
-            add(status = new JLabel(account.getName()), BorderLayout.CENTER);
+            add(status = new JLabel(account.getName() + " (" + account.getScore() + ")"));
             status.setIconTextGap(20);
             updateStatus();
 
@@ -137,6 +137,7 @@ public class PlayerListPanel extends JPanel implements IView {
          * Updates the current status of the account in view.
          */
         public void updateStatus() {
+            status.setText(account.getName() + " (" +  account.getScore() + ")");
             if(!account.isOnline()) {
                 status.setIcon(offline);
                 status.setToolTipText(localization.getString("STATUS_OFFLINE"));

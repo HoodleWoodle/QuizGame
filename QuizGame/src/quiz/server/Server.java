@@ -266,7 +266,7 @@ public final class Server extends AbstractTCPServer
 
 		if (matchStep.isDone())
 		{
-			if (match.getQuestions().length < Constants.QUESTION_COUNT)
+			if (match.getQuestions().length == Constants.QUESTION_COUNT)
 			{
 				endMatch(match, true);
 				sendOpponents();

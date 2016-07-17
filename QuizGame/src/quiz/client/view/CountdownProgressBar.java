@@ -24,7 +24,7 @@ public class CountdownProgressBar extends JProgressBar {
     }
 
     /**
-     * Creates a new CountdownProgessBar with the minimum @param min, the
+     * Creates a new CountdownProgressBar with the minimum @param min, the
      * maximum @param max, and the delay 1000.
      *
      * @param min the minimum
@@ -35,7 +35,7 @@ public class CountdownProgressBar extends JProgressBar {
     }
 
     /**
-     * Creates a new CountdownProgessBar with the minimum @param min, the
+     * Creates a new CountdownProgressBar with the minimum @param min, the
      * maximum @param max, and the @delay delay.
      *
      * @param min   the minimum
@@ -47,6 +47,7 @@ public class CountdownProgressBar extends JProgressBar {
 
         this.delay = delay;
         setCounter(max);
+        UIManager.put("nimbusOrange", new Color(0, 255, 0));
         setForeground(new Color(0, 255, 0));
 
         timer = new Timer(delay, event -> {
@@ -65,6 +66,7 @@ public class CountdownProgressBar extends JProgressBar {
 
             if (green  < 0) green = 0;
             setForeground(new Color(red, green, 0));
+            UIManager.put("nimbusOrange", new Color(red, green, 0));
             setValue(counter);
             setString(String.valueOf(counter));
 

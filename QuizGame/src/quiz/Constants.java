@@ -10,6 +10,10 @@ import java.nio.file.Paths;
 public interface Constants
 {
 	/**
+	 * The path of the data folder.
+	 */
+	public static final String DATA = "data";
+	/**
 	 * The count of Questions per Match.
 	 */
 	public static final int QUESTION_COUNT = 3;
@@ -32,11 +36,19 @@ public interface Constants
 	/**
 	 * The name of the database.
 	 */
-	public static final String DB_FILE = "quizDB.mv.db";
+	public static final String DB_FILE = DATA + "/quizDB.mv.db";
 	/**
 	 * The name of the database.
 	 */
-	public static final String DB_PATH = "jdbc:h2:./quizDB";
+	public static final String DB_PATH = "jdbc:h2:./" + DATA + "/quizDB";
+	/**
+	 * The path of the ini file.
+	 */
+	public static final String INI_FILE = DATA + "/quiz.ini";
+	/**
+	 * The path of the icon file.
+	 */
+	public static final String ICON_FILE = DATA + "/icon_image.png";
 	/**
 	 * The user-name to connect to the database.
 	 */

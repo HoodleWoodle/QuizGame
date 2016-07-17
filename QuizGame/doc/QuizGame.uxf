@@ -241,7 +241,7 @@ quiz.server.tools
       <x>1340</x>
       <y>610</y>
       <w>260</w>
-      <h>140</h>
+      <h>170</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 quiz
@@ -251,7 +251,8 @@ quiz
 + DB_FILE : String {static, final}
 + DB_PATH : String {static, final}
 + DB_USERNAME : String {static, final}
-+ DB_PASSWORD : String {static, final}</panel_attributes>
++ DB_PASSWORD : String {static, final}
+...</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -512,6 +513,18 @@ NO_OPPONENTS_AVAILABLE
 OPPONENT_NOT_AVAILABLE
 ALREADY_LOGGED_IN
 ALREADY_REQUESTED</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1530</x>
+      <y>750</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>NO UML
+bg=RED</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

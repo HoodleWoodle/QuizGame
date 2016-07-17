@@ -1,5 +1,6 @@
 package quiz.server.model;
 
+import static quiz.Constants.DATA;
 import static quiz.Constants.DB_FILE;
 import static quiz.Constants.DB_PASSWORD;
 import static quiz.Constants.DB_PATH;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import quiz.model.Account;
 import quiz.model.Category;
@@ -33,18 +36,22 @@ public final class DataManager implements IDataManager
 	{
 		db = new Database(DB_PATH, DB_USERNAME, DB_PASSWORD);
 
+		File data = new File(DATA);
+		if (!data.exists())
+			data.mkdirs();
+
 		boolean create = false;
 		if (!new File(DB_FILE).exists())
-			// if database does not exist activate creating tables
+			// if database does not exist activate tables creating
 			create = true;
 
 		// connect to database
 		if (!db.connect())
 		{
 			// if connecting fails
-			System.out.println("Cannot connect to database!");
+			JOptionPane.showMessageDialog(null, "Cannot connect to database!");
 			// shut down process
-			System.exit(1); // TODO all System.exits removen
+			System.exit(1);
 		}
 
 		if (create)

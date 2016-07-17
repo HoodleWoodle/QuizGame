@@ -44,13 +44,11 @@ public final class Utils
 		try
 		{
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-			{
 				if (Constants.LOOK_AND_FEEL.equals(info.getName()))
 				{
 					UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
-			}
 		} catch (Exception e)
 		{
 		}
@@ -62,7 +60,7 @@ public final class Utils
 	{
 		try
 		{
-			return ImageIO.read(new File("data/icon_image.png"));
+			return ImageIO.read(new File(Constants.ICON_FILE));
 		} catch (IOException e)
 		{
 			return null;

@@ -21,11 +21,16 @@ import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
 import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 import static quiz.net.NetworkKeys.TAG_SET_SENT_REQUESTS;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.client.AbstractTCPClient;
+import quiz.Constants;
 import quiz.Utils;
 import quiz.client.model.IModel;
 import quiz.client.model.Model;
@@ -209,8 +214,23 @@ public final class Client extends AbstractTCPClient
 	 */
 	public static void main(String args[])
 	{
+		String server = null;
+		int port = -1;
+		try
+		{
+			Properties ini = new Properties();
+			ini.load(new FileReader(new File(Constants.INI_FILE)));
+
+			server = ini.getProperty("server");
+			port = Integer.parseInt(ini.getProperty("port"));
+		} catch (Exception e)
+		{
+			server = "localhost";
+			port = 1819;
+		}
+
 		// try to connect to Server
-		Client client = new Client("localhost", 1819); // TODO
+		Client client = new Client(server, port);
 		boolean con = client.connect();
 
 		IModel model = client.model;

@@ -59,15 +59,18 @@ public class PlayerListPanel extends JPanel implements IView {
         // update account statuses
         if (type == ChangeType.OPPONENTS) {
             for (Account account : model.getOpponents()) {
-                if (!accounts.containsKey(account)) {
+                if (accounts.containsKey(account)) {
+                    PlayerPanel playerPanel = accounts.get(account);
+                    playerPanel.setAccount(account);
+                    playerPanel.updateStatus();
+                } else {
                     PlayerPanel playerPanel = new PlayerPanel(account);
                     accounts.put(account, playerPanel);
                     add(playerPanel);
 
                     revalidate();
                     repaint();
-                } else
-                    accounts.get(account).updateStatus();
+                }
             }
         }
     }
@@ -78,7 +81,7 @@ public class PlayerListPanel extends JPanel implements IView {
      */
     private class PlayerPanel extends JPanel {
 
-        private final Account account;
+        private Account account;
         private final JLabel status;
 
         /**
@@ -110,6 +113,24 @@ public class PlayerListPanel extends JPanel implements IView {
                         popupMenu.show(PlayerPanel.this, event.getX(), event.getY());
                 }
             });
+        }
+
+        /**
+         * Sets the account used for this player panel.
+         *
+         * @param account the account used for this player panel
+         */
+        public void setAccount(Account account) {
+            this.account = account;
+        }
+
+        /**
+         * Returns the account used for this player panel.
+         *
+         * @return the account used for this player panel
+         */
+        public Account getAccount() {
+            return account;
         }
 
         /**

@@ -150,7 +150,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
             int opponentIndex = -1;
             for (int a = 0; a < match.getOpponents().length; a++) {
-                if (match.getOpponents()[a].getID() != gameFrame.getUser().getID()) {
+                if (match.getOpponents()[a].getID() != model.getAccount().getID()) {
                     opponentIndex = a;
                 }
             }

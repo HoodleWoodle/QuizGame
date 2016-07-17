@@ -159,7 +159,7 @@ public class MatchRequestListPanel extends JPanel implements IView {
         private void initComponents() {
             Account opponent = null;
             for (Account account : matchRequest.getOpponents()) {
-                if (account.getID() != gameFrame.getUser().getID()) {
+                if (account.getID() != model.getAccount().getID()) {
                     opponent = account;
                     break;
                 }

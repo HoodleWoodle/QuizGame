@@ -4,6 +4,7 @@ import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
+import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
 
@@ -138,7 +139,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                 if (countdown.isRunning() && !answerLoggedIn) {
                     answerLoggedIn = true;
                     control.setAnswer(i);
-                    answerButton.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 5, 5, true));
+                    answerButton.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 3, 5, 5, true));
                     questionsAnswered++;
                     countdown.setCounter(0);
 
@@ -168,7 +169,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                 // make the opponent's answer visible
                 for (JButton answerButton : answerButtons)
                     if (answerButton.getText().equals(opponentAnswer))
-                        answerButton.setBorder(BorderFactory.createDashedBorder(Color.ORANGE, 2, 5, 5, true));
+                        answerButton.setBorder(BorderFactory.createDashedBorder(new Color(10, 144, 232), 3, 5, 5, true));
             }
         }
 

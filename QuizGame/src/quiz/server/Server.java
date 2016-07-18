@@ -272,12 +272,13 @@ public final class Server extends AbstractTCPServer
 			{
 				endMatch(match, true);
 				sendOpponents();
-				sendMatch(match);
 			} else
 			{
-				sendMatch(matchStep.editMatch(match));
+				match = matchStep.editMatch(match);
+				matches.put(matchID, match);
 				sendQuestion(match);
 			}
+			sendMatch(match);
 		}
 	}
 

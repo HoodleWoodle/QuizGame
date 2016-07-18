@@ -261,7 +261,8 @@ public final class Server extends AbstractTCPServer
 
 		int accountID = accountIDs.get(client.getID());
 		Match match = getMatch(accountID);
-		MatchStep matchStep = matchSteps.get(match.getID());
+		int matchID = match.getID();
+		MatchStep matchStep = matchSteps.get(matchID);
 
 		matchStep.setAnswer(dataManager.getAccount(accountID), answer);
 
@@ -271,9 +272,12 @@ public final class Server extends AbstractTCPServer
 			{
 				endMatch(match, true);
 				sendOpponents();
+				sendMatch(match);
 			} else
+			{
+				sendMatch(matchStep.editMatch(match));
 				sendQuestion(match);
-			sendMatch(match);
+			}
 		}
 	}
 

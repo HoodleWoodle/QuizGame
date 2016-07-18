@@ -195,7 +195,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     repaint();
                     revalidate();
                 } else {
-                    gameFrame.setContentPane(new GameOverPanel(gameFrame, model));
+                    gameFrame.setContentPane(gameOverPanel = new GameOverPanel(gameFrame, model));
                     repaint();
                     revalidate();
                 }

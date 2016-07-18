@@ -210,7 +210,7 @@ public final class Server extends AbstractTCPServer
 			return;
 		}
 
-		Match request = new Match(nextMatchID++, category, accounts, new Question[0], new int[0][0]);
+		Match request = new Match(nextMatchID++, category, accounts, new Question[0], new int[2][0]);
 		requests.put(request.getID(), request);
 
 		sendSentRequests(playerID);
@@ -310,7 +310,9 @@ public final class Server extends AbstractTCPServer
 	private void sendQuestion(Match match)
 	{
 		List<Question> questions = dataManager.getQuestions(match.getCategory());
-		questions.remove(match.getQuestions());
+		Question[] doneQuestions = match.getQuestions();
+		for (int i = 0; i < doneQuestions.length; i++)
+			questions.remove(doneQuestions[i]);
 		Question question = questions.get(random.nextInt(questions.size()));
 
 		matchSteps.put(match.getID(), new MatchStep(question));
@@ -563,7 +565,7 @@ public final class Server extends AbstractTCPServer
 		for (int i = 0; i < questions.length; i++)
 		{
 			builder.append(convertQuestion(questions[i]));
-			if (i < questions.length - 1 || answers[0].length > 0)
+			if (answers[0].length > 0)
 				builder.append(SPLIT_SUB_SUB);
 		}
 
@@ -571,7 +573,7 @@ public final class Server extends AbstractTCPServer
 			for (int j = 0; j < answers[0].length; j++)
 			{
 				builder.append(answers[i][j]);
-				if (i * j < answers.length - 1)
+				if (i * j < answers.length)
 					builder.append(SPLIT_SUB_SUB);
 			}
 

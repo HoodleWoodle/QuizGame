@@ -28,7 +28,9 @@ public class GameOverPanel extends JPanel {
         this.model = model;
         this.gameFrame = gameFrame;
         setLayout(new GridBagLayout());
+    }
 
+    private void initComponents() {
         Match match = model.getMatch();
         Question[] questions = match.getQuestions();
         int[][] answers = match.getAnswers();

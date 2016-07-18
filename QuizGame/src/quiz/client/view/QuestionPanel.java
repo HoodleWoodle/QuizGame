@@ -8,6 +8,9 @@ import quiz.model.Match;
 import quiz.model.Question;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,6 +76,11 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
         questionText = new JTextPane();
         questionText.setEditable(false);
+        questionText.setBackground(Color.LIGHT_GRAY);
+        StyledDocument doc = questionText.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
         add(questionText, c);
         c.gridwidth = 1;
@@ -82,6 +90,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i] = new JButton();
             answerButtons[i].addActionListener(this);
+            answerButtons[i].setBackground(Color.LIGHT_GRAY);
         }
 
         c.gridy = 1;
@@ -107,8 +116,13 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
         countdown = new CountdownProgressBar(SECONDS_PER_ANSWER);
         countdown.getTimer().addActionListener(e -> {
-            if (!countdown.isRunning())
+            if (countdown.getCounter() == 0 && !answerLoggedIn) {
+                answerLoggedIn = true;
                 control.setAnswer(-1);
+                questionsAnswered++;
+
+                showAnswers(question.getAnswers());
+            }
         });
         add(countdown, c);
     }
@@ -128,14 +142,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     questionsAnswered++;
                     countdown.setCounter(0);
 
-                    for (int k = 0; k < answers.length; k++) {
-                        for (int j = 0; j < answerButtons.length; j++) {
-                            if (answerButtons[j].getText().equals(answers[k])) {
-                                // first answer is correct
-                                answerButtons[j].setBackground((k == 0) ? Color.GREEN : Color.RED);
-                            }
-                        }
-                    }
+                    showAnswers(answers);
                 }
             }
         }
@@ -154,7 +161,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                 }
             }
 
-            if (answersGiven[0].length - 1 > 0) {
+            if (questionsAnswered > 0) {
                 int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length - 1];
                 String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
 
@@ -177,7 +184,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     for (JButton answerButton : answerButtons) {
                         Collections.shuffle(answers);
                         answerButton.setText(answers.get(0));
-                        answerButton.setBackground(Color.WHITE);
+                        answerButton.setBackground(Color.LIGHT_GRAY);
                         answerButton.setBorder(BorderFactory.createEmptyBorder());
                         answers.remove(0);
                     }
@@ -195,6 +202,17 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
             });
             timer.setRepeats(false);
             timer.start();
+        }
+    }
+
+    private void showAnswers(String[] answers) {
+        for (int k = 0; k < answers.length; k++) {
+            for (int j = 0; j < answerButtons.length; j++) {
+                if (answerButtons[j].getText().equals(answers[k])) {
+                    // first answer is correct
+                    answerButtons[j].setBackground((k == 0) ? Color.GREEN : Color.RED);
+                }
+            }
         }
     }
 }

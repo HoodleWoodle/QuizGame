@@ -105,8 +105,7 @@ final class AccountPanel extends JPanel
 				Account selected = model.get(table.getSelectedRow());
 
 				// there is something selected
-				if (selected == null)
-					return;
+				if (selected == null) return;
 
 				// set data to input
 				name.setText(selected.getName());
@@ -123,8 +122,7 @@ final class AccountPanel extends JPanel
 				Account selected = model.get(table.getSelectedRow());
 
 				// there is something selected
-				if (selected == null)
-					return;
+				if (selected == null) return;
 
 				// remove selected
 				dataManager.removeAccount(selected);

@@ -101,8 +101,7 @@ public final class Match
 		for (int i = 0; i < opponents.length; i++)
 		{
 			int j = (i + 1) % opponents.length;
-			if (wins[i] > wins[j])
-				return opponents[i];
+			if (wins[i] > wins[j]) return opponents[i];
 		}
 		return null;
 	}

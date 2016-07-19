@@ -132,7 +132,8 @@ public final class Account
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object o)
+	{
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -145,7 +146,8 @@ public final class Account
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		int result = ID;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		result = 31 * result + (password != null ? password.hashCode() : 0);

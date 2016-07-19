@@ -201,8 +201,7 @@ public final class Client extends AbstractTCPClient
 	private Category getCategory(int ID)
 	{
 		Category[] values = Category.values();
-		if (ID > values.length)
-			return null;
+		if (ID > values.length) return null;
 
 		return values[ID];
 	}

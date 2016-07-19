@@ -37,8 +37,7 @@ public final class DataManager implements IDataManager
 		db = new Database(DB_PATH, DB_USERNAME, DB_PASSWORD);
 
 		File data = new File(DATA);
-		if (!data.exists())
-			data.mkdirs();
+		if (!data.exists()) data.mkdirs();
 
 		boolean create = false;
 		if (!new File(DB_FILE).exists())
@@ -76,8 +75,7 @@ public final class DataManager implements IDataManager
 	public synchronized List<Question> getQuestions(Category category)
 	{
 		// check category
-		if (category == null)
-			return null;
+		if (category == null) return null;
 
 		// select Questions
 		ResultSet result = db.select("SELECT * FROM " + TABLE_QUESTIONS + " WHERE category='" + category.ordinal() + "'");
@@ -135,8 +133,7 @@ public final class DataManager implements IDataManager
 
 		// search Account
 		for (Account account : accounts)
-			if (account.getID() == ID)
-				return account;
+			if (account.getID() == ID) return account;
 
 		log_err(1);
 		return null;
@@ -157,10 +154,8 @@ public final class DataManager implements IDataManager
 			{
 				// get Account
 				Account account = getAccount(result);
-				if (account != null)
-					accounts.add(account);
-				else
-					log_err(2);
+				if (account != null) accounts.add(account);
+				else log_err(2);
 			}
 
 			return accounts;
@@ -189,17 +184,13 @@ public final class DataManager implements IDataManager
 		String[] answers = question.getAnswers();
 
 		// check question-string
-		if (!check(quest, 1023))
-			return false;
+		if (!check(quest, 1023)) return false;
 		// check category
-		if (category == null)
-			return false;
+		if (category == null) return false;
 		// check answer-strings
-		if (answers.length != 4)
-			return false;
+		if (answers.length != 4) return false;
 		for (String answer : answers)
-			if (!check(answer))
-				return false;
+			if (!check(answer)) return false;
 
 		// insert question into database
 		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (question, category, correct, answer1, answer2, answer3) VALUES ('" + quest + "', '" + category.ordinal() + "', '" + answers[0] + "', '" + answers[1] + "', '" + answers[2] + "', '" + answers[3] + "')"))
@@ -215,8 +206,7 @@ public final class DataManager implements IDataManager
 	public synchronized Account addAccount(String name, String password)
 	{
 		// check name and password
-		if (!check(name) || !check(password))
-			return null;
+		if (!check(name) || !check(password)) return null;
 
 		int ID = db.insertReturn("INSERT INTO " + TABLE_ACCOUNTS + " (name, password) VALUES ('" + name + "', '" + password + "')");
 		if (ID == -1)
@@ -231,30 +221,26 @@ public final class DataManager implements IDataManager
 	@Override
 	public synchronized void removeQuestion(Question question)
 	{
-		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'"))
-			log_err(6);
+		if (!db.insert("DELETE FROM " + TABLE_QUESTIONS + " WHERE question='" + question.getQuestion() + "'")) log_err(6);
 	}
 
 	@Override
 	public synchronized void removeAccount(Account account)
 	{
-		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'"))
-			log_err(7);
+		if (!db.insert("DELETE FROM " + TABLE_ACCOUNTS + " WHERE ID='" + account.getID() + "'")) log_err(7);
 	}
 
 	@Override
 	public synchronized Account updateAccount(Account account, int score)
 	{
-		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'"))
-			log_err(8);
+		if (!db.insert("UPDATE " + TABLE_ACCOUNTS + " SET score='" + score + "' WHERE ID='" + account.getID() + "'")) log_err(8);
 		return new Account(account.getID(), account.getName(), score);
 	}
 
 	@Override
 	public synchronized void close()
 	{
-		if (!db.close())
-			log_err(9);
+		if (!db.close()) log_err(9);
 	}
 
 	/**
@@ -327,8 +313,7 @@ public final class DataManager implements IDataManager
 		try
 		{
 			// get count
-			if (result.next())
-				return result.getInt("count");
+			if (result.next()) return result.getInt("count");
 		} catch (SQLException e)
 		{
 			// some Exception

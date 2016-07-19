@@ -97,15 +97,12 @@ final class WelcomeThread implements Runnable
 			{
 				// waiting for new clients
 				ClientThread client = new ClientThread(server, socket.accept());
-				if (server.register(client))
-					server.addClient(client);
-				else
-					client.close();
+				if (server.register(client)) server.addClient(client);
+				else client.close();
 			} catch (IOException e)
 			{
 				// some Exception
-				if (running)
-					System.err.println("Error while running!");
+				if (running) System.err.println("Error while running!");
 				// e.printStackTrace();
 			}
 	}

@@ -144,8 +144,7 @@ public final class Server extends AbstractTCPServer
 			addAccount(account, client);
 
 			System.out.println("Account registered. (" + account.getName() + "[" + account.getID() + "])");
-		}
-		else client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
+		} else client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workLogin(ClientThread client, NetworkMessage message)
@@ -156,8 +155,7 @@ public final class Server extends AbstractTCPServer
 			addAccount(account, client);
 
 			System.out.println("Account logged in. (" + account.getName() + "[" + account.getID() + "])");
-		}
-		else client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
+		} else client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workRequest(ClientThread client, NetworkMessage message)
@@ -269,8 +267,7 @@ public final class Server extends AbstractTCPServer
 			{
 				endMatch(match, true);
 				sendOpponents();
-			}
-			else
+			} else
 			{
 				match = matchStep.editMatch(match);
 				matches.put(matchID, match);
@@ -409,8 +406,7 @@ public final class Server extends AbstractTCPServer
 			updateAccounts(match);
 			opponents[0] = dataManager.getAccount(accountID);
 			opponents[1] = dataManager.getAccount(otherID);
-		}
-		else
+		} else
 		{
 			opponents[0] = dataManager.updateAccount(opponents[0], opponents[0].getScore() + SCORE_WIN);
 			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
@@ -446,7 +442,7 @@ public final class Server extends AbstractTCPServer
 		Account account = possibles.remove(rand);
 
 		int otherID = account.getID();
-		if (otherID == accountID || existsRequest(otherID, accountID)) return getRandomAccount(accountID, possibles);
+		if (otherID == accountID || existsRequest(otherID, accountID) || !isOnline(otherID)) return getRandomAccount(accountID, possibles);
 
 		return account;
 	}

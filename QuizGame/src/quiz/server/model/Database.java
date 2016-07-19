@@ -78,10 +78,8 @@ final class Database
 			System.out.println("Closing database!");
 
 			// try to close database-connection
-			if (statement != null)
-				statement.close();
-			if (resultSet != null)
-				resultSet.close();
+			if (statement != null) statement.close();
+			if (resultSet != null) resultSet.close();
 			return true;
 		} catch (SQLException e)
 		{
@@ -101,13 +99,11 @@ final class Database
 	 */
 	ResultSet select(String sql)
 	{
-		if (connected == false)
-			return null;
+		if (connected == false) return null;
 		try
 		{
 			// execute select like SQL-command
-			if (resultSet != null)
-				resultSet.close();
+			if (resultSet != null) resultSet.close();
 			resultSet = statement.executeQuery(sql);
 			return resultSet;
 		} catch (SQLException e)
@@ -128,8 +124,7 @@ final class Database
 	 */
 	boolean insert(String sql)
 	{
-		if (connected == false)
-			return false;
+		if (connected == false) return false;
 		try
 		{
 			// execute of insert like SQL-command
@@ -153,23 +148,20 @@ final class Database
 	 */
 	int insertReturn(String sql)
 	{
-		if (connected != false)
-			try
-			{
-				// execute insert like SQL-command and get key for returning
-				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				ps.executeUpdate();
-				if (resultSet != null)
-					resultSet.close();
-				resultSet = ps.getGeneratedKeys();
-				if (resultSet.next())
-					return resultSet.getInt(1);
-			} catch (SQLException e)
-			{
-				// some Exception
-				System.err.println("Cannot execute SQL-command: '" + sql + "'!");
-				// e.printStackTrace();
-			}
+		if (connected != false) try
+		{
+			// execute insert like SQL-command and get key for returning
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.executeUpdate();
+			if (resultSet != null) resultSet.close();
+			resultSet = ps.getGeneratedKeys();
+			if (resultSet.next()) return resultSet.getInt(1);
+		} catch (SQLException e)
+		{
+			// some Exception
+			System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+			// e.printStackTrace();
+		}
 		return -1;
 	}
 }

@@ -124,8 +124,7 @@ final class QuestionPanel extends JPanel
 				Question selected = model.get(table.getSelectedRow());
 
 				// there is something selected
-				if (selected == null)
-					return;
+				if (selected == null) return;
 
 				// set data to input
 				question.setText(selected.getQuestion());
@@ -144,8 +143,7 @@ final class QuestionPanel extends JPanel
 				Question selected = model.get(table.getSelectedRow());
 
 				// there is something selected
-				if (selected == null)
-					return;
+				if (selected == null) return;
 
 				// remove selected
 				dataManager.removeQuestion(selected);
@@ -169,19 +167,13 @@ final class QuestionPanel extends JPanel
 
 				boolean correct = true;
 				// check input
-				if (!DataManager.check(q, 1024) || !Utils.checkString(q))
-					correct = false;
+				if (!DataManager.check(q, 1024) || !Utils.checkString(q)) correct = false;
 				for (String a : as)
-					if (!DataManager.check(a) || !Utils.checkString(a))
-						correct = false;
-				if (correct)
-					for (int i = 1; i < as.length; i++)
-						if (as[0].equals(as[i]))
-							correct = false;
-				if (ca == null)
-					correct = false;
-				if (!dataManager.addQuestion(new Question(ca, q, as)))
-					correct = false;
+					if (!DataManager.check(a) || !Utils.checkString(a)) correct = false;
+				if (correct) for (int i = 1; i < as.length; i++)
+					if (as[0].equals(as[i])) correct = false;
+				if (ca == null) correct = false;
+				if (!dataManager.addQuestion(new Question(ca, q, as))) correct = false;
 
 				if (!correct)
 				{

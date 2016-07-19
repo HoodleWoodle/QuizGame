@@ -122,8 +122,7 @@ public final class ClientThread implements Runnable
 				byte[] message = new byte[size];
 				in.read(message);
 				// if a message received
-				if (running)
-					server.received(this, message);
+				if (running) server.received(this, message);
 			} catch (Exception e)
 			{
 				// some Exception

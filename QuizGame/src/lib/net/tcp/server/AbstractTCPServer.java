@@ -130,8 +130,7 @@ public abstract class AbstractTCPServer
 		for (int i = 0; i < clients.size(); i++)
 		{
 			ClientThread client = clients.get(i);
-			if (ID == client.getID())
-				return client.close();
+			if (ID == client.getID()) return client.close();
 		}
 		return false;
 	}
@@ -146,8 +145,7 @@ public abstract class AbstractTCPServer
 	public final ClientThread getClient(int ID)
 	{
 		for (ClientThread client : clients)
-			if (ID == client.getID())
-				return client;
+			if (ID == client.getID()) return client;
 		return null;
 	}
 

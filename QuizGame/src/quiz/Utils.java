@@ -25,14 +25,10 @@ public final class Utils
 	 */
 	public static boolean checkString(String string)
 	{
-		if (string.contains(";"))
-			return false;
-		if (string.contains(NetworkKeys.SPLIT_SUB))
-			return false;
-		if (string.contains(NetworkKeys.SPLIT_SUB_SUB))
-			return false;
-		if (string.contains(NetworkKeys.SPLIT_SUB_SUB_SUB))
-			return false;
+		if (string.contains(";")) return false;
+		if (string.contains(NetworkKeys.SPLIT_SUB)) return false;
+		if (string.contains(NetworkKeys.SPLIT_SUB_SUB)) return false;
+		if (string.contains(NetworkKeys.SPLIT_SUB_SUB_SUB)) return false;
 		return true;
 	}
 

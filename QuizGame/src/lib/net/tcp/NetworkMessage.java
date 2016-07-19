@@ -94,8 +94,7 @@ public final class NetworkMessage
 	 */
 	public String getParameter(int index)
 	{
-		if (index < 0 || index >= parameters.length)
-			return null;
+		if (index < 0 || index >= parameters.length) return null;
 
 		return parameters[index];
 	}
@@ -112,8 +111,7 @@ public final class NetworkMessage
 		int size = 1;
 		for (String parameter : parameters)
 			size += parameter.length();
-		if (parameters.length > 0)
-			size += (parameters.length - 1) * SPLIT.length();
+		if (parameters.length > 0) size += (parameters.length - 1) * SPLIT.length();
 
 		byte[] bytes = new byte[size];
 
@@ -124,9 +122,8 @@ public final class NetworkMessage
 			for (byte b : parameter.getBytes())
 				bytes[pointer++] = b;
 
-			if (pointer < size - 1)
-				for (byte b : splitBytes)
-					bytes[pointer++] = b;
+			if (pointer < size - 1) for (byte b : splitBytes)
+				bytes[pointer++] = b;
 		}
 
 		// System.out.println("SENDING: " + new String(bytes));

@@ -39,8 +39,7 @@ final class QuestionTableModel extends AbstractTableModel
 	 */
 	public Question get(int row)
 	{
-		if (row < 0 || row >= model.size())
-			return null;
+		if (row < 0 || row >= model.size()) return null;
 
 		return model.get(row);
 	}
@@ -76,8 +75,7 @@ final class QuestionTableModel extends AbstractTableModel
 	@Override
 	public int getRowCount()
 	{
-		if (model == null)
-			return 0;
+		if (model == null) return 0;
 
 		return model.size();
 	}
@@ -85,8 +83,7 @@ final class QuestionTableModel extends AbstractTableModel
 	@Override
 	public Object getValueAt(int row, int column)
 	{
-		if (model == null)
-			return null;
+		if (model == null) return null;
 
 		switch (column)
 		{

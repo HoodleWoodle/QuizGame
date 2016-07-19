@@ -77,8 +77,7 @@ public final class MatchStep
 
 		for (int i = 0; i < newAnswers.length; i++)
 			for (int j = 0; j < newAnswers.length; j++)
-				if (opponents[i].equals(accounts[j]))
-					newAnswers[i][newAnswers[0].length - 1] = this.answers[j];
+				if (opponents[i].equals(accounts[j])) newAnswers[i][newAnswers[0].length - 1] = this.answers[j];
 
 		return new Match(match.getID(), match.getCategory(), opponents, newQuestions, newAnswers);
 	}

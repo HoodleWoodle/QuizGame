@@ -125,12 +125,10 @@ public final class Server extends AbstractTCPServer
 	protected void closed(ClientThread client)
 	{
 		Integer accountID = accountIDs.remove(client.getID());
-		if (accountID == null)
-			return;
+		if (accountID == null) return;
 		clientIDs.remove(accountID);
 
-		if (isInMatch(accountID))
-			endMatch(getMatch(accountID), false);
+		if (isInMatch(accountID)) endMatch(getMatch(accountID), false);
 
 		Account account = dataManager.getAccount(accountID);
 		System.out.println("Account disconnected. (" + account.getName() + "[" + account.getID() + "])");
@@ -146,8 +144,8 @@ public final class Server extends AbstractTCPServer
 			addAccount(account, client);
 
 			System.out.println("Account registered. (" + account.getName() + "[" + account.getID() + "])");
-		} else
-			client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
+		}
+		else client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workLogin(ClientThread client, NetworkMessage message)
@@ -158,8 +156,8 @@ public final class Server extends AbstractTCPServer
 			addAccount(account, client);
 
 			System.out.println("Account logged in. (" + account.getName() + "[" + account.getID() + "])");
-		} else
-			client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
+		}
+		else client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workRequest(ClientThread client, NetworkMessage message)
@@ -216,8 +214,7 @@ public final class Server extends AbstractTCPServer
 		sendSentRequests(playerID);
 
 		int otherID = request.getOpponents()[1].getID();
-		if (isOnline(otherID))
-			sendRequests(otherID);
+		if (isOnline(otherID)) sendRequests(otherID);
 	}
 
 	private void workRequestAccept(ClientThread client, NetworkMessage message)
@@ -272,7 +269,8 @@ public final class Server extends AbstractTCPServer
 			{
 				endMatch(match, true);
 				sendOpponents();
-			} else
+			}
+			else
 			{
 				match = matchStep.editMatch(match);
 				matches.put(matchID, match);
@@ -326,8 +324,7 @@ public final class Server extends AbstractTCPServer
 		{
 			ClientThread client = clients.get(i);
 			Integer accountID = accountIDs.get(client.getID());
-			if (accountID == null)
-				continue;
+			if (accountID == null) continue;
 			client.send(new NetworkMessage(TAG_SET_OPPONENTS, convertAccounts(accountID)).getBytes());
 		}
 	}
@@ -348,8 +345,7 @@ public final class Server extends AbstractTCPServer
 		if (clientID != null)
 		{
 			ClientThread client = getClient(clientIDs.get(accountID));
-			if (client != null)
-				client.send(msg.getBytes());
+			if (client != null) client.send(msg.getBytes());
 		}
 	}
 
@@ -362,8 +358,7 @@ public final class Server extends AbstractTCPServer
 
 	private boolean isOnline(int accountID)
 	{
-		if (clientIDs.get(accountID) == null)
-			return false;
+		if (clientIDs.get(accountID) == null) return false;
 		return true;
 	}
 
@@ -376,8 +371,7 @@ public final class Server extends AbstractTCPServer
 			boolean first = opponents[0].getID() == accountID_0 || opponents[1].getID() == accountID_0;
 			boolean second = opponents[0].getID() == accountID_1 || opponents[1].getID() == accountID_1;
 
-			if (first && second)
-				return true;
+			if (first && second) return true;
 		}
 
 		return false;
@@ -395,8 +389,7 @@ public final class Server extends AbstractTCPServer
 			Match match = matches.get(key);
 			Account[] opponents = match.getOpponents();
 			for (int i = 0; i < opponents.length; i++)
-				if (opponents[i].getID() == accountID)
-					return match;
+				if (opponents[i].getID() == accountID) return match;
 		}
 
 		return null;
@@ -416,7 +409,8 @@ public final class Server extends AbstractTCPServer
 			updateAccounts(match);
 			opponents[0] = dataManager.getAccount(accountID);
 			opponents[1] = dataManager.getAccount(otherID);
-		} else
+		}
+		else
 		{
 			opponents[0] = dataManager.updateAccount(opponents[0], opponents[0].getScore() + SCORE_WIN);
 			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
@@ -446,15 +440,13 @@ public final class Server extends AbstractTCPServer
 	private Account getRandomAccount(int accountID, List<Account> possibles)
 	{
 		int size = possibles.size();
-		if (size == 0)
-			return null;
+		if (size == 0) return null;
 
 		int rand = random.nextInt(size);
 		Account account = possibles.remove(rand);
 
 		int otherID = account.getID();
-		if (otherID == accountID || existsRequest(otherID, accountID))
-			return getRandomAccount(accountID, possibles);
+		if (otherID == accountID || existsRequest(otherID, accountID)) return getRandomAccount(accountID, possibles);
 
 		return account;
 	}
@@ -469,8 +461,7 @@ public final class Server extends AbstractTCPServer
 	private Category getCategory(int categoryID)
 	{
 		Category[] values = Category.values();
-		if (categoryID > values.length)
-			return null;
+		if (categoryID > values.length) return null;
 
 		return values[categoryID];
 	}
@@ -523,8 +514,7 @@ public final class Server extends AbstractTCPServer
 	private String convertAccount(Account account)
 	{
 		account.setOnline(isOnline(account.getID()));
-		if (!isInMatch(account.getID()))
-			account.setAvailable(true);
+		account.setAvailable(!isInMatch(account.getID()));
 
 		StringBuilder builder = new StringBuilder();
 
@@ -556,8 +546,7 @@ public final class Server extends AbstractTCPServer
 		for (int i = 0; i < opponents.length; i++)
 		{
 			builder.append(convertAccount(opponents[i]));
-			if (i < opponents.length - 1 || questions.length > 0)
-				builder.append(SPLIT_SUB_SUB);
+			if (i < opponents.length - 1 || questions.length > 0) builder.append(SPLIT_SUB_SUB);
 		}
 
 		int[][] answers = match.getAnswers();
@@ -565,16 +554,14 @@ public final class Server extends AbstractTCPServer
 		for (int i = 0; i < questions.length; i++)
 		{
 			builder.append(convertQuestion(questions[i]));
-			if (answers[0].length > 0)
-				builder.append(SPLIT_SUB_SUB);
+			if (answers[0].length > 0) builder.append(SPLIT_SUB_SUB);
 		}
 
 		for (int i = 0; i < answers.length; i++)
 			for (int j = 0; j < answers[0].length; j++)
 			{
 				builder.append(answers[i][j]);
-				if (i * j < answers.length)
-					builder.append(SPLIT_SUB_SUB);
+				if (i * j < answers.length) builder.append(SPLIT_SUB_SUB);
 			}
 
 		return builder.toString();
@@ -593,8 +580,7 @@ public final class Server extends AbstractTCPServer
 		for (int i = 0; i < answers.length; i++)
 		{
 			builder.append(answers[i]);
-			if (i < answers.length - 1)
-				builder.append(SPLIT_SUB_SUB_SUB);
+			if (i < answers.length - 1) builder.append(SPLIT_SUB_SUB_SUB);
 		}
 
 		return builder.toString();
@@ -622,8 +608,7 @@ public final class Server extends AbstractTCPServer
 
 		try
 		{
-			if (!server.start())
-				throw new Exception();
+			if (!server.start()) throw new Exception();
 		} catch (Exception e)
 		{
 			System.out.println("Cannot start Server!");

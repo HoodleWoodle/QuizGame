@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 import quiz.Utils;
 import quiz.server.Server;
@@ -108,8 +109,7 @@ public final class ServerView extends JPanel
 					int p = Integer.parseInt(port.getText());
 					server = Server.start(dataManager, p);
 
-					if (server != null)
-						stop.setEnabled(true);
+					if (server != null) stop.setEnabled(true);
 
 					port.setEditable(false);
 					portLabel.setForeground(Color.BLACK);
@@ -149,8 +149,7 @@ public final class ServerView extends JPanel
 	 */
 	public void stop()
 	{
-		if (server != null)
-			server.close();
+		if (server != null) server.close();
 		System.out.println("Server closed!");
 
 		start.setSelected(false);
@@ -168,26 +167,28 @@ public final class ServerView extends JPanel
 	 */
 	public void open(IDataManager dataManager)
 	{
-		this.dataManager = dataManager;
+		SwingUtilities.invokeLater(() -> {
+			this.dataManager = dataManager;
 
-		JFrame frame = new JFrame("QuizGame - Server");
-		frame.setIconImage(Utils.loadIcon());
-		frame.setResizable(false);
-		frame.add(this);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
+			JFrame frame = new JFrame("QuizGame - Server");
+			frame.setIconImage(Utils.loadIcon());
+			frame.setResizable(false);
+			frame.add(this);
+			frame.pack();
+			frame.setLocationRelativeTo(null);
 
-		frame.addWindowListener(new WindowAdapter()
-		{
-			@Override
-			public void windowClosing(WindowEvent e)
+			frame.addWindowListener(new WindowAdapter()
 			{
-				stop();
-				dataManager.close();
-				System.exit(0);
-			}
-		});
+				@Override
+				public void windowClosing(WindowEvent e)
+				{
+					stop();
+					dataManager.close();
+					System.exit(0);
+				}
+			});
 
-		frame.setVisible(true);
+			frame.setVisible(true);
+		});
 	}
 }

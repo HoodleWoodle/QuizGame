@@ -4,7 +4,6 @@ import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
-import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
 
@@ -20,9 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static quiz.Constants.QUESTION_COUNT;
-import static quiz.Constants.SECONDS_PER_ANSWER;
-import static quiz.Constants.DELAY_BETWEEN_QUESTIONS;
+import static quiz.Constants.*;
 
 /**
  * @author Eric
@@ -197,8 +194,8 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     revalidate();
                 } else {
                     gameFrame.setContentPane(gameOverPanel = new GameOverPanel(gameFrame, model));
-                    repaint();
-                    revalidate();
+                    gameFrame.repaint();
+                    gameFrame.revalidate();
                 }
             });
             timer.setRepeats(false);

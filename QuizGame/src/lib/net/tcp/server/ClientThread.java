@@ -132,7 +132,7 @@ public final class ClientThread implements Runnable
 					close();
 					server.closed(this);
 				}
-				// e.printStackTrace();
+				e.printStackTrace(); // TODO
 			}
 	}
 }

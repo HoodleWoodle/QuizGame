@@ -21,7 +21,7 @@ public final class NetworkMessage
 	{
 		String msg = new String(message, 1, message.length - 1);
 
-		// System.out.println("RECEIVING: " + message[0] + msg);
+		System.err.println("RECEIVING: " + message[0] + msg); // TODO
 
 		tag = message[0];
 
@@ -126,7 +126,7 @@ public final class NetworkMessage
 				bytes[pointer++] = b;
 		}
 
-		// System.out.println("SENDING: " + new String(bytes));
+		System.err.println("SENDING: " + new String(bytes)); // TODO
 
 		return bytes;
 	}

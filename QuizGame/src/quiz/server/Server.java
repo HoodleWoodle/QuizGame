@@ -237,8 +237,8 @@ public final class Server extends AbstractTCPServer
 
 		sendOpponents();
 
-		sendQuestion(match);
 		sendMatch(match);
+		sendQuestion(match);
 	}
 
 	private void workRequestDeny(ClientThread client, NetworkMessage message)
@@ -263,7 +263,7 @@ public final class Server extends AbstractTCPServer
 
 		if (matchStep.isDone())
 		{
-			if (match.getQuestions().length == Constants.QUESTION_COUNT)
+			if (match.getQuestions().length == Constants.QUESTION_COUNT - 1)
 			{
 				endMatch(match, true);
 				sendOpponents();

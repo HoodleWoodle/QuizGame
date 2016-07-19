@@ -48,7 +48,7 @@ public final class ClientThread implements Runnable
 		{
 			// some Exception
 			close();
-			server.closed(this);
+			server.removeClient(ID);
 			// e.printStackTrace();
 		}
 	}
@@ -73,7 +73,7 @@ public final class ClientThread implements Runnable
 		{
 			// some Exception
 			close();
-			server.closed(this);
+			server.removeClient(ID);
 			// e.printStackTrace();
 			return false;
 		}
@@ -90,8 +90,8 @@ public final class ClientThread implements Runnable
 		{
 			// try to close
 			running = false;
-			server.removeClient(ID);
 			socket.close();
+			server.closed(this);
 			return true;
 		} catch (IOException e)
 		{
@@ -130,7 +130,7 @@ public final class ClientThread implements Runnable
 				if (running)
 				{
 					close();
-					server.closed(this);
+					server.removeClient(ID);
 				}
 				e.printStackTrace(); // TODO
 			}

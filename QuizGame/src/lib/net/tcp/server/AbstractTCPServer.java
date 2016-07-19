@@ -68,6 +68,7 @@ public abstract class AbstractTCPServer
 		// closes all connections
 		for (int i = 0; i < clients.size(); i++)
 			clients.get(i).close();
+		clients.clear();
 		return welcome.close();
 	}
 

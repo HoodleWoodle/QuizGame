@@ -28,6 +28,8 @@ public class GameOverPanel extends JPanel {
         this.model = model;
         this.gameFrame = gameFrame;
         setLayout(new GridBagLayout());
+
+        initComponents();
     }
 
     private void initComponents() {
@@ -39,40 +41,52 @@ public class GameOverPanel extends JPanel {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 3;
         c.gridy = 0;
-        add(new JLabel(match.getCategory().toString()), c);
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(10, 10, 50, 10);
+        JLabel categoryLabel = new JLabel(match.getCategory().toString(), SwingConstants.CENTER);
+        categoryLabel.setFont(categoryLabel.getFont().deriveFont(Font.BOLD, 20));
+        add(categoryLabel, c);
 
-        int rows = match.getQuestions().length / QUESTIONS_PER_ROW_AND_PLAYER + 1;
+        int rows = match.getQuestions().length / QUESTIONS_PER_ROW_AND_PLAYER;
         for (int a = 0; a < match.getOpponents().length; a++) {
             c.gridx = (a == 0 ? 1 : 5);
-            add(new JLabel(match.getOpponents()[a].getName()), c);
+            c.gridy = 0;
+            c.insets = new Insets(10, 10, 50, 10);
+            JLabel name = new JLabel(match.getOpponents()[a].getName(), SwingConstants.CENTER);
+            name.setFont(name.getFont().deriveFont(Font.BOLD, 20));
+            add(name, c);
 
-            for (int y = 1, count = 0; y < rows; y++) {
+            for (int y = 1, count = 0; y < rows + 1; y++) {
                 c.gridy = y;
+                c.insets = new Insets(0, 0, 0, 0);
 
-                for (int x = a * (QUESTIONS_PER_ROW_AND_PLAYER + 1); x < x
-                        + QUESTIONS_PER_ROW_AND_PLAYER; x++, count++) {
+                for (int x = a * (QUESTIONS_PER_ROW_AND_PLAYER + 1); x <
+                        a *(QUESTIONS_PER_ROW_AND_PLAYER + 1) + 3; x++, count++) {
                     c.gridx = x;
 
                     Question question = questions[count];
                     int answerIndex = answers[a][count];
                     String answer = question.getAnswers()[answerIndex];
 
-                    JButton button = new JButton("");
+                    JButton button = new JButton();
                     button.setFocusable(false);
                     button.setBorderPainted(false);
                     // correct answer is 0
                     button.setBackground((answerIndex == 0) ? Color.GREEN : Color.RED);
                     button.setToolTipText(answer);
                     add(button, c);
+                    GameFrame.setProperties(new Dimension(75, 40), new Dimension(100, 50), new Dimension(125, 60), button);
                 }
             }
         }
 
         c.gridy = rows + 1;
         c.gridx = 3;
+        c.insets = new Insets(50, 0, 50, 0);
 
         JButton menu = new JButton(GameFrame.getLocalization().getString("MAIN_MENU"));
         menu.addActionListener(e -> gameFrame.setContentPane(gameFrame.getMenuPanel()));
         add(menu, c);
+        GameFrame.setProperties(new Dimension(75, 40), new Dimension(100, 50), new Dimension(125, 60), menu);
     }
 }

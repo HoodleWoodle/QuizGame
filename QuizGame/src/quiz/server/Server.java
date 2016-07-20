@@ -265,17 +265,16 @@ public final class Server extends AbstractTCPServer
 
 		if (matchStep.isDone())
 		{
-			if (match.getQuestions().length == Constants.QUESTION_COUNT - 1)
+			match = matchStep.editMatch(match);
+			matches.put(matchID, match);
+
+			if (match.getQuestions().length == Constants.QUESTION_COUNT)
 			{
 				endMatch(match, true);
 				sendOpponents();
 			}
-			else
-			{
-				match = matchStep.editMatch(match);
-				matches.put(matchID, match);
-				sendQuestion(match);
-			}
+			else sendQuestion(match);
+
 			sendMatch(match);
 		}
 	}
@@ -561,7 +560,7 @@ public final class Server extends AbstractTCPServer
 			for (int j = 0; j < answers[0].length; j++)
 			{
 				builder.append(answers[i][j]);
-				if (i + j * answers[0].length < answers.length * answers[0].length - 1) builder.append(SPLIT_SUB_SUB);
+				if (j + i * answers[0].length < answers.length * answers[0].length - 1) builder.append(SPLIT_SUB_SUB);
 			}
 
 		return builder.toString();

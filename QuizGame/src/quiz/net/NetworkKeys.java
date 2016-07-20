@@ -34,6 +34,6 @@ public interface NetworkKeys
 	public static final String TAG_REQUEST_3 = "3";
 
 	public static final String SPLIT_SUB = ",";
-	public static final String SPLIT_SUB_SUB = ":";
-	public static final String SPLIT_SUB_SUB_SUB = "_";
+	public static final String SPLIT_SUB_SUB = ">";
+	public static final String SPLIT_SUB_SUB_SUB = "<";
 }

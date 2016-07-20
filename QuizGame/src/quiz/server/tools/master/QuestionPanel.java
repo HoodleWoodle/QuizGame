@@ -5,6 +5,12 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.TooManyListenersException;
 
 import javax.swing.JButton;
@@ -15,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import quiz.Constants;
 import quiz.Utils;
 import quiz.model.Category;
 import quiz.model.Question;
@@ -184,7 +191,6 @@ final class QuestionPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-
 				// get input
 				String q = question.getText();
 				String im = image.getText();
@@ -198,10 +204,19 @@ final class QuestionPanel extends JPanel
 				if (!DataManager.check(q, 1024) || !Utils.checkString(q) || !Utils.checkString(im)) correct = false;
 				for (String a : as)
 					if (!DataManager.check(a) || !Utils.checkString(a)) correct = false;
+				File dest = new File(Constants.DATA + "/" + im);
+				if (!dest.exists()) // TODO
+				{
+					File file = new File(im);
+					dest = new File(Constants.DATA + "/" + file.getName());
+					im = file.getName();
+					if (!file.exists()) correct = false;
+					else if (!copyFile(file, dest)) correct = false;
+				}
 				if (correct) for (int i = 1; i < as.length; i++)
 					if (as[0].equals(as[i])) correct = false;
 				if (ca == null) correct = false;
-				if (!dataManager.addQuestion(new Question(ca, q, im, as))) correct = false;
+				if (correct) if (!dataManager.addQuestion(new Question(ca, q, im, as))) correct = false;
 
 				if (!correct)
 				{
@@ -236,5 +251,32 @@ final class QuestionPanel extends JPanel
 	void setImage(String image)
 	{
 		this.image.setText(image);
+	}
+
+	static boolean copyFile(File source, File dest)
+	{
+		if (!source.isFile()) return false;
+		String name = source.getName();
+		if (!name.endsWith(".png") && !name.endsWith(".jpg")) return false;
+
+		InputStream is = null;
+		OutputStream os = null;
+
+		try
+		{
+			is = new FileInputStream(source);
+			os = new FileOutputStream(dest);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0)
+				os.write(buffer, 0, length);
+			is.close();
+			os.close();
+		} catch (IOException e)
+		{
+			return false;
+		}
+
+		return true;
 	}
 }

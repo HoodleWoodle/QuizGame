@@ -169,12 +169,6 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     if (answerButton.getText().equals(opponentAnswer))
                         answerButton.setBorder(BorderFactory.createDashedBorder(new Color(10, 144, 232), 3, 5, 5, true));
             }
-
-            if(questionsAnswered >= QUESTION_COUNT) {
-                Timer timer = new Timer(DELAY_BETWEEN_QUESTIONS, event -> gameFrame.setContentPane(gameOverPanel));
-                timer.setRepeats(false);
-                timer.start();
-            }
         }
 
         if (type == ChangeType.QUESTION) {
@@ -206,6 +200,11 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
             timer.setRepeats(false);
             timer.start();
         }
+    }
+
+    public void reset() {
+        questionsAnswered = 0;
+        gameOverPanel = new GameOverPanel(gameFrame, model);
     }
 
     private void showAnswers(String[] answers) {

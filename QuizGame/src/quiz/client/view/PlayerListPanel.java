@@ -34,7 +34,7 @@ public class PlayerListPanel extends JPanel implements IView {
      * Creates a new PlayerListPanel.
      *
      * @param gameFrame the GameFrame
-     * @param model   the IModel implementation
+     * @param model     the IModel implementation
      */
     public PlayerListPanel(GameFrame gameFrame, IModel model) {
         this.gameFrame = gameFrame;
@@ -97,7 +97,8 @@ public class PlayerListPanel extends JPanel implements IView {
             setBorder(BorderFactory.createRaisedBevelBorder());
             setBackground(Color.LIGHT_GRAY);
 
-            add(status = new JLabel(account.getName() + " (Score: " + account.getScore() + ")"), BorderLayout.CENTER);
+            add(status = new JLabel(account.getName() + " (" + localization.getString("SCORE") + ": "
+                    + account.getScore() + ")"), BorderLayout.CENTER);
             status.setIconTextGap(20);
             updateStatus();
 
@@ -137,16 +138,14 @@ public class PlayerListPanel extends JPanel implements IView {
          * Updates the current status of the account in view.
          */
         public void updateStatus() {
-            status.setText(account.getName() + " (Score: " +  account.getScore() + ")");
-            if(!account.isOnline()) {
+            status.setText(account.getName() + " (" + localization.getString("SCORE") + ": " + account.getScore() + ")");
+            if (!account.isOnline()) {
                 status.setIcon(offline);
                 status.setToolTipText(localization.getString("STATUS_OFFLINE"));
-            }
-            else if(account.isAvailable()) {
+            } else if (account.isAvailable()) {
                 status.setIcon(online);
                 status.setToolTipText(localization.getString("STATUS_ONLINE"));
-            }
-            else {
+            } else {
                 status.setIcon(not_available);
                 status.setToolTipText(localization.getString("STATUS_IN_GAME"));
             }

@@ -160,6 +160,10 @@ public class MenuPanel extends JPanel implements IView {
 
         if(type == ChangeType.REQUESTS && status == Status.NO_OPPONENTS_AVAILABLE)
             gameFrame.showExceptionMessage(localization.getString("NO_OPPONENTS_AVAILABLE"));
+
+        if(type == ChangeType.ACCOUNT)
+            gameFrame.setTitle(localization.getString("GAME_NAME") + " - " + model.getAccount().getName()
+                    + "(" + localization.getString("SCORE") + ":" + model.getAccount().getScore() + ")");
     }
 
     private void searchOpponent(String opponentName, Category category) {

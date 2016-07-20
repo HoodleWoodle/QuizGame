@@ -72,7 +72,7 @@ public interface Constants
 	/**
 	 * GameFrame's width.
 	 */
-	int FRAME_WIDTH = 700;
+	int FRAME_WIDTH = 750;
 	/**
 	 * GameFrame's height.
 	 */

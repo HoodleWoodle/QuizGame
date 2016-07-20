@@ -3,14 +3,15 @@ package quiz.client.view;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
+import quiz.model.Account;
 import quiz.model.Match;
 import quiz.model.Question;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ResourceBundle;
 
-import static quiz.Constants.QUESTIONS_PER_ROW_AND_PLAYER;
-import static quiz.Constants.QUESTION_COUNT;
+import static quiz.Constants.*;
 
 /**
  * @author Eric
@@ -20,6 +21,7 @@ public class GameOverPanel extends JPanel implements IView {
 
     private IModel model;
     private GameFrame gameFrame;
+    private ResourceBundle localization = GameFrame.getLocalization();
 
     /**
      * Creates a new GameOverPanel.
@@ -40,7 +42,6 @@ public class GameOverPanel extends JPanel implements IView {
             Match match = model.getMatch();
             if(match != null) {
                 Question[] questions = match.getQuestions();
-                System.out.println(questions.length);
                 if(questions.length >= QUESTION_COUNT) {
                     GridBagConstraints c = new GridBagConstraints();
 
@@ -48,23 +49,37 @@ public class GameOverPanel extends JPanel implements IView {
                     c.gridx = 3;
                     c.gridy = 0;
                     c.anchor = GridBagConstraints.CENTER;
-                    c.insets = new Insets(10, 10, 50, 10);
+                    c.insets = new Insets(10, 10, 10, 10);
                     JLabel categoryLabel = new JLabel(match.getCategory().toString(), SwingConstants.CENTER);
                     categoryLabel.setFont(categoryLabel.getFont().deriveFont(Font.BOLD, 20));
                     add(categoryLabel, c);
 
-                    int rows = questions.length / QUESTIONS_PER_ROW_AND_PLAYER;
+                    int rows = questions.length / QUESTIONS_PER_ROW_AND_PLAYER + 2;
                     for (int a = 0; a < match.getOpponents().length; a++) {
                         c.gridx = (a == 0 ? 1 : 5);
                         c.gridy = 0;
+                        Account account = match.getOpponents()[a];
+                        JLabel result = new JLabel("", SwingConstants.CENTER);
+                        result.setFont(result.getFont().deriveFont(Font.BOLD, 20));
+                        if(match.getWinner() != null)
+                            result.setText(match.getWinner().getID() == account.getID() ?
+                                    localization.getString("WINNER") : localization.getString("LOSER"));
+                        else
+                            result.setText(localization.getString("DRAW"));
+                        add(result, c);
+
+                        c.gridy = 1;
                         c.insets = new Insets(10, 10, 50, 10);
-                        JLabel name = new JLabel(match.getOpponents()[a].getName(), SwingConstants.CENTER);
+                        JLabel name = new JLabel(account.getName() + " (" + localization.getString("SCORE")
+                                +  ": " + account.getScore() + ")", SwingConstants.CENTER);
                         name.setFont(name.getFont().deriveFont(Font.BOLD, 20));
                         add(name, c);
 
-                        for (int y = 1, count = 0; y < rows + 1; y++) {
+                        for (int y = 2, count = 0; y < rows; y++) {
                             c.gridy = y;
-                            c.insets = new Insets(0, 0, 0, 0);
+                            c.insets = new Insets(10, 0, 10, 0);
+                            c.anchor = GridBagConstraints.CENTER;
+                            c.fill = GridBagConstraints.NONE;
 
                             for (int x = a * (QUESTIONS_PER_ROW_AND_PLAYER + 1); x <
                                     a * (QUESTIONS_PER_ROW_AND_PLAYER + 1) + QUESTIONS_PER_ROW_AND_PLAYER; x++, count++) {
@@ -89,13 +104,23 @@ public class GameOverPanel extends JPanel implements IView {
                     c.gridy = rows + 1;
                     c.gridx = 3;
                     c.insets = new Insets(50, 0, 50, 0);
+                    c.fill = GridBagConstraints.BOTH;
 
                     JButton menu = new JButton(GameFrame.getLocalization().getString("MAIN_MENU"));
                     menu.addActionListener(e -> gameFrame.setContentPane(gameFrame.getMenuPanel()));
                     add(menu, c);
                     GameFrame.setProperties(new Dimension(75, 40), new Dimension(100, 50), new Dimension(125, 60), menu);
-                    gameFrame.repaint();
-                    gameFrame.revalidate();
+
+                    Timer timer = new Timer(DELAY_BETWEEN_QUESTIONS - 500, event -> {
+                        SwingUtilities.invokeLater(() -> {
+                            gameFrame.setContentPane(this);
+                            gameFrame.repaint();
+                            gameFrame.revalidate();
+                            gameFrame.getMenuPanel().getQuestionPanel().reset();
+                        });
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
                 }
             }
         }

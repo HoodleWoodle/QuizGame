@@ -74,7 +74,7 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
                 Account user = model.getAccount();
 
                 gameFrame.setTitle(localization.getString("GAME_NAME") + " - "
-                        + user.getName() + "(" + localization.getString("SCORE") + ":" + user.getScore() + ")");
+                        + user.getName() + " (" + localization.getString("SCORE") + ": " + user.getScore() + ")");
                 dispose();
             }
         }

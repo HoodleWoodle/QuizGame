@@ -52,6 +52,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         model.addView(this);
         setLayout(new GridBagLayout());
         initComponents();
+        gameOverPanel = new GameOverPanel(gameFrame, model);
     }
 
     /**
@@ -168,6 +169,12 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     if (answerButton.getText().equals(opponentAnswer))
                         answerButton.setBorder(BorderFactory.createDashedBorder(new Color(10, 144, 232), 3, 5, 5, true));
             }
+
+            if(questionsAnswered >= QUESTION_COUNT) {
+                Timer timer = new Timer(DELAY_BETWEEN_QUESTIONS, event -> gameFrame.setContentPane(gameOverPanel));
+                timer.setRepeats(false);
+                timer.start();
+            }
         }
 
         if (type == ChangeType.QUESTION) {
@@ -178,24 +185,22 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     question = model.getQuestion();
                     List<String> answers = new ArrayList<>(Arrays.asList(question.getAnswers()));
                     questionText.setText(question.getQuestion());
-
-                    for (JButton answerButton : answerButtons) {
-                        Collections.shuffle(answers);
-                        answerButton.setText(answers.get(0));
-                        answerButton.setBackground(Color.LIGHT_GRAY);
-                        answerButton.setBorder(BorderFactory.createEmptyBorder());
-                        answers.remove(0);
-                    }
-
                     answerLoggedIn = false;
-                    countdown.setCounter(countdown.getMaximum());
-                    countdown.restart();
-                    repaint();
-                    revalidate();
-                } else {
-                    gameFrame.setContentPane(gameOverPanel = new GameOverPanel(gameFrame, model));
-                    gameFrame.repaint();
-                    gameFrame.revalidate();
+
+                    SwingUtilities.invokeLater(() -> {
+                        for (JButton answerButton : answerButtons) {
+                            Collections.shuffle(answers);
+                            answerButton.setText(answers.get(0));
+                            answerButton.setBackground(Color.LIGHT_GRAY);
+                            answerButton.setBorder(BorderFactory.createEmptyBorder());
+                            answers.remove(0);
+                        }
+
+                        countdown.setCounter(countdown.getMaximum());
+                        countdown.restart();
+                        repaint();
+                        revalidate();
+                    });
                 }
             });
             timer.setRepeats(false);

@@ -204,15 +204,20 @@ final class QuestionPanel extends JPanel
 				if (!DataManager.check(q, 1024) || !Utils.checkString(q) || !Utils.checkString(im)) correct = false;
 				for (String a : as)
 					if (!DataManager.check(a) || !Utils.checkString(a)) correct = false;
-				File dest = new File(Constants.DATA + "/" + im);
-				if (!dest.exists()) // TODO
+
+				if (!im.isEmpty())
 				{
-					File file = new File(im);
-					dest = new File(Constants.DATA + "/" + file.getName());
-					im = file.getName();
-					if (!file.exists()) correct = false;
-					else if (!copyFile(file, dest)) correct = false;
+					File dest = new File(Constants.DATA + "/" + im);
+					if (!dest.exists()) // TODO
+					{
+						File file = new File(im);
+						dest = new File(Constants.DATA + "/" + file.getName());
+						im = file.getName();
+						if (!file.exists()) correct = false;
+						else if (!copyFile(file, dest)) correct = false;
+					}
 				}
+
 				if (correct) for (int i = 1; i < as.length; i++)
 					if (as[0].equals(as[i])) correct = false;
 				if (ca == null) correct = false;

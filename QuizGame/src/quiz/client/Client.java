@@ -146,13 +146,14 @@ public final class Client extends AbstractTCPClient
 	private Account parseAccount(String parameter)
 	{
 		String[] data = parameter.split(SPLIT_SUB_SUB_SUB);
+		int index = 0;
 
-		int ID = Integer.parseInt(data[0]);
-		String name = data[1];
-		int score = Integer.parseInt(data[2]);
+		int ID = Integer.parseInt(data[index++]);
+		String name = data[index++];
+		int score = Integer.parseInt(data[index++]);
 
-		boolean online = Boolean.parseBoolean(data[3]);
-		boolean available = Boolean.parseBoolean(data[4]);
+		boolean online = Boolean.parseBoolean(data[index++]);
+		boolean available = Boolean.parseBoolean(data[index++]);
 
 		Account account = new Account(ID, name, score);
 		account.setOnline(online);
@@ -188,14 +189,16 @@ public final class Client extends AbstractTCPClient
 	private Question parseQuestion(String parameter)
 	{
 		String[] data = parameter.split(SPLIT_SUB_SUB_SUB);
+		int index = 0;
 
-		Category category = getCategory(Integer.parseInt(data[0]));
-		String question = data[1];
-		String[] answers = new String[data.length - 2];
+		Category category = getCategory(Integer.parseInt(data[index++]));
+		String question = data[index++];
+		String image = "null".equals(data[2]) ? null : data[index++];
+		String[] answers = new String[data.length - 3];
 		for (int i = 0; i < answers.length; i++)
-			answers[i] = data[2 + i];
+			answers[i] = data[index++];
 
-		return new Question(category, question, answers);
+		return new Question(category, question, image, answers);
 	}
 
 	private Category getCategory(int ID)

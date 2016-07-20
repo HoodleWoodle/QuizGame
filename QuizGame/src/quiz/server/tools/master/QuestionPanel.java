@@ -1,8 +1,11 @@
 package quiz.server.tools.master;
 
 import java.awt.Insets;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.TooManyListenersException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,6 +18,7 @@ import javax.swing.JTextField;
 import quiz.Utils;
 import quiz.model.Category;
 import quiz.model.Question;
+import quiz.net.NetworkKeys;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
 
@@ -31,6 +35,7 @@ final class QuestionPanel extends JPanel
 	private JTable table;
 	private QuestionTableModel model;
 	private JTextField question;
+	private JTextField image;
 	private JTextField[] answers;
 	private JComboBox<Category> category;
 	private JButton get;
@@ -82,21 +87,41 @@ final class QuestionPanel extends JPanel
 		label.setBounds(302, 290, 70, 25);
 		add(label = new JLabel("Category:"));
 		label.setBounds(0, 315, 70, 25);
+		add(label = new JLabel("*Image:"));
+		label.setBounds(302, 315, 70, 25);
+
+		final String msg = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
+		final String tag = "<compulsive> - " + msg;
 
 		// initialize fields/boxes
 		add(question = new JTextField());
+		question.setToolTipText(tag);
 		question.setBounds(70, 239, 525, 26);
 		answers = new JTextField[4];
 		add(answers[0] = new JTextField());
+		answers[0].setToolTipText(tag);
 		answers[0].setBounds(70, 264, 223, 26);
 		add(answers[1] = new JTextField());
+		answers[1].setToolTipText(tag);
 		answers[1].setBounds(372, 264, 223, 26);
 		add(answers[2] = new JTextField());
+		answers[2].setToolTipText(tag);
 		answers[2].setBounds(70, 289, 223, 26);
 		add(answers[3] = new JTextField());
+		answers[3].setToolTipText(tag);
 		answers[3].setBounds(372, 289, 223, 26);
 		add(category = new JComboBox<Category>(Category.values()));
 		category.setBounds(70, 316, 120, 23);
+		add(image = new JTextField());
+		image.setToolTipText("<optional> - " + msg + " - Drag and Drop is enabled for an Image. (png, jpg)");
+		image.setBounds(372, 316, 223, 26);
+
+		try
+		{
+			new DropTarget(image, DnDConstants.ACTION_COPY, null).addDropTargetListener(new DropTargetHandler(this));
+		} catch (TooManyListenersException e)
+		{
+		}
 
 		// initialize buttons
 		add(get = new JButton("get"));
@@ -128,6 +153,7 @@ final class QuestionPanel extends JPanel
 
 				// set data to input
 				question.setText(selected.getQuestion());
+				image.setText(selected.getImage());
 				for (int i = 0; i < 4; i++)
 					answers[i].setText(selected.getAnswers()[i]);
 				category.setSelectedItem(selected.getCategory());
@@ -158,8 +184,10 @@ final class QuestionPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+
 				// get input
 				String q = question.getText();
+				String im = image.getText();
 				String[] as = new String[4];
 				for (int i = 0; i < 4; i++)
 					as[i] = answers[i].getText();
@@ -167,13 +195,13 @@ final class QuestionPanel extends JPanel
 
 				boolean correct = true;
 				// check input
-				if (!DataManager.check(q, 1024) || !Utils.checkString(q)) correct = false;
+				if (!DataManager.check(q, 1024) || !Utils.checkString(q) || !Utils.checkString(im)) correct = false;
 				for (String a : as)
 					if (!DataManager.check(a) || !Utils.checkString(a)) correct = false;
 				if (correct) for (int i = 1; i < as.length; i++)
 					if (as[0].equals(as[i])) correct = false;
 				if (ca == null) correct = false;
-				if (!dataManager.addQuestion(new Question(ca, q, as))) correct = false;
+				if (!dataManager.addQuestion(new Question(ca, q, im, as))) correct = false;
 
 				if (!correct)
 				{
@@ -183,6 +211,7 @@ final class QuestionPanel extends JPanel
 
 				// clear input
 				question.setText("");
+				image.setText("");
 				for (int i = 0; i < 4; i++)
 					answers[i].setText("");
 				category.setSelectedIndex(0);
@@ -199,5 +228,13 @@ final class QuestionPanel extends JPanel
 	void update()
 	{
 		model.update(dataManager.getQuestions());
+	}
+
+	/**
+	 * Sets a dragged image.
+	 */
+	void setImage(String image)
+	{
+		this.image.setText(image);
 	}
 }

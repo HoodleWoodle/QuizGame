@@ -144,7 +144,8 @@ public final class Server extends AbstractTCPServer
 			addAccount(account, client);
 
 			System.out.println("Account registered. (" + account.getName() + "[" + account.getID() + "])");
-		} else client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
+		}
+		else client.send(new NetworkMessage(TAG_INVALID_REGISTER_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workLogin(ClientThread client, NetworkMessage message)
@@ -155,7 +156,8 @@ public final class Server extends AbstractTCPServer
 			addAccount(account, client);
 
 			System.out.println("Account logged in. (" + account.getName() + "[" + account.getID() + "])");
-		} else client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
+		}
+		else client.send(new NetworkMessage(TAG_INVALID_LOGIN_DETAILS, new String[0]).getBytes());
 	}
 
 	private void workRequest(ClientThread client, NetworkMessage message)
@@ -267,7 +269,8 @@ public final class Server extends AbstractTCPServer
 			{
 				endMatch(match, true);
 				sendOpponents();
-			} else
+			}
+			else
 			{
 				match = matchStep.editMatch(match);
 				matches.put(matchID, match);
@@ -406,7 +409,8 @@ public final class Server extends AbstractTCPServer
 			updateAccounts(match);
 			opponents[0] = dataManager.getAccount(accountID);
 			opponents[1] = dataManager.getAccount(otherID);
-		} else
+		}
+		else
 		{
 			opponents[0] = dataManager.updateAccount(opponents[0], opponents[0].getScore() + SCORE_WIN);
 			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
@@ -571,6 +575,8 @@ public final class Server extends AbstractTCPServer
 		builder.append(SPLIT_SUB_SUB_SUB);
 		builder.append(question.getQuestion());
 		builder.append(SPLIT_SUB_SUB_SUB);
+		builder.append(question.getImage());
+		builder.append(SPLIT_SUB_SUB_SUB);
 
 		String[] answers = question.getAnswers();
 		for (int i = 0; i < answers.length; i++)
@@ -634,7 +640,7 @@ public final class Server extends AbstractTCPServer
 		// TODO TEMP
 		for (Category c : Category.values())
 			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
+				dataManager.addQuestion(new Question(c, c.toString() + "-question-" + i, "example.jpg", new String[] { "correct", "incorrect-0", "incorrect-1", "incorrect-2" }));
 
 		dataManager.addAccount("1", "1");
 		dataManager.addAccount("2", "2");

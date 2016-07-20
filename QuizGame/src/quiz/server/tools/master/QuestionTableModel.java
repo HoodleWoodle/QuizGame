@@ -47,7 +47,7 @@ final class QuestionTableModel extends AbstractTableModel
 	@Override
 	public int getColumnCount()
 	{
-		return 6;
+		return 7;
 	}
 
 	@Override
@@ -66,6 +66,8 @@ final class QuestionTableModel extends AbstractTableModel
 		case 4:
 			return "Answer 3";
 		case 5:
+			return "Image";
+		case 6:
 			return "Category";
 		default:
 			return null;
@@ -98,6 +100,8 @@ final class QuestionTableModel extends AbstractTableModel
 		case 4:
 			return model.get(row).getAnswers()[3];
 		case 5:
+			return model.get(row).getImage();
+		case 6:
 			return model.get(row).getCategory();
 		}
 

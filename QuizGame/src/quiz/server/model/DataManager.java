@@ -68,7 +68,7 @@ public final class DataManager implements IDataManager
 		// create Accounts-table
 		db.insert("CREATE TABLE " + TABLE_ACCOUNTS + " (ID INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, score INTEGER DEFAULT '0' NOT NULL)");
 		// create Questions-table
-		db.insert("CREATE TABLE " + TABLE_QUESTIONS + " (category TINYINT NOT NULL, question VARCHAR(1023) NOT NULL UNIQUE, correct VARCHAR(255) NOT NULL, answer1 VARCHAR(255) NOT NULL, answer2 VARCHAR(255) NOT NULL, answer3 VARCHAR(255) NOT NULL)");
+		db.insert("CREATE TABLE " + TABLE_QUESTIONS + " (category TINYINT NOT NULL, question VARCHAR(1023) NOT NULL UNIQUE, image VARCHAR(255) NOT NULL, correct VARCHAR(255) NOT NULL, answer1 VARCHAR(255) NOT NULL, answer2 VARCHAR(255) NOT NULL, answer3 VARCHAR(255) NOT NULL)");
 	}
 
 	@Override
@@ -180,6 +180,7 @@ public final class DataManager implements IDataManager
 	{
 		// get data from Question-object
 		String quest = question.getQuestion();
+		String image = question.getImage();
 		Category category = question.getCategory();
 		String[] answers = question.getAnswers();
 
@@ -187,13 +188,15 @@ public final class DataManager implements IDataManager
 		if (!check(quest, 1023)) return false;
 		// check category
 		if (category == null) return false;
+		// check image-name
+		if (image == null || image.length() > 255) return false;
 		// check answer-strings
 		if (answers.length != 4) return false;
 		for (String answer : answers)
 			if (!check(answer)) return false;
 
 		// insert question into database
-		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (question, category, correct, answer1, answer2, answer3) VALUES ('" + quest + "', '" + category.ordinal() + "', '" + answers[0] + "', '" + answers[1] + "', '" + answers[2] + "', '" + answers[3] + "')"))
+		if (!db.insert("INSERT INTO " + TABLE_QUESTIONS + " (category, question, image, correct, answer1, answer2, answer3) VALUES ('" + category.ordinal() + "', '" + quest + "', '" + image + "', '" + answers[0] + "', '" + answers[1] + "', '" + answers[2] + "', '" + answers[3] + "')"))
 		{
 			log_err(4);
 			return false;
@@ -262,8 +265,8 @@ public final class DataManager implements IDataManager
 				// add Question
 				String[] answers = new String[4];
 				for (int answer = 0; answer < answers.length; answer++)
-					answers[answer] = result.getString(3 + answer);
-				questions.add(new Question(Category.values()[result.getInt(1)], result.getString(2), answers));
+					answers[answer] = result.getString(4 + answer);
+				questions.add(new Question(Category.values()[result.getInt(1)], result.getString(2), result.getString(3), answers));
 			}
 
 			return questions;

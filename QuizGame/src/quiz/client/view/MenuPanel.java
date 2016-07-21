@@ -155,8 +155,15 @@ public class MenuPanel extends JPanel implements IView {
 
     @Override
     public void onChange(ChangeType type, Status status) {
-        if (type == ChangeType.MATCH && model.getMatch() != null)
-            gameFrame.setContentPane(questionPanel);
+        if (type == ChangeType.MATCH && model.getMatch() != null) {
+            Timer timer = new Timer(100, event -> {
+                SwingUtilities.invokeLater(() -> {
+                    gameFrame.setContentPane(questionPanel);
+                });
+            });
+            timer.setRepeats(false);
+            timer.start();
+        }
 
         if(type == ChangeType.REQUESTS && status == Status.NO_OPPONENTS_AVAILABLE)
             gameFrame.showExceptionMessage(localization.getString("NO_OPPONENTS_AVAILABLE"));

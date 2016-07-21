@@ -564,13 +564,8 @@ public final class Server extends AbstractTCPServer
 			Match request = requests.get(key);
 
 			Account[] opponents = request.getOpponents();
-			if (opponents[sender ? 0 : 1].getID() == accountID)
-			{
-				rs.add(request);
-				break;
-			}
+			if (opponents[sender ? 0 : 1].getID() == accountID) rs.add(request);
 		}
-		System.out.println(rs.size());
 
 		String[] result = new String[rs.size()];
 
@@ -715,8 +710,8 @@ public final class Server extends AbstractTCPServer
 			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
 				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, "example.jpg", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
 
-		dataManager.addAccount("user_1", "1");
-		dataManager.addAccount("user_2", "2");
+		dataManager.addAccount("1", "1");
+		dataManager.addAccount("2", "2");
 		// TODO TEMP
 
 		for (Category category : Category.values())

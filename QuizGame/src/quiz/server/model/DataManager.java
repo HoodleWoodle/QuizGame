@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import quiz.Utils;
 import quiz.model.Account;
 import quiz.model.Category;
 import quiz.model.Question;
@@ -48,7 +49,7 @@ public final class DataManager implements IDataManager
 		if (!db.connect())
 		{
 			// if connecting fails
-			JOptionPane.showMessageDialog(null, "Cannot connect to database!");
+			JOptionPane.showMessageDialog(null, Utils.ERROR_DB_CONNECTING);
 			// shut down process
 			System.exit(1);
 		}

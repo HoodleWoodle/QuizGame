@@ -66,6 +66,7 @@ public final class Client extends AbstractTCPClient
 	@Override
 	protected void received(byte[] message)
 	{
+		// parse message and set it
 		NetworkMessage msg = new NetworkMessage(message);
 
 		Model model = (Model) this.model;
@@ -227,11 +228,10 @@ public final class Client extends AbstractTCPClient
 			port = Integer.parseInt(ini.getProperty("port"));
 		} catch (Exception e)
 		{
-			server = "localhost";
-			port = 1819;
+			server = Constants.DEFAULT_SERVER;
+			port = Constants.DEFAULT_PORT;
 		}
 
-		// try to connect to Server
 		Client client = new Client(server, port);
 		boolean con = client.connect();
 
@@ -240,16 +240,13 @@ public final class Client extends AbstractTCPClient
 
 		Utils.initalizeLAF();
 
-		// some Exception
 		if (con == false)
 		{
-			JOptionPane.showMessageDialog(null, "Cannot start Client!");
+			JOptionPane.showMessageDialog(null, Utils.ERROR_CLIENT_STARTING);
 			System.exit(1);
 		}
 
-		// start surface
 		SwingUtilities.invokeLater(() -> {
-			// Swing needs to run on event dispatching thread
 			new GameFrame(client, control, model);
 		});
 	}

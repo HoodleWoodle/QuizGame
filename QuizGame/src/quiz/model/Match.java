@@ -99,10 +99,8 @@ public final class Match
 				wins[i] += answers[i][j] == 0 ? 1 : 0;
 
 		for (int i = 0; i < opponents.length; i++)
-		{
-			int j = (i + 1) % opponents.length;
-			if (wins[i] > wins[j]) return opponents[i];
-		}
+			if (wins[i] > wins[(i + 1) % opponents.length]) return opponents[i];
+
 		return null;
 	}
 }

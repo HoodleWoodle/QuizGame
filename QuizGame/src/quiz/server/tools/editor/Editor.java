@@ -1,4 +1,4 @@
-package quiz.server.tools.master;
+package quiz.server.tools.editor;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -19,7 +19,7 @@ import quiz.server.model.IDataManager;
  * @author Stefan
  * @version 29.04.2016
  */
-final class MasterTool extends JPanel
+final class Editor extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ final class MasterTool extends JPanel
 	/**
 	 * Creates an instance of MasterTool.
 	 */
-	MasterTool()
+	Editor()
 	{
 		dataManager = new DataManager();
 
@@ -93,10 +93,10 @@ final class MasterTool extends JPanel
 	{
 		Utils.initalizeLAF();
 
-		MasterTool tool = new MasterTool();
+		Editor tool = new Editor();
 
 		// initialize frame
-		JFrame frame = new JFrame("QuizGame - MasterTool");
+		JFrame frame = new JFrame(Utils.TITLE_EDITOR);
 		frame.setIconImage(Utils.loadIcon());
 		frame.setResizable(false);
 		frame.add(tool);

@@ -30,6 +30,14 @@ public interface Constants
 	 */
 	int SCORE_FOOL = -5;
 	/**
+	 * The score-increase for a loser.
+	 */
+	int SCORE_LOSE = -2;
+	/**
+	 * The score-increase for a tie.
+	 */
+	int SCORE_TIE = -1;
+	/**
 	 * The number of Questions per row and player in the GameOverPanel. QUESTION_COUNT must be a multiple of QUESTIONS_PER_ROW.
 	 */
 	int QUESTIONS_PER_ROW_AND_PLAYER = 3;

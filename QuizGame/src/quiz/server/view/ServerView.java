@@ -75,7 +75,7 @@ public final class ServerView extends JPanel
 		clear.setMargin(new Insets(0, 0, 0, 0));
 		clear.setBounds(270, 5, 125, 25);
 
-		add(information = new JTextArea("QuizGame is coded by  : 'Alex, Eric, Quirin, Stefan'\nQuestions are created by : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!"));
+		add(information = new JTextArea(Utils.INFO_SERVER));
 		information.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 		information.setFont(new Font("Arial", Font.BOLD, 12));
 		information.setLineWrap(true);
@@ -150,7 +150,7 @@ public final class ServerView extends JPanel
 	public void stop()
 	{
 		if (server != null) server.close();
-		System.out.println("Server closed!");
+		System.out.println(Utils.MSG_SERVER_CLOSED);
 
 		start.setSelected(false);
 		stop.setSelected(false);
@@ -167,10 +167,11 @@ public final class ServerView extends JPanel
 	 */
 	public void open(IDataManager dataManager)
 	{
+		// open server-view
 		SwingUtilities.invokeLater(() -> {
 			this.dataManager = dataManager;
 
-			JFrame frame = new JFrame("QuizGame - Server");
+			JFrame frame = new JFrame(Utils.TITLE_SERVER);
 			frame.setIconImage(Utils.loadIcon());
 			frame.setResizable(false);
 			frame.add(this);

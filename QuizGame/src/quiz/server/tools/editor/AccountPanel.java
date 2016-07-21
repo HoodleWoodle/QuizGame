@@ -1,4 +1,4 @@
-package quiz.server.tools.master;
+package quiz.server.tools.editor;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -149,12 +149,12 @@ final class AccountPanel extends JPanel
 				// check input
 				if (!DataManager.check(n) || !DataManager.check(p) || !Utils.checkString(n) || !Utils.checkString(p))
 				{
-					MasterTool.invalid();
+					Editor.invalid();
 					return;
 				}
 				if (dataManager.addAccount(n, p) == null)
 				{
-					MasterTool.invalid();
+					Editor.invalid();
 					return;
 				}
 

@@ -1,4 +1,4 @@
-package quiz.server.tools.master;
+package quiz.server.tools.editor;
 
 import java.util.Collections;
 import java.util.List;

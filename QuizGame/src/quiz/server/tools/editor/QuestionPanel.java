@@ -1,4 +1,4 @@
-package quiz.server.tools.master;
+package quiz.server.tools.editor;
 
 import java.awt.Insets;
 import java.awt.dnd.DnDConstants;
@@ -225,7 +225,7 @@ final class QuestionPanel extends JPanel
 
 				if (!correct)
 				{
-					MasterTool.invalid();
+					Editor.invalid();
 					return;
 				}
 

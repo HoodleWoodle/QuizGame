@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import quiz.Utils;
+
 /**
  * @author Stefan
  * @version 29.04.2016
@@ -49,7 +51,7 @@ final class Database
 	{
 		try
 		{
-			System.out.println("Connecting to database!");
+			System.out.println(Utils.MSG_DB_CONNECTING);
 
 			// try to connect to database
 			Class.forName("org.h2.Driver");
@@ -60,7 +62,7 @@ final class Database
 		} catch (ClassNotFoundException | SQLException e)
 		{
 			// some Exception
-			System.out.println("Cannot connect to database!");
+			System.out.println(Utils.ERROR_DB_CONNECTING);
 			// e.printStackTrace();
 			return false;
 		}
@@ -75,7 +77,7 @@ final class Database
 	{
 		try
 		{
-			System.out.println("Closing database!");
+			System.out.println(Utils.MSG_DB_CLOSING);
 
 			// try to close database-connection
 			if (statement != null) statement.close();
@@ -84,7 +86,7 @@ final class Database
 		} catch (SQLException e)
 		{
 			// some Exception
-			System.out.println("Cannot close database!");
+			System.out.println(Utils.ERROR_DB_CLOSING);
 			// e.printStackTrace();
 			return false;
 		}
@@ -109,7 +111,7 @@ final class Database
 		} catch (SQLException e)
 		{
 			// some Exception
-			System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+			// System.err.println("Cannot execute SQL-command: '" + sql + "'!");
 			// e.printStackTrace();
 			return null;
 		}
@@ -133,7 +135,7 @@ final class Database
 		} catch (SQLException e)
 		{
 			// some Exception
-			System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+			// System.err.println("Cannot execute SQL-command: '" + sql + "'!");
 			// e.printStackTrace();
 			return false;
 		}
@@ -159,7 +161,7 @@ final class Database
 		} catch (SQLException e)
 		{
 			// some Exception
-			System.err.println("Cannot execute SQL-command: '" + sql + "'!");
+			// System.err.println("Cannot execute SQL-command: '" + sql + "'!");
 			// e.printStackTrace();
 		}
 		return -1;

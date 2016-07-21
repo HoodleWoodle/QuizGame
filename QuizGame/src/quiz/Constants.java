@@ -81,4 +81,8 @@ public interface Constants
 	 * The delay in milliseconds until the next question is displayed.
 	 */
 	int DELAY_BETWEEN_QUESTIONS = 2000;
+	/**
+	 * Character restriction for the username length.
+	 */
+	int USERNAME_LENGTH = 20;
 }

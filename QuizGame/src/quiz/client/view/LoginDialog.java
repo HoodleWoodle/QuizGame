@@ -121,6 +121,11 @@ public class LoginDialog extends JDialog implements ItemListener, ActionListener
         if (!Utils.checkString(username.getText()) || !Utils.checkString(pw1) || !Utils.checkString(pw2))
             return;
 
+        if(login.isSelected() && username.getText().length() > 20) {
+            gameFrame.showExceptionMessage(localization.getString("USERNAME_TOO_LONG"));
+            return;
+        }
+
         if (login.isSelected() && !pw1.equals(pw2)) {
             gameFrame.showExceptionMessage(localization.getString("EXCEPTION_SAME_PW"));
             repeatPassword.setText("");

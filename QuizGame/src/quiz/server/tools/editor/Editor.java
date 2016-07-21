@@ -11,6 +11,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import quiz.ImageResourceLoader;
 import quiz.Utils;
 import quiz.server.model.DataManager;
 import quiz.server.model.IDataManager;
@@ -97,7 +98,7 @@ final class Editor extends JPanel
 
 		// initialize frame
 		JFrame frame = new JFrame(Utils.TITLE_EDITOR);
-		frame.setIconImage(Utils.loadIcon());
+		frame.setIconImage(ImageResourceLoader.getInstance().getIcon());
 		frame.setResizable(false);
 		frame.add(tool);
 		frame.pack();

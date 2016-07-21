@@ -1,5 +1,6 @@
 package quiz.client.view;
 
+import quiz.ImageResourceLoader;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
 import quiz.client.model.Status;
@@ -39,14 +40,10 @@ public class PlayerListPanel extends JPanel implements IView {
     public PlayerListPanel(GameFrame gameFrame, IModel model) {
         this.gameFrame = gameFrame;
         this.model = model;
-
-        try {
-            online = new ImageIcon(ImageIO.read(Paths.get("data").resolve("icon_online.png").toFile()));
-            not_available = new ImageIcon(ImageIO.read(Paths.get("data").resolve("icon_not_available.png").toFile()));
-            offline = new ImageIcon(ImageIO.read(Paths.get("data").resolve("icon_offline.png").toFile()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
+		online = ImageResourceLoader.getInstance().getIcon(0);
+		not_available = ImageResourceLoader.getInstance().getIcon(1);
+		offline = ImageResourceLoader.getInstance().getIcon(2);
 
         model.addView(this);
         setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));

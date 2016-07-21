@@ -1,4 +1,4 @@
 /bin/
 /utils-lib.txt
-/quizDB.trace.db
-/quizDB.mv.db
+data/quizDB.trace.db
+data/quizDB.mv.db

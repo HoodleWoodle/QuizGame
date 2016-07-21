@@ -1,10 +1,5 @@
 package quiz;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -66,18 +61,6 @@ public final class Utils
 		} catch (Exception e)
 		{
 		}
-	}
-
-	public static Image loadIcon()
-	{
-		try
-		{
-			return ImageIO.read(new File(Constants.ICON_FILE));
-		} catch (IOException e)
-		{
-			return null;
-		}
-
 	}
 
 	public static String replaceWithAccount(String string, Account account)

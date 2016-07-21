@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
+import quiz.ImageResourceLoader;
 import quiz.Utils;
 import quiz.server.Server;
 import quiz.server.model.IDataManager;
@@ -172,7 +173,7 @@ public final class ServerView extends JPanel
 			this.dataManager = dataManager;
 
 			JFrame frame = new JFrame(Utils.TITLE_SERVER);
-			frame.setIconImage(Utils.loadIcon());
+			frame.setIconImage(ImageResourceLoader.getInstance().getIcon());
 			frame.setResizable(false);
 			frame.add(this);
 			frame.pack();

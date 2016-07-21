@@ -1,6 +1,7 @@
 package quiz.client.view;
 
 import lib.net.tcp.client.AbstractTCPClient;
+import quiz.ImageResourceLoader;
 import quiz.client.IControl;
 import quiz.client.model.IModel;
 import quiz.model.Account;
@@ -79,11 +80,7 @@ public final class GameFrame extends JFrame {
         setContentPane(menuPanel = new MenuPanel(this, control, model));
         setResizable(false);
 
-        try {
-            setIconImage(ImageIO.read(Paths.get("data").resolve("icon_image.png").toFile()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setIconImage(ImageResourceLoader.getInstance().getIcon());
 
         addWindowListener(new WindowAdapter() {
             @Override

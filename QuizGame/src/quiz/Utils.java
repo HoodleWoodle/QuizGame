@@ -20,7 +20,7 @@ public final class Utils
 {
 	public static final String TITLE_EDITOR = "QuizGame - Editor";
 	public static final String TITLE_SERVER = "QuizGame - Server";
-	public static final String INFO_SERVER = "QuizGame is coded by  : 'Alex, Eric, Quirin, Stefan'\nQuestions are created by : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!";
+	public static final String INFO_SERVER = "QuizGame is coded by  : '(Alex, Quirin,) Eric, Stefan'\nQuestions are created by : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!";
 	public static final String MSG_DB_CONNECTING = "Connecting to database...";
 	public static final String MSG_DB_CLOSING = "Database closed";
 	public static final String MSG_SERVER_STARTING = "Starting Server...";

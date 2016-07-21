@@ -81,4 +81,12 @@ public interface Constants
 	 * The delay in milliseconds until the next question is displayed.
 	 */
 	int DELAY_BETWEEN_QUESTIONS = 2000;
+	/**
+	 * The default server-name.
+	 */
+	String DEFAULT_SERVER = "localhost";
+	/**
+	 * The default server-port
+	 */
+	int DEFAULT_PORT = 1819;
 }

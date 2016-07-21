@@ -38,6 +38,14 @@ public interface Constants
 	 */
 	int SCORE_TIE = -1;
 	/**
+	 * The default server-name.
+	 */
+	String DEFAULT_SERVER = "localhost";
+	/**
+	 * The default server-port
+	 */
+	int DEFAULT_PORT = 1819;
+	/**
 	 * The number of Questions per row and player in the GameOverPanel. QUESTION_COUNT must be a multiple of QUESTIONS_PER_ROW.
 	 */
 	int QUESTIONS_PER_ROW_AND_PLAYER = 3;
@@ -90,11 +98,7 @@ public interface Constants
 	 */
 	int DELAY_BETWEEN_QUESTIONS = 2000;
 	/**
-	 * The default server-name.
+	 * Character restriction for the username length.
 	 */
-	String DEFAULT_SERVER = "localhost";
-	/**
-	 * The default server-port
-	 */
-	int DEFAULT_PORT = 1819;
+	int USERNAME_LENGTH = 20;
 }

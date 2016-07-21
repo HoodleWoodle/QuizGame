@@ -9,6 +9,9 @@ import quiz.model.Question;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import static quiz.Constants.*;
@@ -51,7 +54,7 @@ public class GameOverPanel extends JPanel implements IView {
                     c.anchor = GridBagConstraints.CENTER;
                     c.insets = new Insets(10, 10, 10, 10);
                     JLabel categoryLabel = new JLabel(match.getCategory().toString(), SwingConstants.CENTER);
-                    categoryLabel.setFont(categoryLabel.getFont().deriveFont(Font.BOLD, 20));
+                    categoryLabel.setFont(categoryLabel.getFont().deriveFont(Font.BOLD, 22));
                     add(categoryLabel, c);
 
                     int rows = questions.length / QUESTIONS_PER_ROW_AND_PLAYER + 2;
@@ -60,7 +63,7 @@ public class GameOverPanel extends JPanel implements IView {
                         c.gridy = 0;
                         Account account = match.getOpponents()[a];
                         JLabel result = new JLabel("", SwingConstants.CENTER);
-                        result.setFont(result.getFont().deriveFont(Font.BOLD, 20));
+                        setFont(account, result);
                         if(match.getWinner() != null)
                             result.setText(match.getWinner().getID() == account.getID() ?
                                     localization.getString("WINNER") : localization.getString("LOSER"));
@@ -72,7 +75,7 @@ public class GameOverPanel extends JPanel implements IView {
                         c.insets = new Insets(10, 10, 50, 10);
                         JLabel name = new JLabel(account.getName() + " (" + localization.getString("SCORE")
                                 +  ": " + account.getScore() + ")", SwingConstants.CENTER);
-                        name.setFont(name.getFont().deriveFont(Font.BOLD, 20));
+                        setFont(account, name);
                         add(name, c);
 
                         for (int y = 2, count = 0; y < rows; y++) {
@@ -124,5 +127,15 @@ public class GameOverPanel extends JPanel implements IView {
                 }
             }
         }
+    }
+
+    private void setFont(Account account, JComponent component) {
+        if(account.getID() == model.getAccount().getID()) {
+            Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
+            fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+            component.setFont(component.getFont().deriveFont(Font.BOLD, 20).deriveFont(fontAttributes));
+        }
+        else
+            component.setFont(component.getFont().deriveFont(20f));
     }
 }

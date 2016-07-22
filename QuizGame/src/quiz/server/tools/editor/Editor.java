@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -94,26 +95,28 @@ final class Editor extends JPanel
 	{
 		Utils.initalizeLAF();
 
-		Editor tool = new Editor();
+		SwingUtilities.invokeLater(() -> {
+			Editor tool = new Editor();
 
-		// initialize frame
-		JFrame frame = new JFrame(Utils.TITLE_EDITOR);
-		frame.setIconImage(ImageResourceLoader.getInstance().getIcon());
-		frame.setResizable(false);
-		frame.add(tool);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
+			// initialize frame
+			JFrame frame = new JFrame(Utils.TITLE_EDITOR);
+			frame.setIconImage(ImageResourceLoader.getInstance().getIcon());
+			frame.setResizable(false);
+			frame.add(tool);
+			frame.pack();
+			frame.setLocationRelativeTo(null);
 
-		frame.addWindowListener(new WindowAdapter()
-		{
-			@Override
-			public void windowClosing(WindowEvent e)
+			frame.addWindowListener(new WindowAdapter()
 			{
-				tool.dataManager.close();
-				System.exit(0);
-			}
-		});
+				@Override
+				public void windowClosing(WindowEvent e)
+				{
+					tool.dataManager.close();
+					System.exit(0);
+				}
+			});
 
-		frame.setVisible(true);
+			frame.setVisible(true);
+		});
 	}
 }

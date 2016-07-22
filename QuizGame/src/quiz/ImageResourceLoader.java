@@ -16,6 +16,11 @@ public final class ImageResourceLoader
 {
 	private static ImageResourceLoader instance;
 
+	/**
+	 * A Singleton.
+	 * 
+	 * @return the instance of ImageResourceLoader.
+	 */
 	public static ImageResourceLoader getInstance()
 	{
 		if (instance == null) instance = new ImageResourceLoader();
@@ -25,7 +30,7 @@ public final class ImageResourceLoader
 	private Image icon;
 	private Icon[] icons;
 
-	public ImageResourceLoader()
+	private ImageResourceLoader()
 	{
 		icons = new Icon[3];
 
@@ -44,11 +49,23 @@ public final class ImageResourceLoader
 		}
 	}
 
+	/**
+	 * Returns the Image of the game-icon.
+	 * 
+	 * @return the Image of the game-icon
+	 */
 	public Image getIcon()
 	{
 		return icon;
 	}
 
+	/**
+	 * Returns an icon.
+	 * 
+	 * @param index
+	 *            the index of the desired icon
+	 * @return the desired icon
+	 */
 	public Icon getIcon(int index)
 	{
 		return icons[index];

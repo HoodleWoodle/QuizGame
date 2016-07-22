@@ -13,6 +13,7 @@ import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
 import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
 import static quiz.net.NetworkKeys.TAG_LOGIN;
 import static quiz.net.NetworkKeys.TAG_NO_OPPONENTS_AVAILABLE;
+import static quiz.net.NetworkKeys.TAG_OPPONENT_DISCONNECTED;
 import static quiz.net.NetworkKeys.TAG_OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.TAG_REGISTER;
 import static quiz.net.NetworkKeys.TAG_REQUEST;
@@ -30,7 +31,6 @@ import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
 import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 import static quiz.net.NetworkKeys.TAG_SET_SENT_REQUESTS;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -135,7 +135,19 @@ public final class Server extends AbstractTCPServer
 		clientIDs.remove(accountID);
 
 		// if this fool is in a match
-		if (isInMatch(accountID)) endMatch(getMatch(accountID), false);
+		if (isInMatch(accountID))
+		{
+			Match match = getMatch(accountID);
+
+			endMatch(match, false);
+
+			Account[] opponents = match.getOpponents();
+			for (int i = 0; i < opponents.length; i++)
+			{
+				int otherID = opponents[i].getID();
+				if (otherID != accountID) sendTo(otherID, createEmptyMessage(TAG_OPPONENT_DISCONNECTED));
+			}
+		}
 
 		System.out.println(Utils.replaceWithAccount(Utils.MSG_CLOSED, dataManager.getAccount(accountID)));
 
@@ -424,7 +436,7 @@ public final class Server extends AbstractTCPServer
 
 	private boolean existsRequest(int accountID_0, int accountID_1)
 	{
-		// check whether an request exists
+		// check whether an request between two accounts exists
 		for (Integer key : requests.keySet())
 		{
 			Account[] opponents = requests.get(key).getOpponents();
@@ -440,7 +452,7 @@ public final class Server extends AbstractTCPServer
 
 	private void endMatch(Match match, boolean ready)
 	{
-		// ends a match and set new score
+		// get relevant information
 		int matchID = match.getID();
 		matches.remove(matchID);
 		matchSteps.remove(matchID);
@@ -448,6 +460,7 @@ public final class Server extends AbstractTCPServer
 		int accountID = opponents[0].getID();
 		int otherID = opponents[1].getID();
 
+		// set the new score
 		if (ready)
 		{
 			updateAccounts(match);
@@ -460,6 +473,7 @@ public final class Server extends AbstractTCPServer
 			opponents[1] = dataManager.updateAccount(opponents[1], opponents[1].getScore() + SCORE_FOOL);
 		}
 
+		// update accounts
 		sendTo(accountID, new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[0])));
 		sendTo(otherID, new NetworkMessage(TAG_SET_ACCOUNT, convertAccount(opponents[1])));
 	}
@@ -471,18 +485,18 @@ public final class Server extends AbstractTCPServer
 		int[][] answers = match.getAnswers();
 		int[] wins = new int[opponents.length];
 
+		// evaluate win-steps
 		for (int i = 0; i < answers.length; i++)
 			for (int j = 0; j < answers[0].length; j++)
 				wins[i] += answers[i][j] == 0 ? 1 : 0;
 
+		// calculate new score
 		for (int i = 0; i < opponents.length; i++)
 		{
 			int j = (i + 1) % opponents.length;
-			{
-				if (wins[i] > wins[j]) dataManager.updateAccount(opponents[i], opponents[i].getScore() + SCORE_WIN + (wins[i] - wins[j]) * SCORE_DISTANCE);
-				if (wins[i] < wins[j]) dataManager.updateAccount(opponents[i], opponents[i].getScore() + SCORE_LOSE);
-				if (wins[i] == wins[j]) dataManager.updateAccount(opponents[i], opponents[i].getScore() + SCORE_TIE);
-			}
+			if (wins[i] > wins[j]) dataManager.updateAccount(opponents[i], opponents[i].getScore() + SCORE_WIN + (wins[i] - wins[j]) * SCORE_DISTANCE);
+			if (wins[i] < wins[j]) dataManager.updateAccount(opponents[i], opponents[i].getScore() + SCORE_LOSE);
+			if (wins[i] == wins[j]) dataManager.updateAccount(opponents[i], opponents[i].getScore() + SCORE_TIE);
 		}
 	}
 
@@ -670,12 +684,14 @@ public final class Server extends AbstractTCPServer
 		Server server = new Server(dataManager, port);
 		System.out.println(Utils.MSG_SERVER_STARTING);
 
+		// clear intern data
 		server.accountIDs.clear();
 		server.clientIDs.clear();
 		server.matches.clear();
 		server.matchSteps.clear();
 		server.requests.clear();
 
+		// try to start server
 		try
 		{
 			if (!server.start()) throw new Exception();
@@ -698,7 +714,7 @@ public final class Server extends AbstractTCPServer
 		Utils.initalizeLAF();
 
 		// TODO TEMP
-		new File(Constants.DB_FILE).delete();
+		// new File(Constants.DB_FILE).delete();
 		// TODO TEMP
 
 		ServerView serverView = new ServerView();
@@ -706,12 +722,12 @@ public final class Server extends AbstractTCPServer
 		serverView.open(dataManager);
 
 		// TODO TEMP
-		for (Category c : Category.values())
-			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, "example.jpg", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
+		// for (Category c : Category.values())
+		// for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
+		// dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, "example.jpg", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
 
-		dataManager.addAccount("1", "1");
-		dataManager.addAccount("2", "2");
+		// dataManager.addAccount("1", "1");
+		// dataManager.addAccount("2", "2");
 		// TODO TEMP
 
 		for (Category category : Category.values())

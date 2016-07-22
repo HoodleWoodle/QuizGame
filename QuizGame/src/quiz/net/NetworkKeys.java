@@ -25,8 +25,9 @@ public interface NetworkKeys
 	public static final byte TAG_INVALID_LOGIN_DETAILS = 7;
 	public static final byte TAG_NO_OPPONENTS_AVAILABLE = 8;
 	public static final byte TAG_OPPONENT_NOT_AVAILABLE = 9;
-	public static final byte TAG_ALREADY_LOGGED_IN = 10;
-	public static final byte TAG_ALREADY_REQUESTED = 11;
+	public static final byte TAG_OPPONENT_DISCONNECTED = 10;
+	public static final byte TAG_ALREADY_LOGGED_IN = 11;
+	public static final byte TAG_ALREADY_REQUESTED = 12;
 
 	public static final String TAG_REQUEST_0 = "0";
 	public static final String TAG_REQUEST_1 = "1";

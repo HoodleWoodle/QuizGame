@@ -27,6 +27,10 @@ public enum Status
 	 */
 	OPPONENT_NOT_AVAILABLE,
 	/**
+	 * The status, that the current match-opponent has disconnected.
+	 */
+	OPPONENT_DISCONNECTED,
+	/**
 	 * The status, if the account is already logged in.
 	 */
 	ALREADY_LOGGED_IN,

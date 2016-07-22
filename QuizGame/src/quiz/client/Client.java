@@ -5,6 +5,7 @@ import static quiz.client.model.Status.ALREADY_REQUESTED;
 import static quiz.client.model.Status.INVALID_LOGIN_DETAILS;
 import static quiz.client.model.Status.INVALID_REGISTER_DETAILS;
 import static quiz.client.model.Status.NO_OPPONENTS_AVAILABLE;
+import static quiz.client.model.Status.OPPONENT_DISCONNECTED;
 import static quiz.client.model.Status.OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB;
 import static quiz.net.NetworkKeys.SPLIT_SUB_SUB_SUB;
@@ -13,6 +14,7 @@ import static quiz.net.NetworkKeys.TAG_ALREADY_REQUESTED;
 import static quiz.net.NetworkKeys.TAG_INVALID_LOGIN_DETAILS;
 import static quiz.net.NetworkKeys.TAG_INVALID_REGISTER_DETAILS;
 import static quiz.net.NetworkKeys.TAG_NO_OPPONENTS_AVAILABLE;
+import static quiz.net.NetworkKeys.TAG_OPPONENT_DISCONNECTED;
 import static quiz.net.NetworkKeys.TAG_OPPONENT_NOT_AVAILABLE;
 import static quiz.net.NetworkKeys.TAG_SET_ACCOUNT;
 import static quiz.net.NetworkKeys.TAG_SET_MATCH;
@@ -89,6 +91,10 @@ public final class Client extends AbstractTCPClient
 		case TAG_OPPONENT_NOT_AVAILABLE:
 			model.setStatus(OPPONENT_NOT_AVAILABLE);
 			model.setRequests(model.getRequests());
+			break;
+		case TAG_OPPONENT_DISCONNECTED:
+			model.setStatus(OPPONENT_DISCONNECTED);
+			model.setMatch(model.getMatch());
 			break;
 		case TAG_ALREADY_LOGGED_IN:
 			model.setStatus(ALREADY_LOGGED_IN);

@@ -57,7 +57,7 @@ public class GameOverPanel extends JPanel implements IView {
                     categoryLabel.setFont(categoryLabel.getFont().deriveFont(Font.BOLD, 22));
                     add(categoryLabel, c);
 
-                    int rows = questions.length / QUESTIONS_PER_ROW_AND_PLAYER + 2;
+                    int rows = questions.length / QUESTIONS_PER_ROW_AND_PLAYER + 3;
                     for (int a = 0; a < match.getOpponents().length; a++) {
                         c.gridx = (a == 0 ? 1 : 5);
                         c.gridy = 0;
@@ -72,13 +72,19 @@ public class GameOverPanel extends JPanel implements IView {
                         add(result, c);
 
                         c.gridy = 1;
-                        c.insets = new Insets(10, 10, 50, 10);
-                        JLabel name = new JLabel(account.getName() + " (" + localization.getString("SCORE")
+                        c.insets = new Insets(10, 10, 5, 10);
+                        JLabel score = new JLabel("(" + localization.getString("SCORE")
                                 +  ": " + account.getScore() + ")", SwingConstants.CENTER);
+                        setFont(account, score);
+                        add(score, c);
+
+                        c.gridy = 2;
+                        c.insets = new Insets(5, 10, 20, 10);
+                        JLabel name = new JLabel(account.getName(), SwingConstants.CENTER);
                         setFont(account, name);
                         add(name, c);
 
-                        for (int y = 2, count = 0; y < rows; y++) {
+                        for (int y = 3, count = 0; y < rows; y++) {
                             c.gridy = y;
                             c.insets = new Insets(10, 0, 10, 0);
                             c.anchor = GridBagConstraints.CENTER;

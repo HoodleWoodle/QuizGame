@@ -151,10 +151,9 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
     @Override
     public void onChange(ChangeType type, Status status) {
         if(status == Status.OPPONENT_DISCONNECTED) {
+            countdown.getTimer().stop();
             gameFrame.showExceptionMessage(GameFrame.getLocalization().getString("OPPONENT_DISCONNECTED"));
             gameFrame.setContentPane(gameFrame.getMenuPanel());
-            countdown.getTimer().stop();
-            disconncted = true;
             reset();
             return;
         }
@@ -206,7 +205,6 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
                         countdown.setCounter(countdown.getMaximum());
                         countdown.restart();
-                        System.out.println(disconncted);
                         repaint();
                         revalidate();
                     });

@@ -149,6 +149,13 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
     @Override
     public void onChange(ChangeType type, Status status) {
+        if(status == Status.OPPONENT_DISCONNECTED) {
+            gameFrame.showExceptionMessage(GameFrame.getLocalization().getString("OPPONENT_DISCONNECTED"));
+            gameFrame.setContentPane(gameFrame.getMenuPanel());
+            reset();
+            return;
+        }
+
         if (type == ChangeType.MATCH) {
             Match match = model.getMatch();
             int[][] answersGiven = match.getAnswers();

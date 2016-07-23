@@ -351,6 +351,7 @@ public final class Server extends AbstractTCPServer
 		// update account
 		sendOpponents();
 		sendRequests(accountID);
+		sendSentRequests(accountID);
 	}
 
 	private void sendMatch(Match match)
@@ -377,7 +378,7 @@ public final class Server extends AbstractTCPServer
 
 	private void sendOpponents()
 	{
-		// send all opponents to all registed clients
+		// send all opponents to all registerd clients
 		for (int i = 0; i < clients.size(); i++)
 		{
 			ClientThread client = clients.get(i);
@@ -727,7 +728,7 @@ public final class Server extends AbstractTCPServer
 		// TODO TEMP
 		for (Category c : Category.values())
 			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, "example.jpg", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
+				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, i % 2 == 0 ? "example.jpg" : "", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
 
 		dataManager.addAccount("1", "1");
 		dataManager.addAccount("2", "2");

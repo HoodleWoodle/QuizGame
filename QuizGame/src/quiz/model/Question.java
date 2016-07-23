@@ -70,4 +70,14 @@ public final class Question
 	{
 		return answers;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof Question)) return false;
+
+		Question other = (Question) obj;
+
+		return question.equals(other.question);
+	}
 }

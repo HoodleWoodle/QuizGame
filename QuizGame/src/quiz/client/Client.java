@@ -200,7 +200,8 @@ public final class Client extends AbstractTCPClient
 
 		Category category = getCategory(Integer.parseInt(data[index++]));
 		String question = data[index++];
-		String image = data[2].isEmpty() ? null : data[index++];
+		String image = data[index].isEmpty() ? null : data[index];
+		index++;
 		String[] answers = new String[data.length - 3];
 		for (int i = 0; i < answers.length; i++)
 			answers[i] = data[index++];

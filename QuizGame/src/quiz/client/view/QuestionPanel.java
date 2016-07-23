@@ -37,6 +37,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
     private Question question;
     private int questionsAnswered = 0;
     private GameOverPanel gameOverPanel;
+    private boolean disconncted = false;
 
     /**
      * Creates a new QuestionPanel.
@@ -152,6 +153,8 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         if(status == Status.OPPONENT_DISCONNECTED) {
             gameFrame.showExceptionMessage(GameFrame.getLocalization().getString("OPPONENT_DISCONNECTED"));
             gameFrame.setContentPane(gameFrame.getMenuPanel());
+            countdown.getTimer().stop();
+            disconncted = true;
             reset();
             return;
         }
@@ -203,6 +206,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
                         countdown.setCounter(countdown.getMaximum());
                         countdown.restart();
+                        System.out.println(disconncted);
                         repaint();
                         revalidate();
                     });
@@ -214,6 +218,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
     }
 
     public void reset() {
+        answerLoggedIn = false;
         questionsAnswered = 0;
         gameOverPanel = new GameOverPanel(gameFrame, model);
     }

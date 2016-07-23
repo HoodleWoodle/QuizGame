@@ -1,5 +1,6 @@
 package quiz.client.view;
 
+import quiz.ImageResourceLoader;
 import quiz.client.IControl;
 import quiz.client.model.ChangeType;
 import quiz.client.model.IModel;
@@ -7,6 +8,7 @@ import quiz.client.model.Status;
 import quiz.model.Match;
 import quiz.model.Question;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -14,6 +16,9 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,7 +42,8 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
     private Question question;
     private int questionsAnswered = 0;
     private GameOverPanel gameOverPanel;
-    private boolean disconncted = false;
+    private JLabel questionImage;
+    private ImageIcon bigIcon;
 
     /**
      * Creates a new QuestionPanel.
@@ -53,6 +59,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         model.addView(this);
         setLayout(new GridBagLayout());
         initComponents();
+        bigIcon = new ImageIcon(ImageResourceLoader.loadBigIcon());
         gameOverPanel = new GameOverPanel(gameFrame, model);
     }
 
@@ -71,9 +78,17 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         c.gridy = 0;
         c.insets = new Insets(20, 20, 10, 20);
         c.gridwidth = GridBagConstraints.REMAINDER;
-        c.weighty = 0.55;
+        c.weighty = 0.30;
         c.fill = GridBagConstraints.BOTH;
 
+        questionImage = new JLabel("",  JLabel.CENTER);
+        add(questionImage, c);
+        questionImage.setMinimumSize(new Dimension(600, 100));
+        questionImage.setPreferredSize(new Dimension(600, 150));
+        questionImage.setMaximumSize(new Dimension(600, 200));
+
+        c.weighty = 0.25;
+        c.gridy = 1;
         questionText = new JTextPane();
         questionText.setEditable(false);
         questionText.setBackground(Color.LIGHT_GRAY);
@@ -85,7 +100,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         add(questionText, c);
         c.gridwidth = 1;
         c.weightx = 0.5;
-        c.weighty = 0.20;
+        c.weighty = 0.15;
 
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i] = new JButton();
@@ -93,7 +108,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
             answerButtons[i].setBackground(Color.LIGHT_GRAY);
         }
 
-        c.gridy = 1;
+        c.gridy = 2;
         c.insets = new Insets(10, 20, 10, 10);
         add(answerButtons[0], c);
 
@@ -101,7 +116,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         c.insets = new Insets(10, 10, 10, 20);
         add(answerButtons[1], c);
 
-        c.gridy = 2;
+        c.gridy = 3;
         c.insets = new Insets(10, 20, 10, 10);
         add(answerButtons[2], c);
 
@@ -109,7 +124,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         c.insets = new Insets(10, 10, 10, 20);
         add(answerButtons[3], c);
 
-        c.gridy = 3;
+        c.gridy = 4;
         c.gridwidth = 2;
         c.weighty = 0.05;
         c.insets = new Insets(10, 20, 20, 20);
@@ -190,6 +205,17 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                 if (questionsAnswered < QUESTION_COUNT) {
                     // prepare the next question
                     question = model.getQuestion();
+                    String imagePath = question.getImage();
+                    if(imagePath != null) {
+                        try {
+                            BufferedImage image = ImageIO.read(Paths.get(DATA).resolve(imagePath).toFile());
+                            questionImage.setIcon(new ImageIcon(image));
+                        } catch (IOException e) {
+                            questionImage.setIcon(bigIcon);
+                        }
+                    }
+                    else
+                        questionImage.setIcon(bigIcon);
                     List<String> answers = new ArrayList<>(Arrays.asList(question.getAnswers()));
                     questionText.setText(question.getQuestion());
                     answerLoggedIn = false;

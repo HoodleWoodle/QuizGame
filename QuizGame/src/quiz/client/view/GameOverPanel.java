@@ -90,14 +90,14 @@ public class GameOverPanel extends JPanel implements IView {
 
                                 Question question = match.getQuestions()[count];
                                 int answerIndex = match.getAnswers()[a][count];
-                                String answer = question.getAnswers()[answerIndex];
 
                                 JButton button = new JButton();
                                 button.setFocusable(false);
                                 button.setBorderPainted(false);
                                 // correct answer is 0
                                 button.setBackground((answerIndex == 0) ? Color.GREEN : Color.RED);
-                                button.setToolTipText(answer);
+                                // no answer given -> -1
+                                button.setToolTipText(answerIndex != -1 ? question.getAnswers()[answerIndex] : localization.getString("UNANSWERED"));
                                 add(button, c);
                                 GameFrame.setProperties(new Dimension(75, 40), new Dimension(100, 50), new Dimension(125, 60), button);
                             }

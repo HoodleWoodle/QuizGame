@@ -169,12 +169,16 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
             if (questionsAnswered > 0) {
                 int opponentAnswerIndex = answersGiven[opponentIndex][answersGiven[0].length - 1];
-                String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
 
-                // make the opponent's answer visible
-                for (JButton answerButton : answerButtons)
-                    if (answerButton.getText().equals(opponentAnswer))
-                        answerButton.setBorder(BorderFactory.createDashedBorder(new Color(10, 144, 232), 3, 5, 5, true));
+                // in case the opponent didn't answer
+                if(opponentAnswerIndex != -1) {
+                    String opponentAnswer = question.getAnswers()[opponentAnswerIndex];
+
+                    // make the opponent's answer visible
+                    for (JButton answerButton : answerButtons)
+                        if (answerButton.getText().equals(opponentAnswer))
+                            answerButton.setBorder(BorderFactory.createDashedBorder(new Color(10, 144, 232), 3, 5, 5, true));
+                }
             }
         }
 

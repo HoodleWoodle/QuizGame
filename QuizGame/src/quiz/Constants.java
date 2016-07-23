@@ -50,13 +50,17 @@ public interface Constants
 	 */
 	int QUESTIONS_PER_ROW_AND_PLAYER = 3;
 	/**
-	 * The name of the database.
+	 * The simple name of the database.
 	 */
-	String DB_FILE = DATA + "/quizDB.mv.db";
+	String DB_NAME_SIMPLE = "quizDB";
 	/**
 	 * The name of the database.
 	 */
-	String DB_PATH = "jdbc:h2:./" + DATA + "/quizDB";
+	String DB_NAME = "/" + DB_NAME_SIMPLE + ".mv.db";
+	/**
+	 * The file of the database.
+	 */
+	String DB_FILE = DATA + DB_NAME;
 	/**
 	 * The path of the ini file.
 	 */

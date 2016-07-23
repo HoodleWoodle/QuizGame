@@ -1,9 +1,6 @@
 package quiz.server.model;
 
-import static quiz.Constants.DATA;
-import static quiz.Constants.DB_FILE;
 import static quiz.Constants.DB_PASSWORD;
-import static quiz.Constants.DB_PATH;
 import static quiz.Constants.DB_USERNAME;
 
 import java.io.File;
@@ -14,6 +11,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import quiz.Constants;
 import quiz.Utils;
 import quiz.model.Account;
 import quiz.model.Category;
@@ -32,16 +30,28 @@ public final class DataManager implements IDataManager
 
 	/**
 	 * Creates an instance of DataManager.
+	 * 
+	 * @param path
+	 *            the path of the database
+	 * @param file
+	 *            the file of the database
+	 * @param relative
+	 *            whether the path is relative
 	 */
-	public DataManager()
+	public DataManager(String path, String file, boolean relative)
 	{
-		db = new Database(DB_PATH, DB_USERNAME, DB_PASSWORD);
+		String database = null;
+		if (relative) database = "jdbc:h2:./";
+		else database = "jdbc:h2:";
+		database += path + "/" + Constants.DB_NAME_SIMPLE;
 
-		File data = new File(DATA);
+		db = new Database(database, DB_USERNAME, DB_PASSWORD);
+
+		File data = new File(path);
 		if (!data.exists()) data.mkdirs();
 
 		boolean create = false;
-		if (!new File(DB_FILE).exists())
+		if (!new File(file).exists())
 			// if database does not exist activate tables creating
 			create = true;
 
@@ -93,6 +103,24 @@ public final class DataManager implements IDataManager
 
 		// get Questions
 		return getQuestions(result);
+	}
+
+	/**
+	 * Returns a Question by its question-string.
+	 * 
+	 * @param question
+	 *            the question-string
+	 * @return the desired Question (Exception: null)
+	 */
+	public synchronized Question getQuestion(String question)
+	{
+		// select all Questions
+		ResultSet result = db.select("SELECT * FROM " + TABLE_QUESTIONS + " WHERE question='" + question + "'");
+
+		// get Question
+		List<Question> questions = getQuestions(result);
+		if (questions == null) return null;
+		return questions.get(0);
 	}
 
 	@Override

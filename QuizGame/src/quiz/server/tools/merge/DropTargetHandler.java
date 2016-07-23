@@ -1,4 +1,4 @@
-package quiz.server.tools.editor;
+package quiz.server.tools.merge;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -9,19 +9,17 @@ import java.awt.dnd.DropTargetListener;
 import java.io.File;
 import java.util.List;
 
-import quiz.Constants;
-
 /**
  * @author Stefan
  * @version 20.07.2016
  */
 final class DropTargetHandler implements DropTargetListener
 {
-	private final QuestionPanel questionPanel;
+	private final MainPanel mainPanel;
 
-	DropTargetHandler(QuestionPanel questionPanel)
+	DropTargetHandler(MainPanel mainPanel)
 	{
-		this.questionPanel = questionPanel;
+		this.mainPanel = mainPanel;
 	}
 
 	@Override
@@ -45,7 +43,7 @@ final class DropTargetHandler implements DropTargetListener
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	public void drop(DropTargetDropEvent dtde)
 	{
 		Transferable transferable = dtde.getTransferable();
@@ -54,23 +52,28 @@ final class DropTargetHandler implements DropTargetListener
 			dtde.acceptDrop(dtde.getDropAction());
 			try
 			{
-				List data = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-				if (data != null && data.size() == 1)
+				List<File> data = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+				if (data != null)
 				{
-					File file = (File) data.get(0);
-					String name = file.getName();
-					if (QuestionPanel.copyFile(file, new File(Constants.DATA + "/" + name)))
-					{
-						questionPanel.setImage(name);
-						dtde.dropComplete(true);
-					}
+					for (File file : data)
+						if (isCorrectDirectory(file)) mainPanel.addFile(file);
+					dtde.dropComplete(true);
 				}
 				return;
-			} catch (
-
-			Exception e)
+			} catch (Exception e)
 			{
 			}
 		}
+	}
+
+	private boolean isCorrectDirectory(File file)
+	{
+		if (!file.isDirectory()) return false;
+
+		File[] files = file.listFiles();
+		for (File f : files)
+			if (mainPanel.isDBFile(f)) return true;
+
+		return false;
 	}
 }

@@ -1,5 +1,8 @@
 package quiz.server.tools.editor;
 
+import static quiz.Constants.DATA;
+import static quiz.Constants.DB_FILE;
+
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -34,9 +37,9 @@ final class Editor extends JPanel
 	/**
 	 * Creates an instance of MasterTool.
 	 */
-	Editor()
+	private Editor()
 	{
-		dataManager = new DataManager();
+		dataManager = new DataManager(DATA, DB_FILE, true);
 
 		// initialize components
 		initComponents();
@@ -89,6 +92,8 @@ final class Editor extends JPanel
 	}
 
 	/**
+	 * Main-method.
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args)
@@ -100,7 +105,7 @@ final class Editor extends JPanel
 
 			// initialize frame
 			JFrame frame = new JFrame(Utils.TITLE_EDITOR);
-			frame.setIconImage(ImageResourceLoader.getInstance().getIcon());
+			frame.setIconImage(ImageResourceLoader.loadIcon());
 			frame.setResizable(false);
 			frame.add(tool);
 			frame.pack();

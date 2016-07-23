@@ -1,5 +1,7 @@
 package quiz.server;
 
+import static quiz.Constants.DATA;
+import static quiz.Constants.DB_FILE;
 import static quiz.Constants.SCORE_DISTANCE;
 import static quiz.Constants.SCORE_FOOL;
 import static quiz.Constants.SCORE_LOSE;
@@ -31,6 +33,7 @@ import static quiz.net.NetworkKeys.TAG_SET_QUESTION;
 import static quiz.net.NetworkKeys.TAG_SET_REQUESTS;
 import static quiz.net.NetworkKeys.TAG_SET_SENT_REQUESTS;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -714,20 +717,20 @@ public final class Server extends AbstractTCPServer
 		Utils.initalizeLAF();
 
 		// TODO TEMP
-		// new File(Constants.DB_FILE).delete();
+		new File(Constants.DB_FILE).delete();
 		// TODO TEMP
 
 		ServerView serverView = new ServerView();
-		IDataManager dataManager = new DataManager();
+		IDataManager dataManager = new DataManager(DATA, DB_FILE, true);
 		serverView.open(dataManager);
 
 		// TODO TEMP
-		// for (Category c : Category.values())
-		// for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-		// dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, "example.jpg", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
+		for (Category c : Category.values())
+			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
+				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, "example.jpg", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
 
-		// dataManager.addAccount("1", "1");
-		// dataManager.addAccount("2", "2");
+		dataManager.addAccount("1", "1");
+		dataManager.addAccount("2", "2");
 		// TODO TEMP
 
 		for (Category category : Category.values())

@@ -208,7 +208,7 @@ final class QuestionPanel extends JPanel
 				if (!im.isEmpty())
 				{
 					File dest = new File(Constants.DATA + "/" + im);
-					if (!dest.exists()) // TODO
+					if (!dest.exists())
 					{
 						File file = new File(im);
 						dest = new File(Constants.DATA + "/" + file.getName());

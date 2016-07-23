@@ -14,6 +14,7 @@ import quiz.net.NetworkKeys;
 public final class Utils
 {
 	public static final String TITLE_EDITOR = "QuizGame - Editor";
+	public static final String TITLE_MERGE_TOOL = "QuizGame - MergeTool";
 	public static final String TITLE_SERVER = "QuizGame - Server";
 	public static final String INFO_SERVER = "QuizGame is coded by  : '(Alex, Quirin,) Eric, Stefan'\nQuestions are created by : 'unknown Guys'\nIf the Server is closed, Matches and Match-Requests are NOT saved. Only Accounts and their score will be available after restarting!";
 	public static final String MSG_DB_CONNECTING = "Connecting to database...";

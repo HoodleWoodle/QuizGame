@@ -166,7 +166,7 @@ public final class Model implements IModel
 
 	private void onChange(ChangeType type)
 	{
-		for (IView view : views)
-			view.onChange(type, status);
+		for (int i = 0; i < views.size(); i++)
+			views.get(i).onChange(type, status);
 	}
 }

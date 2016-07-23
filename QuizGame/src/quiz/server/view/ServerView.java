@@ -173,7 +173,7 @@ public final class ServerView extends JPanel
 			this.dataManager = dataManager;
 
 			JFrame frame = new JFrame(Utils.TITLE_SERVER);
-			frame.setIconImage(ImageResourceLoader.getInstance().getIcon());
+			frame.setIconImage(ImageResourceLoader.loadIcon());
 			frame.setResizable(false);
 			frame.add(this);
 			frame.pack();

@@ -41,9 +41,10 @@ public class PlayerListPanel extends JPanel implements IView {
         this.gameFrame = gameFrame;
         this.model = model;
         
-		online = ImageResourceLoader.getInstance().getIcon(0);
-		not_available = ImageResourceLoader.getInstance().getIcon(1);
-		offline = ImageResourceLoader.getInstance().getIcon(2);
+        Icon[] icons = ImageResourceLoader.loadIcons();
+		online = icons[0];
+		not_available = icons[1];
+		offline = icons[2];
 
         model.addView(this);
         setMinimumSize(new Dimension(100, FRAME_HEIGHT - 200));

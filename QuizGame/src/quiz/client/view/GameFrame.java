@@ -80,7 +80,7 @@ public final class GameFrame extends JFrame {
         setContentPane(menuPanel = new MenuPanel(this, control, model));
         setResizable(false);
 
-        setIconImage(ImageResourceLoader.getInstance().getIcon());
+        setIconImage(ImageResourceLoader.loadIcon());
 
         addWindowListener(new WindowAdapter() {
             @Override

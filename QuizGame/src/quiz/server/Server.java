@@ -302,7 +302,7 @@ public final class Server extends AbstractTCPServer
 		int matchID = match.getID();
 		MatchStep matchStep = matchSteps.get(matchID);
 
-		// set answer to match-steo
+		// set answer to match-step
 		matchStep.setAnswer(dataManager.getAccount(accountID), answer);
 
 		// if both opponents has answered

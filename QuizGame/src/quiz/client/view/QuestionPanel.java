@@ -83,9 +83,9 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
 
         questionImage = new JLabel("",  JLabel.CENTER);
         add(questionImage, c);
-        questionImage.setMinimumSize(new Dimension(600, 100));
+        questionImage.setMinimumSize(new Dimension(500, 100));
         questionImage.setPreferredSize(new Dimension(600, 150));
-        questionImage.setMaximumSize(new Dimension(600, 200));
+        questionImage.setMaximumSize(new Dimension(700, 250));
 
         c.weighty = 0.25;
         c.gridy = 1;
@@ -169,6 +169,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
             countdown.getTimer().stop();
             gameFrame.showExceptionMessage(GameFrame.getLocalization().getString("OPPONENT_DISCONNECTED"));
             gameFrame.setContentPane(gameFrame.getMenuPanel());
+            gameFrame.setAvailable(true);
             reset();
             return;
         }

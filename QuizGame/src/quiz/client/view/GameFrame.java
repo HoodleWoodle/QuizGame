@@ -24,7 +24,7 @@ public final class GameFrame extends JFrame {
 
     private static final ResourceBundle localization = ResourceBundle.getBundle("quiz.client.view.localization");
     private final MenuPanel menuPanel;
-    private boolean available;
+    private boolean available = true;
 
     /**
      * Sets the standard properties for @param components.

@@ -74,14 +74,15 @@ final class AccountPanel extends JPanel
 		add(label = new JLabel("Password:"));
 		label.setBounds(0, 265, 70, 25);
 
-		final String tag = "<compulsive> - Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
+		final String tag = "*compulsive*";
+		final String invalids = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
 
 		// initialize fields
 		add(name = new JTextField());
-		name.setToolTipText(tag);
+		Utils.setTTT(name, tag, invalids);
 		name.setBounds(70, 239, 223, 26);
 		add(password = new JTextField());
-		password.setToolTipText(tag);
+		Utils.setTTT(password, tag, invalids);
 		password.setBounds(70, 264, 223, 26);
 
 		// initialize buttons

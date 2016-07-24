@@ -97,30 +97,31 @@ final class QuestionPanel extends JPanel
 		add(label = new JLabel("*Image:"));
 		label.setBounds(302, 315, 70, 25);
 
-		final String msg = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
-		final String tag = "<compulsive> - " + msg;
+		final String tag = "*compulsive*";
+		final String invalids = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
 
 		// initialize fields/boxes
 		add(question = new JTextField());
-		question.setToolTipText(tag);
+		Utils.setTTT(question, tag, invalids);
 		question.setBounds(70, 239, 525, 26);
 		answers = new JTextField[4];
 		add(answers[0] = new JTextField());
-		answers[0].setToolTipText(tag);
+		Utils.setTTT(answers[0], tag, invalids);
 		answers[0].setBounds(70, 264, 223, 26);
 		add(answers[1] = new JTextField());
-		answers[1].setToolTipText(tag);
+		Utils.setTTT(answers[1], tag, invalids);
 		answers[1].setBounds(372, 264, 223, 26);
 		add(answers[2] = new JTextField());
-		answers[2].setToolTipText(tag);
+		Utils.setTTT(answers[2], tag, invalids);
 		answers[2].setBounds(70, 289, 223, 26);
 		add(answers[3] = new JTextField());
-		answers[3].setToolTipText(tag);
+		Utils.setTTT(answers[3], tag, invalids);
 		answers[3].setBounds(372, 289, 223, 26);
 		add(category = new JComboBox<Category>(Category.values()));
 		category.setBounds(70, 316, 120, 23);
 		add(image = new JTextField());
-		image.setToolTipText("<optional> - " + msg + " - Drag and Drop is enabled for an Image. (png, jpg)");
+		Utils.setTTT(image, "*optional*", invalids, "Drag and Drop is enabled for an Image. (png, jpg)");
+		image.setEditable(false);
 		image.setBounds(372, 316, 223, 26);
 
 		try
@@ -262,6 +263,7 @@ final class QuestionPanel extends JPanel
 	{
 		if (!source.isFile()) return false;
 		String name = source.getName();
+		if (Utils.checkString(name)) return false;
 		if (!name.endsWith(".png") && !name.endsWith(".jpg")) return false;
 
 		InputStream is = null;

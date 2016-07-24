@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import quiz.Constants;
+import quiz.Utils;
 import quiz.model.Question;
 import quiz.server.model.DataManager;
 
@@ -56,7 +57,7 @@ public final class MainPanel extends JPanel
 		setPreferredSize(new Dimension(600, 400));
 
 		JScrollPane scroll = new JScrollPane(files = new JList<File>(model = new DefaultListModel<File>()));
-		files.setToolTipText("Drag and Drop is enabled for Directories with an quizDB file and maybe some images. (Only Questions are copied!)");
+		Utils.setTTT(files, "Drag and Drop is enabled for Directories", "Requirement: quizDB file and maybe some images", "(Only Questions are copied!)");
 		scroll.setBounds(5, 5, 590, 360);
 		add(scroll);
 

@@ -179,6 +179,9 @@ public final class Server extends AbstractTCPServer
 		// if account is available
 		if (account != null)
 		{
+			// for (int i = 0; i < 12; i++) // TODO
+			// requests.put(i, new Match(i, Category.ENTERTAINMENT, new Account[] { dataManager.getAccount(2), account }, new Question[0], new int[2][0]));
+
 			// add account to intern data
 			addAccount(account, client);
 
@@ -727,8 +730,12 @@ public final class Server extends AbstractTCPServer
 
 		// TODO TEMP
 		for (Category c : Category.values())
-			for (int i = 0; i < Constants.QUESTION_COUNT + 1; i++)
-				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, i % 2 == 0 ? "example.jpg" : "", new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
+			for (int i = 0; i < 9; i++)
+			{
+				String img = i < 7 ? "e" + i + ".jpg" : "e7.png";
+				if (i == 8) img = "";
+				dataManager.addQuestion(new Question(c, c.toString() + "_question_" + i, img, new String[] { "correct", "incorrect_0", "incorrect_1", "incorrect_2" }));
+			}
 
 		dataManager.addAccount("1", "1");
 		dataManager.addAccount("2", "2");

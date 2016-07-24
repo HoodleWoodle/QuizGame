@@ -1,5 +1,6 @@
 package quiz;
 
+import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -64,8 +65,38 @@ public final class Utils
 		}
 	}
 
+	/**
+	 * Replaces string-parts by an account.
+	 * 
+	 * @param string
+	 *            the string to get replacement
+	 * @param account
+	 *            the account for data
+	 * @return the final string
+	 */
 	public static String replaceWithAccount(String string, Account account)
 	{
 		return string.replaceAll("<N>", account.getName()).replaceAll("<ID>", "" + account.getID());
+	}
+
+	/**
+	 * Adds an TTT to an component.
+	 * 
+	 * @param comp
+	 *            the component
+	 * @param lines
+	 *            the TTT lines
+	 */
+	public static void setTTT(JComponent comp, String... lines)
+	{
+		String ttt = "<html>";
+
+		for (int i = 0; i < lines.length; i++)
+			if (i < lines.length - 1) ttt += "<p>" + lines[i] + "</p></br>";
+			else ttt += "<p>" + lines[i] + "</p>";
+
+		ttt += "</html>";
+
+		comp.setToolTipText(ttt);
 	}
 }

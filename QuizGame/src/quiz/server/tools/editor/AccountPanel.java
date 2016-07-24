@@ -74,8 +74,8 @@ final class AccountPanel extends JPanel
 		add(label = new JLabel("Password:"));
 		label.setBounds(0, 265, 70, 25);
 
-		final String tag = "*compulsive*";
-		final String invalids = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
+		final String tag = "*required*";
+		final String invalids = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + "&lt";
 
 		// initialize fields
 		add(name = new JTextField());

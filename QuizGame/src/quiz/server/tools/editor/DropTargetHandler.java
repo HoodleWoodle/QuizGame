@@ -59,7 +59,8 @@ final class DropTargetHandler implements DropTargetListener
 				{
 					File file = (File) data.get(0);
 					String name = file.getName();
-					if (QuestionPanel.copyFile(file, new File(Constants.DATA + "/" + name)))
+					File dest = new File(Constants.DATA + "/" + name);
+					if (dest.exists() || QuestionPanel.copyFile(file, dest))
 					{
 						questionPanel.setImage(name);
 						dtde.dropComplete(true);

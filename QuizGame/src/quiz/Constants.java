@@ -36,7 +36,7 @@ public interface Constants
 	/**
 	 * The score-increase for a tie.
 	 */
-	int SCORE_TIE = -1;
+	int SCORE_TIE = 0;
 	/**
 	 * The default server-name.
 	 */

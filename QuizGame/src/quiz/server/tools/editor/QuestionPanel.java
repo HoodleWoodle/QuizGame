@@ -5,6 +5,8 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,7 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import quiz.Constants;
 import quiz.Utils;
 import quiz.model.Category;
 import quiz.model.Question;
@@ -97,8 +98,8 @@ final class QuestionPanel extends JPanel
 		add(label = new JLabel("*Image:"));
 		label.setBounds(302, 315, 70, 25);
 
-		final String tag = "*compulsive*";
-		final String invalids = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + NetworkKeys.SPLIT_SUB_SUB_SUB;
+		final String tag = "*required*";
+		final String invalids = "Invalid symbols: ;" + NetworkKeys.SPLIT_SUB + NetworkKeys.SPLIT_SUB_SUB + "&lt";
 
 		// initialize fields/boxes
 		add(question = new JTextField());
@@ -120,7 +121,7 @@ final class QuestionPanel extends JPanel
 		add(category = new JComboBox<Category>(Category.values()));
 		category.setBounds(70, 316, 120, 23);
 		add(image = new JTextField());
-		Utils.setTTT(image, "*optional*", invalids, "Drag and Drop is enabled for an Image. (png, jpg)");
+		Utils.setTTT(image, "*optional*", invalids, "Drag and Drop is enabled for an Image (png, jpg)", "Right-Click to delete");
 		image.setEditable(false);
 		image.setBounds(372, 316, 223, 26);
 
@@ -148,6 +149,15 @@ final class QuestionPanel extends JPanel
 	 */
 	private void initListeners()
 	{
+		image.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getButton() == MouseEvent.BUTTON3) image.setText("");
+			}
+		});
+
 		get.addActionListener(new ActionListener()
 		{
 			@Override
@@ -206,19 +216,6 @@ final class QuestionPanel extends JPanel
 				for (String a : as)
 					if (!DataManager.check(a) || !Utils.checkString(a)) correct = false;
 
-				if (!im.isEmpty())
-				{
-					File dest = new File(Constants.DATA + "/" + im);
-					if (!dest.exists())
-					{
-						File file = new File(im);
-						dest = new File(Constants.DATA + "/" + file.getName());
-						im = file.getName();
-						if (!file.exists()) correct = false;
-						else if (!copyFile(file, dest)) correct = false;
-					}
-				}
-
 				if (correct) for (int i = 1; i < as.length; i++)
 					if (as[0].equals(as[i])) correct = false;
 				if (ca == null) correct = false;
@@ -256,6 +253,7 @@ final class QuestionPanel extends JPanel
 	 */
 	void setImage(String image)
 	{
+		System.out.println(image);
 		this.image.setText(image);
 	}
 
@@ -263,7 +261,7 @@ final class QuestionPanel extends JPanel
 	{
 		if (!source.isFile()) return false;
 		String name = source.getName();
-		if (Utils.checkString(name)) return false;
+		if (!Utils.checkString(name)) return false;
 		if (!name.endsWith(".png") && !name.endsWith(".jpg")) return false;
 
 		InputStream is = null;

@@ -124,6 +124,7 @@ public class MenuPanel extends JPanel implements IView {
         mainPart.add(categories = new JComboBox<>());
         Arrays.stream(Category.values()).forEach(category -> categories.addItem(category.toString()));
         mainPart.add(randomCategory = new JCheckBox(localization.getString("RANDOM_CATEGORY")));
+        randomCategory.setEnabled(false);
 
         mainPart.add(Box.createVerticalGlue());
         mainPart.add(challenge = new JButton(localization.getString("CHALLENGE")));

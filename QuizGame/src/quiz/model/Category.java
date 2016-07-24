@@ -10,17 +10,8 @@ import quiz.client.view.GameFrame;
  */
 public enum Category
 {
-
 	/***/
-	ENTERTAINMENT,
-	/***/
-	GAMING,
-	/***/
-	HISTORY,
-	/***/
-	SCIENCE,
-	/***/
-	TECHNOLOGY;
+	NATURE;
 
 	private static ResourceBundle localization = GameFrame.getLocalization();
 
@@ -29,16 +20,8 @@ public enum Category
 	{
 		switch (this)
 		{
-		case ENTERTAINMENT:
-			return localization.getString("ENTERTAINMENT");
-		case GAMING:
-			return localization.getString("GAMING");
-		case HISTORY:
-			return localization.getString("HISTORY");
-		case SCIENCE:
-			return localization.getString("SCIENCE");
-		case TECHNOLOGY:
-			return localization.getString("TECHNOLOGY");
+		case NATURE:
+			return localization.getString("NATURE");
 		default:
 			return null;
 		}

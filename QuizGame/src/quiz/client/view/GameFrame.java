@@ -17,7 +17,7 @@ import static quiz.Constants.FRAME_HEIGHT;
 import static quiz.Constants.FRAME_WIDTH;
 
 /**
- * @author Eric
+ * @author Eric, Stefan
  * @version 1.05.16
  */
 public final class GameFrame extends JFrame {
@@ -64,23 +64,56 @@ public final class GameFrame extends JFrame {
     }
 
     /**
-     * scale image
-     *
-     * @param sbi image to scale
-     * @param dWidth width of destination image
-     * @param dHeight height of destination image
-     * @return scaled image
-     */
-    public static BufferedImage scale(BufferedImage sbi, int dWidth, int dHeight) {
-        BufferedImage dbi = null;
-        if(sbi != null) {
-            dbi = new BufferedImage(dWidth, dHeight, sbi.getType());
-            Graphics2D g = dbi.createGraphics();
-            AffineTransform at = AffineTransform.getScaleInstance(dWidth / sbi.getWidth(), dHeight / sbi.getHeight());
-            g.drawRenderedImage(sbi, at);
-        }
-        return dbi;
-    }
+	 * scale image
+	 *
+	 * @param img
+	 *            image to scale
+	 * @param minSize
+	 *            the minimum size of the result-image
+	 * @param maxSize
+	 *            the maximum size of the result-image
+	 * @return scaled image
+	 */
+	public static BufferedImage scale(BufferedImage img, Dimension minSize, Dimension maxSize)
+	{
+		if (img == null) return null;
+
+		int width = img.getWidth();
+		int height = img.getHeight();
+
+		double[] sizes = { minSize.width, maxSize.width, minSize.height, maxSize.height };
+		boolean[] conditions = { width < sizes[0], width > sizes[1], height < sizes[2], height > sizes[3] };
+		double[] factors = new double[conditions.length];
+
+		boolean sth = false;
+
+		for (int i = 0; i < conditions.length; i++)
+			if (conditions[i])
+			{
+				if (i < conditions.length / 2) factors[i] = sizes[i] / width;
+				else factors[i] = sizes[i] / height;
+				sth = true;
+			}
+
+		if (!sth) return img;
+
+		double factor = 1;
+
+		for (int i = 0; i < conditions.length; i++)
+			if (conditions[i])
+			{
+				factor = factors[i];
+				for (int j = 0; j < conditions.length; j++)
+					if (conditions[j] && 1 - factors[i] < 1 - factors[j]) factor = factors[j];
+			}
+
+		BufferedImage result = new BufferedImage((int) (width * factor), (int) (height * factor), img.getType());
+		Graphics2D g = result.createGraphics();
+		AffineTransform at = AffineTransform.getScaleInstance(factor, factor);
+		g.drawRenderedImage(img, at);
+
+		return result;
+	}
 
     /**
      * Creates a new GameFrame with the given implementation of IControl and IModel.

@@ -6,13 +6,10 @@ import quiz.client.model.IModel;
 import quiz.client.model.Status;
 import quiz.model.Account;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -56,20 +53,27 @@ public class PlayerListPanel extends JPanel implements IView {
     public void onChange(ChangeType type, Status status) {
         // update account statuses
         if (type == ChangeType.OPPONENTS) {
+            int combinedHeight = 0, count = 0;
             for (Account account : model.getOpponents()) {
+                PlayerPanel playerPanel;
                 if (accounts.containsKey(account)) {
-                    PlayerPanel playerPanel = accounts.get(account);
+                    playerPanel = accounts.get(account);
                     playerPanel.setAccount(account);
                     playerPanel.updateStatus();
                 } else {
-                    PlayerPanel playerPanel = new PlayerPanel(account);
+                    playerPanel = new PlayerPanel(account);
                     accounts.put(account, playerPanel);
                     add(playerPanel);
 
                     revalidate();
                     repaint();
                 }
+
+                combinedHeight += playerPanel.getHeight() + 35;
             }
+
+            setSize(new Dimension(getWidth(), combinedHeight));
+            setPreferredSize(new Dimension(getWidth(), combinedHeight));
         }
     }
 

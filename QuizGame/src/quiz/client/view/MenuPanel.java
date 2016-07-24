@@ -73,10 +73,12 @@ public class MenuPanel extends JPanel implements IView {
         c.gridx = 0;
         c.gridy = 0;
         c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.25;
+        c.weightx = 0.3;
+        c.weighty = 1;
         c.anchor = GridBagConstraints.FIRST_LINE_START;
 
-        JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(gameFrame, model));
+        JScrollPane playerListScrollPane = new JScrollPane(new PlayerListPanel(gameFrame, model),
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         JLabel players = new JLabel(localization.getString("PLAYERS") + ":");
         players.setHorizontalAlignment(JLabel.CENTER);
 
@@ -85,26 +87,21 @@ public class MenuPanel extends JPanel implements IView {
         add(playerListScrollPane, c);
 
         c.gridx = GridBagConstraints.RELATIVE;
+        c.weightx = 0.4;
         c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0.5;
         add(createMainPart(), c);
 
-        JScrollPane matchRequestScrollPane = new JScrollPane(new MatchRequestListPanel(gameFrame, control, model));
+        JScrollPane matchRequestScrollPane = new JScrollPane(new MatchRequestListPanel(gameFrame, control, model),
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         JLabel matchRequests = new JLabel(localization.getString("MATCH_REQUESTS") + ":");
         matchRequests.setHorizontalAlignment(JLabel.CENTER);
         matchRequestScrollPane.setColumnHeaderView(matchRequests);
         matchRequestScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         c.gridx = GridBagConstraints.RELATIVE;
-        c.weightx = 0.25;
+        c.weightx = 0.3;
         c.anchor = GridBagConstraints.FIRST_LINE_END;
         add(matchRequestScrollPane, c);
-
-        c.gridy = GridBagConstraints.RELATIVE;
-        c.gridx = 1;
-        c.gridheight = 1;
-        c.weightx = 0.5;
-        c.anchor = GridBagConstraints.CENTER;
     }
 
     private JPanel createMainPart() {
@@ -156,11 +153,7 @@ public class MenuPanel extends JPanel implements IView {
     @Override
     public void onChange(ChangeType type, Status status) {
         if (type == ChangeType.MATCH && model.getMatch() != null) {
-            Timer timer = new Timer(100, event -> {
-                SwingUtilities.invokeLater(() -> {
-                    gameFrame.setContentPane(questionPanel);
-                });
-            });
+            Timer timer = new Timer(100, event -> SwingUtilities.invokeLater(() -> gameFrame.setContentPane(questionPanel)));
             timer.setRepeats(false);
             timer.start();
         }

@@ -120,6 +120,28 @@ public class MatchRequestListPanel extends JPanel implements IView {
             // update sent match requests
             lastSentMatchRequests = matchRequests;
         }
+
+        if(type == ChangeType.SENT_REQUESTS || type == ChangeType.REQUESTS) {
+            List<Match> matchRequests = new ArrayList<>();
+            if(model.getRequests() != null)
+                matchRequests.addAll(Arrays.asList(model.getRequests()));
+            if(model.getSentRequests() != null)
+                matchRequests.addAll(Arrays.asList(model.getSentRequests()));
+
+            int combinedHeight = 0;
+            for(Match matchRequest : matchRequests) {
+                for (ListIterator<Component> it = Arrays.asList(getComponents()).listIterator(); it.hasNext(); ) {
+                    MatchRequestPanel next = (MatchRequestPanel) it.next();
+                    if (next.matchRequest.getID() == matchRequest.getID()) {
+                        combinedHeight += next.getHeight() + 10;
+                    }
+                }
+            }
+
+            //update the size for the scroll pane
+            setSize(new Dimension((int) getSize().getWidth(), combinedHeight));
+            setPreferredSize(new Dimension((int) getSize().getWidth(), combinedHeight));
+        }
     }
 
     /**
@@ -147,9 +169,9 @@ public class MatchRequestListPanel extends JPanel implements IView {
             this.type = type;
             this.matchRequest = matchRequest;
 
-            setMinimumSize(new Dimension(150, (type == SENT) ?  50 : 75));
-            setPreferredSize(new Dimension(200, (type == SENT) ? 75 : 100));
-            setMaximumSize(new Dimension(250, (type == SENT) ? 100 : 125));
+            setMinimumSize(new Dimension(180, (type == SENT) ?  50 : 90));
+            setPreferredSize(new Dimension(190, (type == SENT) ? 75 : 110));
+            setMaximumSize(new Dimension(200, (type == SENT) ? 100 : 130));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
             setBorder(BorderFactory.createLoweredBevelBorder());
 

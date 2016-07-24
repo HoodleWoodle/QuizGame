@@ -209,6 +209,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
                     if(imagePath != null) {
                         try {
                             BufferedImage image = ImageIO.read(Paths.get(DATA).resolve(imagePath).toFile());
+                            image = GameFrame.scale(image, 700, 250);
                             questionImage.setIcon(new ImageIcon(image));
                         } catch (IOException e) {
                             questionImage.setIcon(bigIcon);

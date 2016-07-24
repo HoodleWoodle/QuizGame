@@ -39,6 +39,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 import lib.net.tcp.NetworkMessage;
 import lib.net.tcp.server.AbstractTCPServer;
 import lib.net.tcp.server.ClientThread;
@@ -744,8 +746,8 @@ public final class Server extends AbstractTCPServer
 		for (Category category : Category.values())
 			if (dataManager.getQuestions(category).size() < Constants.QUESTION_COUNT)
 			{
-				System.out.println(Utils.ERROR_QUESTION_COUNT.replace("<C>", category.toString()));
-				return;
+				JOptionPane.showMessageDialog(null, Utils.ERROR_QUESTION_COUNT.replace("<C>", category.toString()));
+				System.exit(1);
 			}
 	}
 }

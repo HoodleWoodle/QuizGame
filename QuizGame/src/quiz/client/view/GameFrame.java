@@ -4,12 +4,12 @@ import lib.net.tcp.client.AbstractTCPClient;
 import quiz.ImageResourceLoader;
 import quiz.client.IControl;
 import quiz.client.model.IModel;
-import quiz.model.Account;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
@@ -24,7 +24,7 @@ public final class GameFrame extends JFrame {
 
     private static final ResourceBundle localization = ResourceBundle.getBundle("quiz.client.view.localization");
     private final MenuPanel menuPanel;
-    private Account user;
+    private boolean available;
 
     /**
      * Sets the standard properties for @param components.
@@ -63,18 +63,23 @@ public final class GameFrame extends JFrame {
         return localization;
     }
 
-    public static BufferedImage scale(BufferedImage imageToScale, int dWidth, int dHeight) {
-        BufferedImage scaledImage = null;
-        if (imageToScale != null) {
-            scaledImage = new BufferedImage(dWidth, dHeight, imageToScale.getType());
-            Graphics2D graphics2D = scaledImage.createGraphics();
-            graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            graphics2D.drawImage(imageToScale, 0, 0, dWidth, dHeight, null);
-            graphics2D.dispose();
+    /**
+     * scale image
+     *
+     * @param sbi image to scale
+     * @param dWidth width of destination image
+     * @param dHeight height of destination image
+     * @return scaled image
+     */
+    public static BufferedImage scale(BufferedImage sbi, int dWidth, int dHeight) {
+        BufferedImage dbi = null;
+        if(sbi != null) {
+            dbi = new BufferedImage(dWidth, dHeight, sbi.getType());
+            Graphics2D g = dbi.createGraphics();
+            AffineTransform at = AffineTransform.getScaleInstance(dWidth / sbi.getWidth(), dHeight / sbi.getHeight());
+            g.drawRenderedImage(sbi, at);
         }
-        return scaledImage;
+        return dbi;
     }
 
     /**
@@ -98,7 +103,7 @@ public final class GameFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent event) {
                 // during a game
-                if (model.getAccount() != null && !model.getAccount().isAvailable()) {
+                if (model.getAccount() != null && !available) {
                     int answer = JOptionPane.showConfirmDialog(GameFrame.this,
                             localization.getString("CONFIRM_LEAVE"),
                             localization.getString("CONFIRM_LEAVE_SCREEN_TITLE"), JOptionPane.YES_NO_OPTION);
@@ -117,6 +122,24 @@ public final class GameFrame extends JFrame {
     }
 
     /**
+     * Returns whether the client is available.
+     *
+     * @return whether the client is available
+     */
+    public boolean isAvailable() {
+        return available;
+    }
+
+    /**
+     * Sets whether the client is available.
+     *
+     * @param available whether the client is available
+     */
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    /**
      * Returns the MenuPanel.
      *
      * @return the MenuPanel
@@ -125,6 +148,9 @@ public final class GameFrame extends JFrame {
         return menuPanel;
     }
 
+    /**
+     * Useful method for showing an exception.
+     */
     public void showExceptionMessage(String message) {
         JOptionPane.showMessageDialog(this, message, localization.getString("EXCEPTION"), JOptionPane.ERROR_MESSAGE);
     }

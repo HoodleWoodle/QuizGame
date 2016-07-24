@@ -123,6 +123,7 @@ public class GameOverPanel extends JPanel implements IView {
                     Timer timer = new Timer(DELAY_BETWEEN_QUESTIONS - 500, event -> {
                         SwingUtilities.invokeLater(() -> {
                             gameFrame.setContentPane(this);
+                            gameFrame.setAvailable(true);
                             gameFrame.repaint();
                             gameFrame.revalidate();
                             gameFrame.getMenuPanel().getQuestionPanel().reset();

@@ -1,10 +1,12 @@
 package quiz;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
+
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  * @author Stefan, Eric
@@ -31,14 +33,15 @@ public final class ImageResourceLoader
 	}
 
 	/**
-	 * Returns the big icon image.
+	 * Returns the standard icon image.
 	 *
-	 * @return the big icon image
-     */
-	public static Image loadBigIcon() {
+	 * @return the standard icon image
+	 */
+	public static Image loadStandardImage()
+	{
 		try
 		{
-			URL url = ImageResourceLoader.class.getResource("/icon_image_big.png");
+			URL url = ImageResourceLoader.class.getResource("/standard.png");
 			if (url != null) return ImageIO.read(url);
 		} catch (IOException e)
 		{

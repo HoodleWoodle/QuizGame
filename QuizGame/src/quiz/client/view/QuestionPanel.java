@@ -59,7 +59,7 @@ public class QuestionPanel extends JPanel implements IView, ActionListener {
         model.addView(this);
         setLayout(new GridBagLayout());
         initComponents();
-        bigIcon = new ImageIcon(ImageResourceLoader.loadBigIcon());
+        bigIcon = new ImageIcon(ImageResourceLoader.loadStandardImage());
         gameOverPanel = new GameOverPanel(gameFrame, model);
     }
 
